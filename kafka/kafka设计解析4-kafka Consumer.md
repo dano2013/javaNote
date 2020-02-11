@@ -20,15 +20,15 @@
 
 　　很多传统的Message Queue都会在消息被消费完后将消息删除，一方面避免重复消费，另一方面可以保证Queue的长度比较短，提高效率。而如上文所述，Kafka并不删除已消费的消息，为了实现传统Message Queue消息只被消费一次的语义，Kafka保证每条消息在同一个Consumer Group里只会被某一个Consumer消费。与传统Message Queue不同的是，Kafka还允许不同Consumer Group同时消费同一条消息，这一特性可以为消息的多元化处理提供支持。
 
-![kafka consumer group](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\cee0c71c66654c74be3b36278f4b6ed4\95fc8357ebf14040863acfcb7a2e2d04.png)
+<img src="D:\pic\markdown\kafka\5b6be6dd9bf44cc3b296fe2bc7a98357.png" alt="kafka consumer group" style="zoom:60%;" />
 
 　　实际上，Kafka的设计理念之一就是同时提供离线处理和实时处理。根据这一特性，可以使用Storm这种实时流处理系统对消息进行实时在线处理，同时使用Hadoop这种批处理系统进行离线处理，还可以同时将数据实时备份到另一个数据中心，只需要保证这三个操作所使用的Consumer在不同的Consumer Group即可。下图展示了Kafka在LinkedIn的一种简化部署模型。
 
-![kafka sample deployment in linkedin](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\a2feab917e7e4ce8bcb27dd2244807f6\6137663978e5494e8d661ea9f9722e5e.png)
+<img src="D:\pic\markdown\kafka\6ae7771520ac4e8fa6e965fe6c5e75c1.png" alt="kafka deployment in linkedin" style="zoom:50%;" />
 
 　　为了更清晰展示Kafka Consumer Group的特性，笔者进行了一项测试。创建一个Topic (名为topic1)，再创建一个属于group1的Consumer实例，并创建三个属于group2的Consumer实例，然后通过Producer向topic1发送Key分别为1，2，3的消息。结果发现属于group1的Consumer收到了所有的这三条消息，同时group2中的3个Consumer分别收到了Key为1，2，3的消息，如下图所示。
 
-![kafka consumer group](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\e02ab734215c4961a6934430a9f20d4a\615ad4d252b2452f832932b98856ba2f.png)
+<img src="D:\pic\markdown\kafka\f9ab76db8f0b457aaa2b32c245752bc0.png" alt="kafka consumer group" style="zoom:48%;" />
 
 　　注：上图中每个黑色区域代表一个Consumer实例，每个实例只创建一个MessageStream。实际上，本实验将Consumer应用程序打成jar包，并在4个不同的命令行终端中传入不同的参数运行。
 
@@ -42,31 +42,31 @@
 
 　　如下例所示，如果topic1有0，1，2共三个Partition，当group1只有一个Consumer(名为consumer1)时，该 Consumer可消费这3个Partition的所有数据。
 
-![kafka rebalance 3 partition 1 consumer](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\af74e65ef73b46c0ae2640ea7c7b8072\09e6d703905042b4bd43851b8c0ed487.png)
+<img src="D:\pic\markdown\kafka\42c12ddb24e64b4f99a1a7bab450134c.png" alt="kafka consumer group rebalance" style="zoom:48%;" />
 
 　　增加一个Consumer(consumer2)后，其中一个Consumer（consumer1）可消费2个Partition的数据（Partition 0和Partition 1），另外一个Consumer(consumer2)可消费另外一个Partition（Partition 2）的数据。
 
-![kafka rebalance 3 partitin 2 consumer](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\2adff38ae1f14d9b9a8827e11441ca7b\f421deb9d97f42abad4f9ddd2ef406a5.png)
+<img src="D:\pic\markdown\kafka\7437c017de654ec5bb8a0205200a5177.png" alt="kafka consumer group rebalance" style="zoom:48%;" />
 
 　　再增加一个Consumer(consumer3)后，每个Consumer可消费一个Partition的数据。consumer1消费partition0，consumer2消费partition1，consumer3消费partition2。
 
-![kafka rebalance 3 partition 3 consumer](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\f75291a60aa9467ba78acc5fc91aed29\6bb2009ee6fb440c84f195e0aa395d73.png)
+<img src="D:\pic\markdown\kafka\B68B87AD9E9B46B2A2CA7042AD2926B8.png" style="zoom:48%;" />
 
 　　再增加一个Consumer（consumer4）后，其中3个Consumer可分别消费一个Partition的数据，另外一个Consumer（consumer4）不能消费topic1的任何数据。
 
-![kafka rebalance 3 partition 4 consumer](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\0cc966fed03c4dd4bb56f5b8f26898d8\d9d79015a2444f2bbc5960f89b60a924.png)
+<img src="D:\pic\markdown\kafka\eb2aa72efd9b4f4f821d3101b6e11542.png" alt="kafka consumer group rebalance" style="zoom:48%;" />
 
 　　此时关闭consumer1，其余3个Consumer可分别消费一个Partition的数据。
 
-![kafka rebalance 3 partition 3 consumer](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\7108525804c440948693af66516351ba\179fb14187e24219921b68b44a47c5f3.png)
+<img src="D:\pic\markdown\kafka\31a0c129c4c1492aa63fa6c932f35f72.png" alt="kafka consumer group" style="zoom:48%;" />
 
 　　接着关闭consumer2，consumer3可消费2个Partition，consumer4可消费1个Partition。
 
-![kafka rebalance 3 partition 2 consumer](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\05da17e087014d18812bc2c36c0be01e\82ba74756de4410499a889e22dd6dea2.png)
+<img src="D:\pic\markdown\kafka\4e5a3e58cf0649a2a2ef9ce5e230dfb6.png" alt="kafka consumer group" style="zoom:48%;" />
 
 　　再关闭consumer3，仅存的consumer4可同时消费topic1的3个Partition。
 
-![kafka rebalance 3 partition 1 consumer](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\c6d2871f26e149e89746d616602722c9\9e55338099fb41ab9207368c7f53bcf5.png)
+<img src="D:\pic\markdown\kafka\a890a6ae36c14230b70c0aee0a849823.png" alt="kafka consumer group" style="zoom:48%;" />
 
 　　Consumer Rebalance的算法如下：
 

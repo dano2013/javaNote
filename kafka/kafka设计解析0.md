@@ -1,12 +1,6 @@
-13434
+## 背景介绍
 
-原创文章，转载请务必将下面这段话置于文章开头处（保留超链接）。
-
-本文转发自[**技术世界**](http://www.jasongj.com)，[原文链接http://www.jasongj.com/2015/01/02/Kafka深度解析](http://www.jasongj.com/2015/01/02/Kafka深度解析)
-
-**背景介绍**
-
-**Kafka简介**
+### Kafka简介
 
 　　Kafka是一种分布式的，基于发布/订阅的消息系统。主要设计目标如下：
 
@@ -15,7 +9,7 @@
 - 支持Kafka Server间的消息分区，及分布式消费，同时保证每个partition内的消息顺序传输
 - 同时支持离线数据处理和实时数据处理
 
-**为什么要用消息系统**
+### 为什么要用消息系统
 
 - **解耦**
 
@@ -23,7 +17,7 @@
 
 - **冗余**
 
-有些情况下，处理数据的过程会失败。除非数据被持久化，否则将造成丢失。消息队列把数据进行持久化直到它们已经被完全处理，通过这一方式规避了数据丢失风险。在被许多消息队列所采用的”插入-获取-删除”范式中，在把一个消息从队列中删除之前，需要你的处理过程明确的指出该消息已经被处理完毕，确保你的数据被安全的保存直到你使用完毕。
+有些情况下，处理数据的过程会失败。除非数据被持久化，否则将造成丢失。消息队列把数据进行持久化直到它们已经被完全处理，通过这一方式规避了数据丢失风险。在被许多消息队列所采用的“插入-获取-删除”范式中，在把一个消息从队列中删除之前，需要你的处理过程明确的指出该消息已经被处理完毕，确保你的数据被安全的保存直到你使用完毕。
 
 - **扩展性**
 
@@ -39,7 +33,7 @@
 
 - **送达保证**
 
-消息队列提供的冗余机制保证了消息能被实际的处理，只要一个进程读取了该队列即可。在此基础上，部分消息系统提供了一个”只送达一次”保证。无论有多少进程在从队列中领取数据，每一个消息只能被处理一次。这之所以成为可能，是因为获取一个消息只是”预定”了这个消息，暂时把它移出了队列。除非客户端明确的表示已经处理完了这个消息，否则这个消息会被放回队列中去，在一段可配置的时间之后可再次被处理。
+消息队列提供的冗余机制保证了消息能被实际的处理，只要一个进程读取了该队列即可。在此基础上，部分消息系统提供了一个“只送达一次”保证。无论有多少进程在从队列中领取数据，每一个消息只能被处理一次。这之所以成为可能，是因为获取一个消息只是“预定”了这个消息，暂时把它移出了队列。除非客户端明确的表示已经处理完了这个消息，否则这个消息会被放回队列中去，在一段可配置的时间之后可再次被处理。
 
 - **顺序保证**
 
@@ -47,7 +41,7 @@
 
 - **缓冲**
 
-在任何重要的系统中，都会有需要不同的处理时间的元素。例如,加载一张图片比应用过滤器花费更少的时间。消息队列通过一个缓冲层来帮助任务最高效率的执行–写入队列的处理会尽可能的快速，而不受从队列读的预备处理的约束。该缓冲有助于控制和优化数据流经过系统的速度。
+在任何重要的系统中，都会有需要不同的处理时间的元素。例如，加载一张图片比应用过滤器花费更少的时间。消息队列通过一个缓冲层来帮助任务最高效率的执行–写入队列的处理会尽可能的快速，而不受从队列读的预备处理的约束。该缓冲有助于控制和优化数据流经过系统的速度。
 
 - **理解数据流**
 
@@ -57,7 +51,7 @@
 
 很多时候，你不想也不需要立即处理消息。消息队列提供了异步处理机制，允许你把一个消息放入队列，但并不立即处理它。你想向队列中放入多少消息就放多少，然后在你乐意的时候再去处理它们。
 
-**常用Message Queue对比**
+### 常用Message Queue对比
 
 - **RabbitMQ**
 
@@ -69,7 +63,7 @@ Redis是一个基于Key-Value对的NoSQL数据库，开发维护很活跃。虽�
 
 - **ZeroMQ**
 
-ZeroMQ号称最快的消息队列系统，尤其针对大吞吐量的需求场景。ZMQ能够实现RabbitMQ不擅长的高级/复杂的队列，但是开发人员需要自己组合多种技术框架，技术上的复杂度是对这MQ能够应用成功的挑战。ZeroMQ具有一个独特的非中间件的模式，你不需要安装和运行一个消息服务器或中间件，因为你的应用程序将扮演了这个服务角色。你只需要简单的引用ZeroMQ程序库，可以使用NuGet安装，然后你就可以愉快的在应用程序之间发送消息了。但是ZeroMQ仅提供非持久性的队列，也就是说如果宕机，数据将会丢失。其中，Twitter的Storm 0.9.0以前的版本中默认使用ZeroMQ作为数据流的传输（Storm从0.9版本开始同时支持ZeroMQ和Netty作为传输模块）。
+ZeroMQ号称最快的消息队列系统，尤其针对大吞吐量的需求场景。ZMQ能够实现RabbitMQ不擅长的高级/复杂的队列，但是开发人员需要自己组合多种技术框架，技术上的复杂度是对ZeroMQ能够应用成功的挑战。ZeroMQ具有一个独特的非中间件的模式，你不需要安装和运行一个消息服务器或中间件，因为你的应用程序将扮演了这个服务角色。你只需要简单的引用ZeroMQ程序库，可以使用NuGet安装，然后你就可以愉快的在应用程序之间发送消息了。但是ZeroMQ仅提供非持久性的队列，也就是说如果宕机，数据将会丢失。其中，Twitter的Storm 0.9.0以前的版本中默认使用ZeroMQ作为数据流的传输（Storm从0.9版本开始同时支持ZeroMQ和Netty作为传输模块）。
 
 - **ActiveMQ**
 
@@ -77,11 +71,11 @@ ActiveMQ是Apache下的一个子项目。 类似于ZeroMQ，它能够以代理�
 
 - **Kafka/Jafka**
 
-Kafka是Apache下的一个子项目，是一个高性能跨语言分布式发布/订阅消息队列系统，而Jafka是在Kafka之上孵化而来的，即Kafka的一个升级版。具有以下特性：快速持久化，可以在O(1)的系统开销下进行消息持久化；高吞吐，在一台普通的服务器上既可以达到10W/s的吞吐速率；完全的分布式系统，Broker、Producer、Consumer都原生自动支持分布式，自动实现负载均衡；支持Hadoop数据并行加载，对于像Hadoop的一样的日志数据和离线分析系统，但又要求实时处理的限制，这是一个可行的解决方案。Kafka通过Hadoop的并行加载机制来统一了在线和离线的消息处理。Apache Kafka相对于ActiveMQ是一个非常轻量级的消息系统，除了性能非常好之外，还是一个工作良好的分布式系统。
+Kafka是Apache下的一个子项目，是一个高性能跨语言分布式发布/订阅消息队列系统，而Jafka是在Kafka之上孵化而来的，即Kafka的一个升级版。具有以下特性：快速持久化，可以在O(1)的系统开销下进行消息持久化；高吞吐，在一台普通的服务器上既可以达到10W/s的吞吐速率；完全的分布式系统，Broker、Producer、Consumer都原生自动支持分布式，自动实现负载均衡；支持Hadoop数据并行加载，对于像Hadoop一样的日志数据和离线分析系统，但又要求实时处理的限制，这是一个可行的解决方案。Kafka通过Hadoop的并行加载机制来统一了在线和离线的消息处理。Apache Kafka相对于ActiveMQ是一个非常**轻量级**的消息系统，除了**性能非常好**之外，还是一个工作良好的**分布式**系统。
 
-**Kafka解析**
+## Kafka解析
 
-**Terminology**
+### Terminology
 
 - **Broker**
 
@@ -103,103 +97,160 @@ parition是物理上的概念，每个topic包含一个或多个partition，创�
 
 消费消息。每个consumer属于一个特定的consumer group（可为每个consumer指定group name，若不指定group name则属于默认的group）。使用consumer high level API时，同一topic的一条消息只能被同一个consumer group内的一个consumer消费，但多个consumer group可同时消费这一消息。
 
-**Kafka架构**
+## Kafka架构
 
-![kafka architecture 架构](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\1f2e058f3a3d48a1b075acd1c06f1f4b\05b47a718f0e4409b825f4318c031b2c.png)
+<img src="D:\pic\markdown\kafka\05b47a718f0e4409b825f4318c031b2c.png" alt="kafka architecture 架构" style="zoom:60%;" />
 
 　　如上图所示，一个典型的kafka集群中包含若干producer（可以是web前端产生的page view，或者是服务器日志，系统CPU、memory等），若干broker（Kafka支持水平扩展，一般broker数量越多，集群吞吐率越高），若干consumer group，以及一个[Zookeeper](http://zookeeper.apache.org/)集群。Kafka通过Zookeeper管理集群配置，选举leader，以及在consumer group发生变化时进行rebalance。producer使用push模式将消息发布到broker，consumer使用pull模式从broker订阅并消费消息。　　
 
-**Push vs. Pull**
+### Push vs Pull
 
-　　作为一个messaging system，Kafka遵循了传统的方式，选择由producer向broker push消息并由consumer从broker pull消息。一些logging-centric system，比如Facebook的[Scribe](https://github.com/facebookarchive/scribe)和Cloudera的[Flume](http://flume.apache.org/),采用非常不同的push模式。事实上，push模式和pull模式各有优劣。
+　　作为一个messaging system，Kafka遵循了传统的方式，选择由producer向broker push消息并由consumer从broker pull消息。一些logging-centric system，比如Facebook的[Scribe](https://github.com/facebookarchive/scribe)和Cloudera的[Flume](http://flume.apache.org/)，采用非常不同的push模式。事实上，push模式和pull模式各有优劣。
 
 　　push模式很难适应消费速率不同的消费者，因为消息发送速率是由broker决定的。push模式的目标是尽可能以最快速度传递消息，但是这样很容易造成consumer来不及处理消息，典型的表现就是拒绝服务以及网络拥塞。而pull模式则可以根据consumer的消费能力以适当的速率消费消息。
 
-**Topic & Partition**
+### Topic & Partition
 
 　　Topic在逻辑上可以被认为是一个queue。每条消费都必须指定它的topic，可以简单理解为必须指明把这条消息放进哪个queue里。为了使得Kafka的吞吐率可以水平扩展，物理上把topic分成一个或多个partition，每个partition在物理上对应一个文件夹，该文件夹下存储这个partition的所有消息和索引文件。
 
-![kafka topic partition](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\74885d0a48874c6c858964b9b3724b03\afab37fa8281442bbb1bf324a5e80300.png)
+![kafka topic partition](D:\pic\markdown\kafka\afab37fa8281442bbb1bf324a5e80300.png)
 
 　　每个日志文件都是“log entries”序列，每一个log entry包含一个4字节整型数（值为N），其后跟N个字节的消息体。每条消息都有一个当前partition下唯一的64字节的offset，它指明了这条消息的起始位置。磁盘上存储的消息格式如下：
 
-　　message length ： 4 bytes (value: 1+4+n)
-
-　　“magic” value ： 1 byte
-
-　　crc ： 4 bytes
-
-　　payload ： n bytes
+```
+message length ： 4 bytes (value: 1+4+n)
+“magic” value ： 1 byte
+crc ： 4 bytes
+payload ： n bytes
+```
 
 　　这个“log entries”并非由一个文件构成，而是分成多个segment，每个segment名为该segment第一条消息的offset和“.kafka”组成。另外会有一个索引文件，它标明了每个segment下包含的log entry的offset范围，如下图所示。
 
-![kafka partition segment](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\5e67d05a6f324f3b9e8d8838f247c887\64173c5091704598a8475c469954493e.png)
+<img src="D:\pic\markdown\kafka\64173c5091704598a8475c469954493e.png" alt="kafka partition segment" style="zoom:60%;" />
 
-　　因为每条消息都被append到该partition中，是顺序写磁盘，因此效率非常高（经验证，顺序写磁盘效率比随机写内存还要高，这是Kafka高吞吐率的一个很重要的保证）。
+　　因为每条消息都被append到该partition中，是顺序写磁盘，因此效率非常高（经验证，<u>顺序写磁盘效率比随机写内存还要高，这是Kafka高吞吐率的一个很重要的保证</u>）。
 
-![kafka partition](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\ea3a59bcce8645e09db07ba7a35992af\3b8c7be3ccb0498ca60a189424456ed7.png)
+<img src="D:\pic\markdown\kafka\3b8c7be3ccb0498ca60a189424456ed7.png" alt="kafka partition" style="zoom:60%;" />
 
 　　每一条消息被发送到broker时，会根据paritition规则选择被存储到哪一个partition。如果partition规则设置的合理，所有消息可以均匀分布到不同的partition里，这样就实现了水平扩展。（如果一个topic对应一个文件，那这个文件所在的机器I/O将会成为这个topic的性能瓶颈，而partition解决了这个问题）。在创建topic时可以在$KAFKA_HOME/config/server.properties中指定这个partition的数量(如下所示)，当然也可以在topic创建之后去修改parition数量。
 
-| 1234 | # The default number of log partitions per topic. More partitions allow greater# parallelism for consumption, but this will also result in more files across# the brokers.num.partitions=3 |
-| ---- | ------------------------------------------------------------ |
-|      |                                                              |
+```
+# The default number of log partitions per topic. More partitions allow greater
+# parallelism for consumption, but this will also result in more files across
+# the brokers.
+num.partitions=3
+```
 
-　　在发送一条消息时，可以指定这条消息的key，producer根据这个key和partition机制来判断将这条消息发送到哪个parition。paritition机制可以通过指定producer的paritition. class这一参数来指定，该class必须实现kafka.producer.Partitioner接口。本例中如果key可以被解析为整数则将对应的整数与partition总数取余，该消息会被发送到该数对应的partition。（每个parition都会有个序号）
+​	　在发送一条消息时，可以指定这条消息的key，producer根据这个key和partition机制来判断将这条消息发送到哪个parition。paritition机制可以通过指定producer的paritition. class这一参数来指定，该class必须实现kafka.producer.Partitioner接口。本例中如果key可以被解析为整数则将对应的整数与partition总数取余，该消息会被发送到该数对应的partition。（每个parition都会有个序号）
 
-| 1234567891011121314151617 | import kafka.producer.Partitioner;import kafka.utils.VerifiableProperties;publicclassJasonPartitioner<T> implementsPartitioner{publicJasonPartitioner(VerifiableProperties verifiableProperties){}@Overridepublicintpartition(Object key, int numPartitions){try {int partitionNum = Integer.parseInt((String) key);return Math.abs(Integer.parseInt((String) key) % numPartitions); } catch (Exception e) {return Math.abs(key.hashCode() % numPartitions); } }} |
-| ------------------------- | ------------------------------------------------------------ |
-|                           |                                                              |
+```java
+import kafka.producer.Partitioner;
+import kafka.utils.VerifiableProperties;
+
+public class JasonPartitioner<T> implements Partitioner {
+
+    public JasonPartitioner(VerifiableProperties verifiableProperties) {}
+    
+    @Override
+    public int partition(Object key, int numPartitions) {
+        try {
+            int partitionNum = Integer.parseInt((String) key);
+            return Math.abs(Integer.parseInt((String) key) % numPartitions);
+        } catch (Exception e) {
+            return Math.abs(key.hashCode() % numPartitions);
+        }
+    }
+}
+```
 
 　　如果将上例中的class作为partitioner.class，并通过如下代码发送20条消息（key分别为0，1，2，3）至topic2（包含4个partition）。
 
-| 12345678910 | publicvoidsendMessage()throws InterruptedException{for(int i = 1; i <= 5; i++){ List messageList = new ArrayList>();for(int j = 0; j < 4; j++）{ messageList.add(new KeyedMessage("topic2", j+"", "The " + i + " message for key " + j)); } producer.send(messageList); } producer.close();} |
-| ----------- | ------------------------------------------------------------ |
-|             |                                                              |
+```java
+public void sendMessage() throws InterruptedException{
+　　for(int i = 1; i <= 5; i++){
+　　      List messageList = new ArrayList<KeyedMessage<String, String>>();
+　　      for(int j = 0; j < 4; j++）{
+　　          messageList.add(new KeyedMessage<String, String>("topic2", j+"", "The " + i + " message for key " + j));
+　　      }
+　　      producer.send(messageList);
+    }
+　　producer.close();
+}
+```
 
-　　则key相同的消息会被发送并存储到同一个partition里，而且key的序号正好和partition序号相同。（partition序号从0开始，本例中的key也正好从0开始）。如下图所示。
+　　则key相同的消息会被发送并存储到同一个partition里，而且key的序号正好和partition序号相同。（partition序号从0开始，本例中的key也正好从0开始）。如下图所示：
 
-![kafka partition key](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\3d5ec01ffdba45368eda021dc9c54511\33001394e8b140c0bc30f0611e733384.png)
+<img src="D:\pic\markdown\kafka\33001394e8b140c0bc30f0611e733384.png" alt="kafka partition key" style="zoom:48%;" />
 
-　　对于传统的message queue而言，一般会删除已经被消费的消息，而Kafka集群会保留所有的消息，无论其被消费与否。当然，因为磁盘限制，不可能永久保留所有数据（实际上也没必要），因此Kafka提供两种策略去删除旧数据。一是基于时间，二是基于partition文件大小。例如可以通过配置$KAFKA_HOME/config/server.properties，让Kafka删除一周前的数据，也可通过配置让Kafka在partition文件超过1GB时删除旧数据，如下所示。
+　　对于传统的message queue而言，一般会删除已经被消费的消息，而Kafka集群会保留所有的消息，无论其被消费与否。当然，因为磁盘限制，不可能永久保留所有数据（实际上也没必要），因此Kafka提供两种策略去删除旧数据。一是基于时间，二是基于partition文件大小。例如可以通过配置$KAFKA_HOME/config/server.properties，让Kafka删除一周前的数据，也可通过配置让Kafka在partition文件超过1GB时删除旧数据，如下所示：
 
-| 1234567891011121314151617181920212223242526 | ############################# Log Retention Policy ############################## The following configurations control the disposal of log segments. The policy can# be set to delete segments after a period of time, or after a given size has accumulated.# A segment will be deleted whenever *either* of these criteria are met. Deletion always happens# from the end of the log.# The minimum age of a log file to be eligible for deletionlog.retention.hours=168# A size-based retention policy for logs. Segments are pruned from the log as long as the remaining# segments don't drop below log.retention.bytes.#log.retention.bytes=1073741824# The maximum size of a log segment file. When this size is reached a new log segment will be created.log.segment.bytes=1073741824# The interval at which log segments are checked to see if they can be deleted according# to the retention policieslog.retention.check.interval.ms=300000# By default the log cleaner is disabled and the log retention policy will default to #just delete segments after their retention expires.# If log.cleaner.enable=true is set the cleaner will be enabled and individual logs #can then be marked for log compaction.log.cleaner.enable=false |
-| ------------------------------------------- | ------------------------------------------------------------ |
-|                                             |                                                              |
+```properties
+　　############################# Log Retention Policy #############################
 
-　　这里要注意，因为Kafka读取特定消息的时间复杂度为O(1)，即与文件大小无关，所以这里删除文件与Kafka性能无关，选择怎样的删除策略只与磁盘以及具体的需求有关。另外，Kafka会为每一个consumer group保留一些metadata信息–当前消费的消息的position，也即offset。这个offset由consumer控制。正常情况下consumer会在消费完一条消息后线性增加这个offset。当然，consumer也可将offset设成一个较小的值，重新消费一些消息。因为offet由consumer控制，所以Kafka broker是无状态的，它不需要标记哪些消息被哪些consumer过，不需要通过broker去保证同一个consumer group只有一个consumer能消费某一条消息，因此也就不需要锁机制，这也为Kafka的高吞吐率提供了有力保障。　　　　
+# The following configurations control the disposal of log segments. The policy can
+# be set to delete segments after a period of time, or after a given size has accumulated.
+# A segment will be deleted whenever *either* of these criteria are met. Deletion always happens
+# from the end of the log.
 
-**Replication & Leader election**
+# The minimum age of a log file to be eligible for deletion
+log.retention.hours=168
 
-　　Kafka从0.8开始提供partition级别的replication，replication的数量可在$KAFKA_HOME/config/server.properties中配置。
+# A size-based retention policy for logs. Segments are pruned from the log as long as the remaining
+# segments don't drop below log.retention.bytes.
+#log.retention.bytes=1073741824
 
-| 1    | default.replication.factor = 1 |
-| ---- | ------------------------------ |
-|      |                                |
+# The maximum size of a log segment file. When this size is reached a new log segment will be created.
+log.segment.bytes=1073741824
 
-　　该 Replication与leader election配合提供了自动的failover机制。replication对Kafka的吞吐率是有一定影响的，但极大的增强了可用性。默认情况下，Kafka的replication数量为1。　　每个partition都有一个唯一的leader，所有的读写操作都在leader上完成，leader批量从leader上pull数据。一般情况下partition的数量大于等于broker的数量，并且所有partition的leader均匀分布在broker上。follower上的日志和其leader上的完全一样。
+# The interval at which log segments are checked to see if they can be deleted according
+# to the retention policies
+log.retention.check.interval.ms=300000
+
+# By default the log cleaner is disabled and the log retention policy will default to 
+#just delete segments after their retention expires.
+# If log.cleaner.enable=true is set the cleaner will be enabled and individual logs 
+#can then be marked for log compaction.
+log.cleaner.enable=false
+```
+
+　　这里要注意，因为Kafka读取特定消息的时间复杂度为O(1)，即与文件大小无关，所以这里删除文件与Kafka性能无关，选择怎样的删除策略只与磁盘以及具体的需求有关。另外，Kafka会为每一个consumer group保留一些metadata信息，当前消费的消息的position，也即offset。这个offset由consumer控制。正常情况下consumer会在消费完一条消息后线性增加这个offset。当然，consumer也可将offset设成一个较小的值，重新消费一些消息。<u>因为offet由consumer控制，所以Kafka broker是无状态的，它不需要标记哪些消息被哪些consumer过，不需要通过broker去保证同一个consumer group只有一个consumer能消费某一条消息，因此也就不需要锁机制，这也为Kafka的高吞吐率提供了有力保障。</u>　　　　
+
+### Replication & Leader election
+
+　　Kafka从0.8开始提供partition级别的replication，replication的数量可在server.properties中配置。
+
+```properties
+default.replication.factor = 1
+```
+
+　　该 Replication与leader election配合提供了自动的failover机制。replication对Kafka的吞吐率是有一定影响的，但极大的增强了可用性。默认情况下，Kafka的replication数量为1。　　
+
+​		每个partition都有一个唯一的leader，所有的读写操作都在leader上完成，leader批量从leader上pull数据。一般情况下partition的数量大于等于broker的数量，并且所有partition的leader均匀分布在broker上。follower上的日志和其leader上的完全一样。
 
 　　和大部分分布式系统一样，Kakfa处理失败需要明确定义一个broker是否alive。对于Kafka而言，Kafka存活包含两个条件，一是它必须维护与Zookeeper的session(这个通过Zookeeper的heartbeat机制来实现)。二是follower必须能够及时将leader的writing复制过来，不能“落后太多”。
 
-　　leader会track“in sync”的node list。如果一个follower宕机，或者落后太多，leader将把它从”in sync” list中移除。这里所描述的“落后太多”指follower复制的消息落后于leader后的条数超过预定值，该值可在$KAFKA_HOME/config/server.properties中配置
+　　leader会track“in sync”的node list。如果一个follower宕机，或者落后太多，leader将把它从“in sync” list中移除。这里所描述的“落后太多”指follower复制的消息落后于leader后的条数超过预定值，该值可在$KAFKA_HOME/config/server.properties中配置
 
-| 12345 | #If a replica falls more than this many messages behind the leader, the leader will remove the follower from ISR and treat it as deadreplica.lag.max.messages=4000#If a follower hasn't sent any fetch requests for this window of time, the leader will remove the follower from ISR (in-sync replicas) and treat it as deadreplica.lag.time.max.ms=10000 |
-| ----- | ------------------------------------------------------------ |
-|       |                                                              |
+```properties
+#If a replica falls more than this many messages behind the leader, the leader will remove the follower from ISR and treat it as dead
+replica.lag.max.messages=4000
+#If a follower hasn't sent any fetch requests for this window of time, the leader will remove the follower from ISR (in-sync replicas) and treat it as dead
+replica.lag.time.max.ms=10000
+```
 
-　　需要说明的是，Kafka只解决”fail/recover”，不处理“Byzantine”（“拜占庭”）问题。
+　　需要说明的是，Kafka只解决“fail/recover”，不处理“Byzantine”（“拜占庭”）问题。
 
 　　一条消息只有被“in sync” list里的所有follower都从leader复制过去才会被认为已提交。这样就避免了部分数据被写进了leader，还没来得及被任何follower复制就宕机了，而造成数据丢失（consumer无法消费这些数据）。而对于producer而言，它可以选择是否等待消息commit，这可以通过request.required.acks来设置。这种机制确保了只要“in sync” list有一个或以上的flollower，一条被commit的消息就不会丢失。
 
-　　这里的复制机制即不是同步复制，也不是单纯的异步复制。事实上，同步复制要求“活着的”follower都复制完，这条消息才会被认为commit，这种复制方式极大的影响了吞吐率（高吞吐率是Kafka非常重要的一个特性）。而异步复制方式下，follower异步的从leader复制数据，数据只要被leader写入log就被认为已经commit，这种情况下如果follwer都落后于leader，而leader突然宕机，则会丢失数据。而Kafka的这种使用“in sync” list的方式则很好的均衡了确保数据不丢失以及吞吐率。follower可以批量的从leader复制数据，这样极大的提高复制性能（批量写磁盘），极大减少了follower与leader的差距（前文有说到，只要follower落后leader不太远，则被认为在“in sync” list里）。
+　　这里的复制机制既不是同步复制，也不是单纯的异步复制。事实上，同步复制要求“活着的”follower都复制完，这条消息才会被认为commit，这种复制方式极大的影响了吞吐率（高吞吐率是Kafka非常重要的一个特性）。而异步复制方式下，follower异步的从leader复制数据，数据只要被leader写入log就被认为已经commit，这种情况下如果follwer都落后于leader，而leader突然宕机，则会丢失数据。而Kafka的这种使用“in sync” list的方式则很好的均衡了确保数据不丢失以及吞吐率。follower可以批量的从leader复制数据，这样极大的提高复制性能（批量写磁盘），极大减少了follower与leader的差距（前文有说到，只要follower落后leader不太远，则被认为在“in sync” list里）。
 
 　　上文说明了Kafka是如何做replication的，另外一个很重要的问题是当leader宕机了，怎样在follower中选举出新的leader。因为follower可能落后许多或者crash了，所以必须确保选择“最新”的follower作为新的leader。一个基本的原则就是，如果leader不在了，新的leader必须拥有原来的leader commit的所有消息。这就需要作一个折衷，如果leader在标明一条消息被commit前等待更多的follower确认，那在它die之后就有更多的follower可以作为新的leader，但这也会造成吞吐率的下降。
 
 　　一种非常常用的选举leader的方式是“majority vote”（“少数服从多数”），但Kafka并未采用这种方式。这种模式下，如果我们有2f+1个replica（包含leader和follower），那在commit之前必须保证有f+1个replica复制完消息，为了保证正确选出新的leader，fail的replica不能超过f个。因为在剩下的任意f+1个replica里，至少有一个replica包含有最新的所有消息。这种方式有个很大的优势，系统的latency只取决于最快的几台server，也就是说，如果replication factor是3，那latency就取决于最快的那个follower而非最慢那个。majority vote也有一些劣势，为了保证leader election的正常进行，它所能容忍的fail的follower个数比较少。如果要容忍1个follower挂掉，必须要有3个以上的replica，如果要容忍2个follower挂掉，必须要有5个以上的replica。也就是说，在生产环境下为了保证较高的容错程度，必须要有大量的replica，而大量的replica又会在大数据量下导致性能的急剧下降。这就是这种算法更多用在[Zookeeper](http://zookeeper.apache.org/)这种共享集群配置的系统中而很少在需要存储大量数据的系统中使用的原因。例如HDFS的HA feature是基于[majority-vote-based journal](http://blog.cloudera.com/blog/2012/10/quorum-based-journaling-in-cdh4-1)，但是它的数据存储并没有使用这种expensive的方式。
 
-　　实际上，leader election算法非常多，比如Zookeper的[Zab](http://web.stanford.edu/class/cs347/reading/zab.pdf), [Raft](https://ramcloud.stanford.edu/wiki/download/attachments/11370504/raft.pdf)和[Viewstamped Replication](http://pmg.csail.mit.edu/papers/vr-revisited.pdf)。而Kafka所使用的leader election算法更像微软的[PacificA](http://research.microsoft.com/apps/pubs/default.aspx?id=66814)算法。
+　　实际上，leader election算法非常多，比如Zookeper的[Zab](http://web.stanford.edu/class/cs347/reading/zab.pdf)、[Raft](https://ramcloud.stanford.edu/wiki/download/attachments/11370504/raft.pdf)和[Viewstamped Replication](http://pmg.csail.mit.edu/papers/vr-revisited.pdf)。而Kafka所使用的leader election算法更像微软的[PacificA](http://research.microsoft.com/apps/pubs/default.aspx?id=66814)算法。
 
-　　Kafka在Zookeeper中动态维护了一个ISR（in-sync replicas） set，这个set里的所有replica都跟上了leader，只有ISR里的成员才有被选为leader的可能。在这种模式下，对于f+1个replica，一个Kafka topic能在保证不丢失已经ommit的消息的前提下容忍f个replica的失败。在大多数使用场景中，这种模式是非常有利的。事实上，为了容忍f个replica的失败，majority vote和ISR在commit前需要等待的replica数量是一样的，但是ISR需要的总的replica的个数几乎是majority vote的一半。
+　　Kafka在Zookeeper中动态维护了一个ISR（in-sync replicas） set，这个set里的所有replica都跟上了leader，只有ISR里的成员才有被选为leader的可能。在这种模式下，对于f+1个replica，一个Kafka topic能在保证不丢失已经commit的消息的前提下容忍f个replica的失败。在大多数使用场景中，这种模式是非常有利的。事实上，为了容忍f个replica的失败，majority vote和ISR在commit前需要等待的replica数量是一样的，但是ISR需要的总的replica的个数几乎是majority vote的一半。
 
 　　虽然majority vote与ISR相比有不需等待最慢的server这一优势，但是Kafka作者认为Kafka可以通过producer选择是否被commit阻塞来改善这一问题，并且节省下来的replica和磁盘使得ISR模式仍然值得。
 
@@ -210,31 +261,31 @@ parition是物理上的概念，每个topic包含一个或多个partition，创�
 
 　　这就需要在可用性和一致性当中作出一个简单的平衡。如果一定要等待ISR中的replica“活”过来，那不可用的时间就可能会相对较长。而且如果ISR中的所有replica都无法“活”过来了，或者数据都丢失了，这个partition将永远不可用。选择第一个“活”过来的replica作为leader，而这个replica不是ISR中的replica，那即使它并不保证已经包含了所有已commit的消息，它也会成为leader而作为consumer的数据源（前文有说明，所有读写都由leader完成）。Kafka0.8.*使用了第二种方式。根据Kafka的文档，在以后的版本中，Kafka支持用户通过配置选择这两种方式中的一种，从而根据不同的使用场景选择高可用性还是强一致性。
 
-　　上文说明了一个parition的replication过程，然尔Kafka集群需要管理成百上千个partition，Kafka通过round-robin的方式来平衡partition从而避免大量partition集中在了少数几个节点上。同时Kafka也需要平衡leader的分布，尽可能的让所有partition的leader均匀分布在不同broker上。另一方面，优化leadership election的过程也是很重要的，毕竟这段时间相应的partition处于不可用状态。一种简单的实现是暂停宕机的broker上的所有partition，并为之选举leader。实际上，Kafka选举一个broker作为controller，这个controller通过watch Zookeeper检测所有的broker failure，并负责为所有受影响的parition选举leader，再将相应的leader调整命令发送至受影响的broker，过程如下图所示。
+　　上文说明了一个parition的replication过程，然而Kafka集群需要管理成百上千个partition，Kafka通过round-robin的方式来平衡partition从而避免大量partition集中在了少数几个节点上。同时Kafka也需要平衡leader的分布，尽可能的让所有partition的leader均匀分布在不同broker上。另一方面，优化leadership election的过程也是很重要的，毕竟这段时间相应的partition处于不可用状态。一种简单的实现是暂停宕机的broker上的所有partition，并为之选举leader。实际上，Kafka选举一个broker作为controller，这个controller通过watch Zookeeper检测所有的broker failure，并负责为所有受影响的parition选举leader，再将相应的leader调整命令发送至受影响的broker，过程如下图所示。
 
-![kafka controller](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\a1fd7b7c399246d2b73e2827db58a943\089fa546af7d43888db3316e64a1dc12.png)
+<img src="D:\pic\markdown\kafka\089fa546af7d43888db3316e64a1dc12.png" alt="kafka controller" style="zoom:60%;" />
 
 　　这样做的好处是，可以批量的通知leadership的变化，从而使得选举过程成本更低，尤其对大量的partition而言。如果controller失败了，幸存的所有broker都会尝试在Zookeeper中创建/controller->{this broker id}，如果创建成功（只可能有一个创建成功），则该broker会成为controller，若创建不成功，则该broker会等待新controller的命令。
 
-![kafka controller failover](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\867efd2fb2a0475db1b1555b47b9f701\bbd6033c595f4327bb29785bdf00c902.png)
+<img src="D:\pic\markdown\kafka\bbd6033c595f4327bb29785bdf00c902.png" alt="kafka controller failover" style="zoom:60%;" />
 
-**Consumer group**
+### Consumer group
 
 　　（本节所有描述都是基于consumer hight level API而非low level API）。
 
 　　每一个consumer实例都属于一个consumer group，每一条消息只会被同一个consumer group里的一个consumer实例消费。（不同consumer group可以同时消费同一条消息）
 
-![kafka consumer group](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\f2e8a488f9774c8aa7bdc613dd600d90\5b6be6dd9bf44cc3b296fe2bc7a98357.png)
+<img src="D:\pic\markdown\kafka\5b6be6dd9bf44cc3b296fe2bc7a98357.png" alt="kafka consumer group" style="zoom:60%;" />
 
 　　很多传统的message queue都会在消息被消费完后将消息删除，一方面避免重复消费，另一方面可以保证queue的长度比较少，提高效率。而如上文所将，Kafka并不删除已消费的消息，为了实现传统message queue消息只被消费一次的语义，Kafka保证保证同一个consumer group里只有一个consumer会消费一条消息。与传统message queue不同的是，Kafka还允许不同consumer group同时消费同一条消息，这一特性可以为消息的多元化处理提供了支持。实际上，Kafka的设计理念之一就是同时提供离线处理和实时处理。根据这一特性，可以使用Storm这种实时流处理系统对消息进行实时在线处理，同时使用Hadoop这种批处理系统进行离线处理，还可以同时将数据实时备份到另一个数据中心，只需要保证这三个操作所使用的consumer在不同的consumer group即可。下图展示了Kafka在Linkedin的一种简化部署。
 
-![kafka deployment in linkedin](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\38ab49466cb84cd6b702ea012f404af3\6ae7771520ac4e8fa6e965fe6c5e75c1.png)
+<img src="D:\pic\markdown\kafka\6ae7771520ac4e8fa6e965fe6c5e75c1.png" alt="kafka deployment in linkedin" style="zoom:50%;" />
 
 　　为了更清晰展示Kafka consumer group的特性，笔者作了一项测试。创建一个topic (名为topic1)，创建一个属于group1的consumer实例，并创建三个属于group2的consumer实例，然后通过producer向topic1发送key分别为1，2，3r的消息。结果发现属于group1的consumer收到了所有的这三条消息，同时group2中的3个consumer分别收到了key为1，2，3的消息。如下图所示。
 
-![kafka consumer group](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\8a518e7bc5e743fd8cc27f058f71682d\f9ab76db8f0b457aaa2b32c245752bc0.png)
+<img src="D:\pic\markdown\kafka\f9ab76db8f0b457aaa2b32c245752bc0.png" alt="kafka consumer group" style="zoom:48%;" />
 
-**Consumer Rebalance**
+### Consumer Rebalance
 
 　　（本节所讲述内容均基于Kafka consumer high level API）
 
@@ -244,31 +295,31 @@ parition是物理上的概念，每个topic包含一个或多个partition，创�
 
 　　如下例所示，如果topic1有0，1，2共三个partition，当group1只有一个consumer(名为consumer1)时，该 consumer可消费这3个partition的所有数据。
 
-![kafka consumer group rebalance](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\20cafc5f40d4430481a2d4ab6695279f\42c12ddb24e64b4f99a1a7bab450134c.png)
+<img src="D:\pic\markdown\kafka\42c12ddb24e64b4f99a1a7bab450134c.png" alt="kafka consumer group rebalance" style="zoom:48%;" />
 
 　　增加一个consumer(consumer2)后，其中一个consumer（consumer1）可消费2个partition的数据，另外一个consumer(consumer2)可消费另外一个partition的数据。
 
-![kafka consumer group rebalance](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\4790bfbcfc3c4b9fb77e33c4f8371096\7437c017de654ec5bb8a0205200a5177.png)
+<img src="D:\pic\markdown\kafka\7437c017de654ec5bb8a0205200a5177.png" alt="kafka consumer group rebalance" style="zoom:48%;" />
 
 　　再增加一个consumer(consumer3)后，每个consumer可消费一个partition的数据。consumer1消费partition0，consumer2消费partition1，consumer3消费partition2
 
-![kafka consumer group rebalance](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\482492a1609d4d5b95e1f7a3ce7765ef\b68b87ad9e9b46b2a2ca7042ad2926b8.png)
+<img src="D:\pic\markdown\kafka\B68B87AD9E9B46B2A2CA7042AD2926B8.png" style="zoom:48%;" />
 
 　　再增加一个consumer（consumer4）后，其中3个consumer可分别消费一个partition的数据，另外一个consumer（consumer4）不能消费topic1任何数据。
 
-![kafka consumer group rebalance](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\8835c5c6b4794131b76125ba01a7530b\eb2aa72efd9b4f4f821d3101b6e11542.png)
+<img src="D:\pic\markdown\kafka\eb2aa72efd9b4f4f821d3101b6e11542.png" alt="kafka consumer group rebalance" style="zoom:48%;" />
 
 　　此时关闭consumer1，剩下的consumer可分别消费一个partition的数据。
 
-![kafka consumer group](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\e12d7810220d4b72b8d28c2e9d6dbfd7\31a0c129c4c1492aa63fa6c932f35f72.png)
+<img src="D:\pic\markdown\kafka\31a0c129c4c1492aa63fa6c932f35f72.png" alt="kafka consumer group" style="zoom:48%;" />
 
 　　接着关闭consumer2，剩下的consumer3可消费2个partition，consumer4可消费1个partition。
 
-![kafka consumer group](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\8786952645b74ef6891823b041fd9e2b\4e5a3e58cf0649a2a2ef9ce5e230dfb6.png)
+<img src="D:\pic\markdown\kafka\4e5a3e58cf0649a2a2ef9ce5e230dfb6.png" alt="kafka consumer group" style="zoom:48%;" />
 
 　　再关闭consumer3，剩下的consumer4可同时消费topic1的3个partition。
 
-![kafka consumer group](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\22c9c6048b904859a40a6e532d4300e4\a890a6ae36c14230b70c0aee0a849823.png)
+<img src="D:\pic\markdown\kafka\a890a6ae36c14230b70c0aee0a849823.png" alt="kafka consumer group" style="zoom:48%;" />
 
 　　consumer rebalance算法如下：　　
 
@@ -301,19 +352,19 @@ parition是物理上的概念，每个topic包含一个或多个partition，创�
 
 　　根据Kafka官方文档，Kafka作者正在考虑在还未发布的[0.9.x版本中使用中心协调器(coordinator)](https://cwiki.apache.org/confluence/display/KAFKA/Kafka+0.9+Consumer+Rewrite+Design)。大体思想是选举出一个broker作为coordinator，由它watch Zookeeper，从而判断是否有partition或者consumer的增减，然后生成rebalance命令，并检查是否这些rebalance在所有相关的consumer中被执行成功，如果不成功则重试，若成功则认为此次rebalance成功（这个过程跟replication controller非常类似，所以我很奇怪为什么当初设计replication controller时没有使用类似方式来解决consumer rebalance的问题）。流程如下：
 
-![kafka coordinator](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\f9dfd5d755214bbcaf5bc32d54ae9e4e\ebee64a0e9a54cc5b711aa8485b2b2b2.png)
+<img src="D:\pic\markdown\kafka\ebee64a0e9a54cc5b711aa8485b2b2b2.png" alt="kafka coordinator" style="zoom:60%;" />
 
-**消息Deliver guarantee**
+### 消息Deliver guarantee
 
-　　通过上文介绍，想必读者已经明天了producer和consumer是如何工作的，以及Kafka是如何做replication的，接下来要讨论的是Kafka如何确保消息在producer和consumer之间传输。有这么几种可能的delivery guarantee：
+　　通过上文介绍，想必读者已经明白了producer和consumer是如何工作的，以及Kafka是如何做replication的，接下来要讨论的是Kafka如何确保消息在producer和consumer之间传输。有这么几种可能的delivery guarantee：
 
 - At most once 消息可能会丢，但绝不会重复传输
 - At least one 消息绝不会丢，但可能会重复传输
 - Exactly once 每条消息肯定会被传输一次且仅传输一次，很多时候这是用户所想要的。
 
-　　Kafka的delivery guarantee semantic非常直接。当producer向broker发送消息时，一旦这条消息被commit，因数replication的存在，它就不会丢。但是如果producer发送数据给broker后，遇到的网络问题而造成通信中断，那producer就无法判断该条消息是否已经commit。这一点有点像向一个自动生成primary key的数据库表中插入数据。虽然Kafka无法确定网络故障期间发生了什么，但是producer可以生成一种类似于primary key的东西，发生故障时幂等性的retry多次，这样就做到了Exactly one。截止到目前(Kafka 0.8.2版本，2015-01-25)，这一feature还并未实现，有希望在Kafka未来的版本中实现。（所以目前默认情况下一条消息从producer和broker是确保了At least once，但可通过设置producer异步发送实现At most once）。
+　　Kafka的delivery guarantee semantic非常直接。当producer向broker发送消息时，一旦这条消息被commit，因为replication的存在，它就不会丢。但是如果producer发送数据给broker后，遇到的网络问题而造成通信中断，那producer就无法判断该条消息是否已经commit。这一点有点像向一个自动生成primary key的数据库表中插入数据。虽然Kafka无法确定网络故障期间发生了什么，但是producer可以生成一种类似于primary key的东西，发生故障时幂等性的retry多次，这样就做到了Exactly one。截止到目前(Kafka 0.8.2版本，2015-01-25)，这一feature还并未实现，有希望在Kafka未来的版本中实现。（所以目前默认情况下一条消息从producer和broker是确保了At least once，但可通过设置producer异步发送实现At most once）。
 
-　　接下来讨论的是消息从broker到consumer的delivery guarantee semantic。（仅针对Kafka consumer high level API）。consumer在从broker读取消息后，可以选择commit，该操作会在Zookeeper中存下该consumer在该partition下读取的消息的offset。该consumer下一次再读该partition时会从下一条开始读取。如未commit，下一次读取的开始位置会跟上一次commit之后的开始位置相同。当然可以将consumer设置为autocommit，即consumer一旦读到数据立即自动commit。如果只讨论这一读取消息的过程，那Kafka是确保了Exactly once。但实际上实际使用中consumer并非读取完数据就结束了，而是要进行进一步处理，而数据处理与commit的顺序在很大程度上决定了消息从broker和consumer的delivery guarantee semantic。
+　　接下来讨论的是消息从broker到consumer的delivery guarantee semantic。（仅针对Kafka consumer high level API）。consumer在从broker读取消息后，可以选择commit，该操作会在Zookeeper中存下该consumer在该partition下读取的消息的offset。该consumer下一次再读该partition时会从下一条开始读取。如未commit，下一次读取的开始位置会跟上一次commit之后的开始位置相同。当然可以将consumer设置为autocommit，即consumer一旦读到数据立即自动commit。如果只讨论这一读取消息的过程，那Kafka是确保了Exactly once。但实际使用中consumer并非读取完数据就结束了，而是要进行进一步处理，而数据处理与commit的顺序在很大程度上决定了消息从broker和consumer的delivery guarantee semantic。
 
 - 读完消息先commit再处理消息。这种模式下，如果consumer在commit后还没来得及处理消息就crash了，下次重新开始工作后就无法读到刚刚已提交而未处理的消息，这就对应于At most once
 - 读完消息先处理再commit。这种模式下，如果处理完了消息在commit之前consumer crash了，下次重新开始工作时还会处理刚刚未commit的消息，实际上该消息已经被处理过了。这就对应于At least once。在很多情况使用场景下，消息都有一个primary key，所以消息的处理往往具有幂等性，即多次处理这一条消息跟只处理一次是等效的，那就可以认为是Exactly once。（人个感觉这种说法有些牵强，毕竟它不是Kafka本身提供的机制，而且primary key本身不保证操作的幂等性。而且实际上我们说delivery guarantee semantic是讨论被处理多少次，而非处理结果怎样，因为处理方式多种多样，我们的系统不应该把处理过程的特性–如是否幂等性，当成Kafka本身的feature）
@@ -321,11 +372,11 @@ parition是物理上的概念，每个topic包含一个或多个partition，创�
 
 　　总之，Kafka默认保证At least once，并且允许通过设置producer异步提交来实现At most once。而Exactly once要求与目标存储系统协作，幸运的是Kafka提供的offset可以使用这种方式非常直接非常容易。
 
-**Benchmark**
+## Benchmark
 
 　　纸上得来终觉浅，绝知些事要躬行。笔者希望能亲自测一下Kafka的性能，而非从网上找一些测试数据。所以笔者曾在0.8发布前两个月做过详细的Kafka0.8性能测试，不过很可惜测试报告不慎丢失。所幸在网上找到了Kafka的创始人之一的[Jay Kreps的bechmark](http://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines)。以下描述皆基于该benchmark。（该benchmark基于Kafka0.8.1）
 
-**测试环境**
+### 测试环境
 
 　　该benchmark用到了六台机器，机器配置如下
 
@@ -336,7 +387,7 @@ parition是物理上的概念，每个topic包含一个或多个partition，创�
 
 　　这6台机器其中3台用来搭建Kafka broker集群，另外3台用来安装Zookeeper及生成测试数据。6个drive都直接以非RAID方式挂载。实际上kafka对机器的需求与Hadoop的类似。
 
-**Producer吞吐率**
+### Producer吞吐率
 
 　　该项测试只测producer的吞吐率，也就是数据只被持久化，没有consumer读数据。
 
@@ -351,7 +402,7 @@ parition是物理上的概念，每个topic包含一个或多个partition，创�
 　　初步观察此结果会认为它比人们所预期的要高很多，尤其当考虑到Kafka要把数据持久化到磁盘当中。实际上，如果使用随机访问数据系统，比如RDBMS，或者key-velue store，可预期的最高访问频率大概是5000到50000个请求每秒，这和一个好的RPC层所能接受的远程请求量差不多。而该测试中远超于此的原因有两个。
 
 - Kafka确保写磁盘的过程是线性磁盘I/O，测试中使用的6块廉价磁盘线性I/O的最大吞吐量是822MB/second，这已经远大于1Gb网卡所能带来的吞吐量了。许多消息系统把数据持久化到磁盘当成是一个开销很大的事情，这是因为他们对磁盘的操作都不是线性I/O。
-- 在每一个阶段，Kafka都尽量使用批量处理。如果想了解批处理在I/O操作中的重要性，可以参考David Patterson的”[Latency Lags Bandwidth](http://www.ll.mit.edu/HPEC/agendas/proc04/invited/patterson_keynote.pdf)“
+- 在每一个阶段，Kafka都尽量使用批量处理。如果想了解批处理在I/O操作中的重要性，可以参考David Patterson的“[Latency Lags Bandwidth](http://www.ll.mit.edu/HPEC/agendas/proc04/invited/patterson_keynote.pdf)”。
 
 **1个producer线程，3个异步replication**
 
@@ -367,11 +418,11 @@ parition是物理上的概念，每个topic包含一个或多个partition，创�
 
 　　Kafka同步复制与异步复制并没有本质的不同。leader会始终track follower replica从而监控它们是否还alive，只有所有in sync集合里的replica都acknowledge的消息才可能被consumer所消费。而对follower的等待影响了吞吐率。可以通过增大batch size来改善这种情况，但为了避免特定的优化而影响测试结果的可比性，本次测试并没有做这种调整。　　
 
-**3个producer,3个异步replication**
+**3个producer，3个异步replication**
 
 　　该测试相当于把上文中的1个producer,复制到了3台不同的机器上（在1台机器上跑多个实例对吞吐率的增加不会有太大帮忙，因为网卡已经基本饱和了），这3个producer同时发送数据。整个集群的吞吐率为**2,024,032 records/second**（**193,0MB/second**）。
 
-**Producer Throughput Vs. Stored Data**
+### Producer Throughput vs Stored Data
 
 　　消息系统的一个潜在的危险是当数据能都存于内存时性能很好，但当数据量太大无法完全存于内存中时（然后很多消息系统都会删除已经被消费的数据，但当消费速度比生产速度慢时，仍会造成数据的堆积），数据会被转移到磁盘，从而使得吞吐率下降，这又反过来造成系统无法及时接收数据。这样就非常糟糕，而实际上很多情景下使用queue的目的就是解决数据消费速度和生产速度不一致的问题。
 
@@ -383,7 +434,7 @@ parition是物理上的概念，每个topic包含一个或多个partition，创�
 
 　　这个variance是由Linux I/O管理造成的，它会把数据缓存起来再批量flush。上图的测试结果是在生产环境中对Kafka集群做了些tuning后得到的，这些tuning方法可参考[这里](http://kafka.apache.org/documentation.html#hwandos)。　　
 
-**consumer吞吐率**
+### consumer吞吐率
 
 　　需要注意的是，replication factor并不会影响consumer的吞吐率测试，因为consumer只会从每个partition的leader读数据，而与replicaiton factor无关。同样，consumer吞吐率也与同步复制还是异步复制无关。　　
 
@@ -399,7 +450,7 @@ parition是物理上的概念，每个topic包含一个或多个partition，创�
 
 　　正如所预期的那样，consumer的吞吐率几乎线性增涨。　　
 
-**Producer and Consumer**
+### Producer and Consumer
 
 　　上面的测试只是把producer和consumer分开测试，而该项测试同时运行producer和consumer，这更接近使用场景。实际上目前的replication系统中follower就相当于consumer在工作。
 
@@ -407,19 +458,19 @@ parition是物理上的概念，每个topic包含一个或多个partition，创�
 
 　　可以看到，该项测试结果与单独测试1个producer时的结果几乎一致。所以说consumer非常轻量级。　　
 
-**消息长度对吞吐率的影响**
+### 消息长度对吞吐率的影响
 
 　　上面的所有测试都基于短消息（payload 100字节），而正如上文所说，短消息对Kafka来说是更难处理的使用方式，可以预期，随着消息长度的增大，records/second会减小，但MB/second会有所提高。下图是records/second与消息长度的关系图。
 
-![kafka throughput](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\8295b44e95c94ccba55b320ef9e84842\bb89c41f2ed44d1b9579fc0444b2ba07.png)
+<img src="D:\pic\markdown\kafka\bb89c41f2ed44d1b9579fc0444b2ba07.png" alt="kafka throughput" style="zoom:60%;" />
 
 　　正如我们所预期的那样，随着消息长度的增加，每秒钟所能发送的消息的数量逐渐减小。但是如果看每秒钟发送的消息的总大小，它会随着消息长度的增加而增加，如下图所示。
 
-![kafka benchmark](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\bae5077a42f04d44a45154afab466719\4dc83630375a427eaa5a73c3b48a48fc.png)
+<img src="D:\pic\markdown\kafka\4dc83630375a427eaa5a73c3b48a48fc.png" alt="kafka benchmark" style="zoom:60%;" />
 
 　　从上图可以看出，当消息长度为10字节时，因为要频繁入队，花了太多时间获取锁，CPU成了瓶颈，并不能充分利用带宽。但从100字节开始，我们可以看到带宽的使用逐渐趋于饱和（虽然MB/second还是会随着消息长度的增加而增加，但增加的幅度也越来越小）。　　
 
-**端到端的Latency**
+### 端到端的Latency
 
 　　上文中讨论了吞吐率，那消息传输的latency如何呢？也就是说消息从producer到consumer需要多少时间呢？该项测试创建1个producer和1个consumer并反复计时。结果是，**2 ms (median), 3ms (99th percentile, 14ms (99.9th percentile)**。
 
@@ -431,30 +482,159 @@ parition是物理上的概念，每个topic包含一个或多个partition，创�
 
 　　实际上Kafka Distribution提供了producer性能测试工具，可通过bin/kafka-producer-perf-test.sh脚本来启动。所使用的命令如下
 
-| 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253 | ProducerSetupbin/kafka-topics.sh --zookeeper esv4-hcl197.grid.linkedin.com:2181 --create --topic test-rep-one --partitions 6 --replication-factor 1bin/kafka-topics.sh --zookeeper esv4-hcl197.grid.linkedin.com:2181 --create --topic test --partitions 6 --replication-factor 3Single thread, no replicationbin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test7 50000000 100 -1 acks=1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=8196Single-thread, async 3x replicationbin/kafktopics.sh --zookeeper esv4-hcl197.grid.linkedin.com:2181 --create --topic test --partitions 6 --replication-factor 3bin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test6 50000000 100 -1 acks=1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=8196Single-thread, sync 3x replicationbin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test 50000000 100 -1 acks=-1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=64000Three Producers, 3x async replicationbin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test 50000000 100 -1 acks=1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=8196Throughput Versus Stored Databin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test 50000000000 100 -1 acks=1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=8196Effect of message sizefor i in 10 100 1000 10000 100000;doecho""echo$ibin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test $((1000*1024*1024/$i)) $i -1 acks=1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=128000done;ConsumerConsumer throughputbin/kafka-consumer-perf-test.sh --zookeeper esv4-hcl197.grid.linkedin.com:2181 --messages 50000000 --topic test --threads 13 ConsumersOn three servers, run:bin/kafka-consumer-perf-test.sh --zookeeper esv4-hcl197.grid.linkedin.com:2181 --messages 50000000 --topic test --threads 1End-to-end Latencybin/kafka-run-class.sh kafka.tools.TestEndToEndLatency esv4-hcl198.grid.linkedin.com:9092 esv4-hcl197.grid.linkedin.com:2181 test 5000Producer and consumerbin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test 50000000 100 -1 acks=1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=8196bin/kafka-consumer-perf-test.sh --zookeeper esv4-hcl197.grid.linkedin.com:2181 --messages 50000000 --topic test --threads 1 |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-|                                                              |                                                              |
+```properties
+Producer
+Setup
+bin/kafka-topics.sh --zookeeper esv4-hcl197.grid.linkedin.com:2181 --create --topic test-rep-one --partitions 6 --replication-factor 1
+bin/kafka-topics.sh --zookeeper esv4-hcl197.grid.linkedin.com:2181 --create --topic test --partitions 6 --replication-factor 3
 
-　　broker配置如下
+Single thread, no replication
 
-| 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495 | ############################# Server Basics ############################## The id of the broker. This must be set to a unique integer for each broker.broker.id=0############################# Socket Server Settings ############################## The port the socket server listens onport=9092# Hostname the broker will bind to and advertise to producers and consumers.# If not set, the server will bind to all interfaces and advertise the value returned from# from java.net.InetAddress.getCanonicalHostName().#host.name=localhost# The number of threads handling network requestsnum.network.threads=4# The number of threads doing disk I/Onum.io.threads=8# The send buffer (SO_SNDBUF) used by the socket serversocket.send.buffer.bytes=1048576# The receive buffer (SO_RCVBUF) used by the socket serversocket.receive.buffer.bytes=1048576# The maximum size of a request that the socket server will accept (protection against OOM)socket.request.max.bytes=104857600############################# Log Basics ############################## The directory under which to store log fileslog.dirs=/grid/a/dfs-data/kafka-logs,/grid/b/dfs-data/kafka-logs,/grid/c/dfs-data/kafka-logs,/grid/d/dfs-data/kafka-logs,/grid/e/dfs-data/kafka-logs,/grid/f/dfs-data/kafka-logs# The number of logical partitions per topic per server. More partitions allow greater parallelism# for consumption, but also mean more files.num.partitions=8############################# Log Flush Policy ############################## The following configurations control the flush of data to disk. This is the most# important performance knob in kafka.# There are a few important trade-offs here:# 1. Durability: Unflushed data is at greater risk of loss in the event of a crash.# 2. Latency: Data is not made available to consumers until it is flushed (which adds latency).# 3. Throughput: The flush is generally the most expensive operation. # The settings below allow one to configure the flush policy to flush data after a period of time or# every N messages (or both). This can be done globally and overridden on a per-topic basis.# Per-topic overrides for log.flush.interval.ms#log.flush.intervals.ms.per.topic=topic1:1000, topic2:3000############################# Log Retention Policy ############################## The following configurations control the disposal of log segments. The policy can# be set to delete segments after a period of time, or after a given size has accumulated.# A segment will be deleted whenever *either* of these criteria are met. Deletion always happens# from the end of the log.# The minimum age of a log file to be eligible for deletionlog.retention.hours=168# A size-based retention policy for logs. Segments are pruned from the log as long as the remaining# segments don't drop below log.retention.bytes.#log.retention.bytes=1073741824# The maximum size of a log segment file. When this size is reached a new log segment will be created.log.segment.bytes=536870912# The interval at which log segments are checked to see if they can be deleted according # to the retention policieslog.cleanup.interval.mins=1############################# Zookeeper ############################## Zookeeper connection string (see zookeeper docs for details).# This is a comma separated host:port pairs, each corresponding to a zk# server. e.g. "127.0.0.1:3000,127.0.0.1:3001,127.0.0.1:3002".# You can also append an optional chroot string to the urls to specify the# root directory for all kafka znodes.zookeeper.connect=esv4-hcl197.grid.linkedin.com:2181# Timeout in ms for connecting to zookeeperzookeeper.connection.timeout.ms=1000000# metrics reporter propertieskafka.metrics.polling.interval.secs=5kafka.metrics.reporters=kafka.metrics.KafkaCSVMetricsReporterkafka.csv.metrics.dir=/tmp/kafka_metrics# Disable csv reporting by default.kafka.csv.metrics.reporter.enabled=falsereplica.lag.max.messages=10000000 |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-|                                                              |                                                              |
+bin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test7 50000000 100 -1 acks=1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=8196
 
-　　读者也可参考另外一份[Kafka性能测试报告](http://liveramp.com/blog/kafka-0-8-producer-performance-2/)
+Single-thread, async 3x replication
 
-**Kafka系列文章**
+bin/kafktopics.sh --zookeeper esv4-hcl197.grid.linkedin.com:2181 --create --topic test --partitions 6 --replication-factor 3
+bin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test6 50000000 100 -1 acks=1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=8196
 
-- [Kafka设计解析（一）- Kafka背景及架构介绍](http://www.jasongj.com/2015/03/10/KafkaColumn1/)
-- [Kafka设计解析（二）- Kafka High Availability （上）](http://www.jasongj.com/2015/04/24/KafkaColumn2/)
-- [Kafka设计解析（三）- Kafka High Availability （下）](http://www.jasongj.com/2015/06/08/KafkaColumn3/)
-- [Kafka设计解析（四）- Kafka Consumer设计解析](http://www.jasongj.com/2015/08/09/KafkaColumn4/)
-- [Kafka设计解析（五）- Kafka性能测试方法及Benchmark报告](http://www.jasongj.com/2015/12/31/KafkaColumn5_kafka_benchmark/)
+Single-thread, sync 3x replication
 
-**参考**
+bin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test 50000000 100 -1 acks=-1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=64000
 
-- [使用消息队列的 10 个理由](http://www.oschina.net/translate/top-10-uses-for-message-queue)
-- [Apache Kafka](http://kafka.apache.org/)
-- [Efficient data transfer through zero copy](http://www.ibm.com/developerworks/library/j-zerocopy/)
-- [Benchmarking Apache Kafka: 2 Million Writes Per Second (On Three Cheap Machines)](http://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines)
-- [Kafka 0.8 Producer Performance](http://liveramp.com/blog/kafka-0-8-producer-performance-2/)
+Three Producers, 3x async replication
+bin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test 50000000 100 -1 acks=1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=8196
+
+Throughput Versus Stored Data
+
+bin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test 50000000000 100 -1 acks=1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=8196
+
+Effect of message size
+
+for i in 10 100 1000 10000 100000;
+do
+echo ""
+echo $i
+bin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test $((1000*1024*1024/$i)) $i -1 acks=1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=128000
+done;
+
+Consumer
+Consumer throughput
+
+bin/kafka-consumer-perf-test.sh --zookeeper esv4-hcl197.grid.linkedin.com:2181 --messages 50000000 --topic test --threads 1
+
+3 Consumers
+
+On three servers, run:
+bin/kafka-consumer-perf-test.sh --zookeeper esv4-hcl197.grid.linkedin.com:2181 --messages 50000000 --topic test --threads 1
+
+End-to-end Latency
+
+bin/kafka-run-class.sh kafka.tools.TestEndToEndLatency esv4-hcl198.grid.linkedin.com:9092 esv4-hcl197.grid.linkedin.com:2181 test 5000
+
+Producer and consumer
+
+bin/kafka-run-class.sh org.apache.kafka.clients.tools.ProducerPerformance test 50000000 100 -1 acks=1 bootstrap.servers=esv4-hcl198.grid.linkedin.com:9092 buffer.memory=67108864 batch.size=8196
+
+bin/kafka-consumer-perf-test.sh --zookeeper esv4-hcl197.grid.linkedin.com:2181 --messages 50000000 --topic test --threads 1
+```
+
+broker配置如下
+
+```properties
+############################# Server Basics #############################
+
+# The id of the broker. This must be set to a unique integer for each broker.
+broker.id=0
+
+############################# Socket Server Settings #############################
+
+# The port the socket server listens on
+port=9092
+
+# Hostname the broker will bind to and advertise to producers and consumers.
+# If not set, the server will bind to all interfaces and advertise the value returned from
+# from java.net.InetAddress.getCanonicalHostName().
+#host.name=localhost
+
+# The number of threads handling network requests
+num.network.threads=4
+ 
+# The number of threads doing disk I/O
+num.io.threads=8
+
+# The send buffer (SO_SNDBUF) used by the socket server
+socket.send.buffer.bytes=1048576
+
+# The receive buffer (SO_RCVBUF) used by the socket server
+socket.receive.buffer.bytes=1048576
+
+# The maximum size of a request that the socket server will accept (protection against OOM)
+socket.request.max.bytes=104857600
+
+
+############################# Log Basics #############################
+
+# The directory under which to store log files
+log.dirs=/grid/a/dfs-data/kafka-logs,/grid/b/dfs-data/kafka-logs,/grid/c/dfs-data/kafka-logs,/grid/d/dfs-data/kafka-logs,/grid/e/dfs-data/kafka-logs,/grid/f/dfs-data/kafka-logs
+
+# The number of logical partitions per topic per server. More partitions allow greater parallelism
+# for consumption, but also mean more files.
+num.partitions=8
+
+############################# Log Flush Policy #############################
+
+# The following configurations control the flush of data to disk. This is the most
+# important performance knob in kafka.
+# There are a few important trade-offs here:
+#    1. Durability: Unflushed data is at greater risk of loss in the event of a crash.
+#    2. Latency: Data is not made available to consumers until it is flushed (which adds latency).
+#    3. Throughput: The flush is generally the most expensive operation. 
+# The settings below allow one to configure the flush policy to flush data after a period of time or
+# every N messages (or both). This can be done globally and overridden on a per-topic basis.
+
+# Per-topic overrides for log.flush.interval.ms
+#log.flush.intervals.ms.per.topic=topic1:1000, topic2:3000
+
+############################# Log Retention Policy #############################
+
+# The following configurations control the disposal of log segments. The policy can
+# be set to delete segments after a period of time, or after a given size has accumulated.
+# A segment will be deleted whenever *either* of these criteria are met. Deletion always happens
+# from the end of the log.
+
+# The minimum age of a log file to be eligible for deletion
+log.retention.hours=168
+
+# A size-based retention policy for logs. Segments are pruned from the log as long as the remaining
+# segments don't drop below log.retention.bytes.
+#log.retention.bytes=1073741824
+
+# The maximum size of a log segment file. When this size is reached a new log segment will be created.
+log.segment.bytes=536870912
+
+# The interval at which log segments are checked to see if they can be deleted according 
+# to the retention policies
+log.cleanup.interval.mins=1
+
+############################# Zookeeper #############################
+
+# Zookeeper connection string (see zookeeper docs for details).
+# This is a comma separated host:port pairs, each corresponding to a zk
+# server. e.g. "127.0.0.1:3000,127.0.0.1:3001,127.0.0.1:3002".
+# You can also append an optional chroot string to the urls to specify the
+# root directory for all kafka znodes.
+zookeeper.connect=esv4-hcl197.grid.linkedin.com:2181
+
+# Timeout in ms for connecting to zookeeper
+zookeeper.connection.timeout.ms=1000000
+
+# metrics reporter properties
+kafka.metrics.polling.interval.secs=5
+kafka.metrics.reporters=kafka.metrics.KafkaCSVMetricsReporter
+kafka.csv.metrics.dir=/tmp/kafka_metrics
+# Disable csv reporting by default.
+kafka.csv.metrics.reporter.enabled=false
+
+replica.lag.max.messages=10000000
+```
+
