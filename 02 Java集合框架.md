@@ -115,7 +115,7 @@ HashSet 底层就是基于 HashMap 实现的。HashSet 除了 clone()、writeObj
 
 **JDK1.7的ConcurrentHashMap：**
 
-<img src="D:\pic\markdown\面试题总结\02 Java集合框架\5FDD59D305E740C1B90B872BF12703F7.png" style="zoom:20%;" />
+<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5FDD59D305E740C1B90B872BF12703F7.png" style="zoom:20%;" />
 
 首先将数据分为一段一段的存储，然后给每一段数据配一把锁，当一个线程占用锁访问其中一个段数据时，其他段的数据也能被其他线程访问。
 
@@ -129,7 +129,7 @@ static class Segment<K,V> extends ReentrantLock implements Serializable {}
 
 **JDK1.8的ConcurrentHashMap**（TreeBin: 红黑二叉树节点 Node: 链表节点）：
 
-![](D:\pic\markdown\面试题总结\02 Java集合框架\3AD7080E8B404BF8AA7CF5F322D6375F.png)
+![](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\3AD7080E8B404BF8AA7CF5F322D6375F.png)
 
 取消了Segment分段锁，采用CAS和synchronized来保证并发安全。数据结构跟HashMap1.8的结构类似，数组+链表/红黑二叉树。在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为O(N)）转换为红黑树（寻址时间复杂度为O(log(N))）。
 
@@ -151,7 +151,7 @@ Hashtable 采用 **数组+链表** 的形式，数组是 Hashtable  的主体，
 
 ② **Hashtable(同一把锁)** 使用 synchronized 来保证线程安全，效率非常低下。当一个线程访问同步方法时，其他线程也访问同步方法，可能会进入阻塞或轮询状态，如使用 put 添加元素，另一个线程不能使用 put 添加元素，也不能使用 get，竞争会越激烈效率越低。
 
-<img src="D:\pic\markdown\面试题总结\02 Java集合框架\7C499FAFE70B49C68711C34F91D96CF3.png" style="zoom: 40%;" />
+<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\7C499FAFE70B49C68711C34F91D96CF3.png" style="zoom: 40%;" />
 
 ### List、Set和Map的初始容量和加载因子
 

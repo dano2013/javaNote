@@ -24,7 +24,7 @@ java.lang、java.util、java.io、java.net、java.sql
 
 Java 程序从源代码到运行一般有下面3步：
 
-![](D:\pic\markdown\面试题总结\01 Java基础知识\3FFF5A36E61246A9B45737B1C8F2D5AF.png)
+![](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\3FFF5A36E61246A9B45737B1C8F2D5AF.png)
 
 ### Java vs C++
 
@@ -213,7 +213,7 @@ public void sout(String name) { //形式参数为 name
 
 引用传递（pass by reference）是指在调用函数时将实际参数的地址直接传递到函数中，那么在函数中对参数所进行的修改，将影响到实际参数。
 
-![](D:\pic\markdown\面试题总结\01 Java基础知识\p.png)
+![](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\p.png)
 
 所以，<u>值传递和引用传递的区别并不是传递的内容，而是实参到底有没有被复制一份给形参。</u>在判断实参内容有没有受影响的时候，要看传的的是什么，<u>如果你传递的是个地址，那么就看这个地址的变化会不会有影响，而不是看地址指向的对象的变化。</u>
 

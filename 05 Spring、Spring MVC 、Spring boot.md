@@ -6,7 +6,7 @@
 
 ### 列举一些重要的Spring模块
 
-<img src="D:\pic\markdown\面试题总结\05 Mybatis、Spring、Spring MVC 、Spring boot\4d851e51106f4bc4b11c1cd0b3d4a4c4.png" alt="Spring主要模块" style="zoom: 80%;" />
+<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\4d851e51106f4bc4b11c1cd0b3d4a4c4.png" alt="Spring主要模块" style="zoom: 80%;" />
 
 - Spring Core： Spring 其他所有的功能都需要依赖于该类库，主要提供 IoC 依赖注入功能
 - Spring AOP ：提供了面向切面的编程实现
@@ -34,7 +34,7 @@
 
 事务管理器接口 PlatformTransactionManager 通过 getTransaction(TransactionDefinition definition) 方法来得到一个事务，TransactionDefinition就定义了一些基本的事务属性。事务属性可以理解成事务的一些基本配置，描述了事务策略如何应用到方法上，事务属性包含了5个方面。
 
-<img src="D:\pic\markdown\面试题总结\05 Mybatis、Spring、Spring MVC 、Spring boot\1637b43a47916b2d.png" style="zoom:75%;" />
+<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\1637b43a47916b2d.png" style="zoom:75%;" />
 
 #### 隔离级别
 
@@ -93,7 +93,7 @@ IoC（Inverse of Control：控制反转）是一种解耦的设计思想。<u>�
 
 Spring IoC的初始化过程：
 
-<img src="D:\pic\markdown\面试题总结\05 Mybatis、Spring、Spring MVC 、Spring boot\4a7ef6d2553a4179a6f2c73722e730ea.png" alt="Spring IoC的初始化过程" style="zoom:80%;" />
+<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\4a7ef6d2553a4179a6f2c73722e730ea.png" alt="Spring IoC的初始化过程" style="zoom:80%;" />
 
 Spring 时代我们一般通过 XML 文件来配置 Bean，后来开发人员觉得 XML 文件来配置不太好，于是 SpringBoot 的注解配置就慢慢开始流行起来。
 
@@ -229,7 +229,7 @@ SpringMVC 框架是以请求为驱动，围绕 Servlet 设计，将请求发给�
 
 SpringMVC的核心控制器是DispatcherServlet。
 
-<img src="D:\pic\markdown\面试题总结\05 Mybatis、Spring、Spring MVC 、Spring boot\7b948963f66748798d25ad194708bc0c.png" alt="SpringMVC运行原理" style="zoom:80%;" />
+<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\7b948963f66748798d25ad194708bc0c.png" alt="SpringMVC运行原理" style="zoom:80%;" />
 
 **流程说明：**
 
