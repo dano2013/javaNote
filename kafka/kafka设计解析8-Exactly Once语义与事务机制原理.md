@@ -6,7 +6,7 @@
 
 本文所有Kafka原理性的描述除特殊说明外均基于Kafka 1.0.0版本。
 
-**为什么要提供事务机制**
+## 为什么要提供事务机制
 
 Kafka事务机制的实现主要是为了支持
 
@@ -14,7 +14,7 @@ Kafka事务机制的实现主要是为了支持
 - 操作的原子性
 - 有状态操作的可恢复性
 
-**Exactly Once**
+### Exactly Once
 
 《[Kafka背景及架构介绍](http://www.jasongj.com/2015/03/10/KafkaColumn1/#Kafka-delivery-guarantee)》一文中有说明Kafka在0.11.0.0之前的版本中只支持At Least Once和At Most Once语义，尚不支持Exactly Once语义。
 
@@ -26,7 +26,7 @@ Kafka事务机制的实现主要是为了支持
 
 因此，Kafka本身对Exactly Once语义的支持就非常必要。
 
-**操作原子性**
+### 操作原子性
 
 操作的原子性是指，多个操作要么全部成功要么全部失败，不存在部分成功部分失败的可能。
 
@@ -35,17 +35,17 @@ Kafka事务机制的实现主要是为了支持
 - 操作结果更可控，有助于提升数据一致性
 - 便于故障恢复。因为操作是原子的，从故障中恢复时只需要重试该操作（如果原操作失败）或者直接跳过该操作（如果原操作成功），而不需要记录中间状态，更不需要针对中间状态作特殊处理
 
-**实现事务机制的几个阶段**
+## 实现事务机制的几个阶段
 
-**幂等性发送**
+### 幂等性发送
 
 上文提到，实现Exactly Once的一种方法是让下游系统具有幂等处理特性，而在Kafka Stream中，Kafka Producer本身就是“下游”系统，因此如果能让Producer具有幂等处理特性，那就可以让Kafka Stream在一定程度上支持Exactly once语义。
 
 为了实现Producer的幂等语义，Kafka引入了Producer ID（即PID）和Sequence Number。每个新的Producer在初始化的时候会被分配一个唯一的PID，该PID对用户完全透明而不会暴露给用户。
 
-对于每个PID，该Producer发送数据的每个都对应一个从0开始单调递增的Sequence Number。
+对于每个PID，该Producer发送的每个数据都对应一个从0开始单调递增的Sequence Number。
 
-类似地，Broker端也会为每个维护一个序号，并且每次Commit一条消息时将其对应序号递增。对于接收的每条消息，如果其序号比Broker维护的序号（即最后一次Commit的消息的序号）大一，则Broker会接受它，否则将其丢弃：
+类似地，Broker端也会为每个数据维护一个序号，并且每次Commit一条消息时将其对应序号递增。对于接收的每条消息，如果其序号比Broker维护的序号（即最后一次Commit的消息的序号）大一，则Broker会接受它，否则将其丢弃：
 
 - 如果消息序号比Broker维护的序号大一以上，说明中间有数据尚未写入，也即乱序，此时Broker拒绝该消息，Producer抛出InvalidSequenceNumber
 - 如果消息序号小于等于Broker维护的序号，说明该消息已被保存，即为重复消息，Broker直接丢弃该消息，Producer抛出DuplicateSequenceNumber
@@ -55,15 +55,15 @@ Kafka事务机制的实现主要是为了支持
 - Broker保存消息后，发送ACK前宕机，Producer认为消息未发送成功并重试，造成数据重复
 - 前一条消息发送失败，后一条消息发送成功，前一条消息重试后成功，造成数据乱序
 
-**事务性保证**
+### 事务性保证
 
-上述幂等设计只能保证单个Producer对于同一个的Exactly Once语义。
+上述幂等设计只能保证单个Producer对于同一个<Topic, Partition>的Exactly Once语义。
 
 另外，它并不能保证写操作的原子性——即多个写操作，要么全部被Commit要么全部不被Commit。
 
 更不能保证多个读写操作的的原子性。尤其对于Kafka Stream应用而言，典型的操作即是从某个Topic消费数据，经过一系列转换后写回另一个Topic，保证从源Topic的读取与向目标Topic的写入的原子性有助于从故障中恢复。
 
-事务保证可使得应用程序将生产数据和消费数据当作一个原子单元来处理，要么全部成功，要么全部失败，即使该生产或消费跨多个。
+事务保证可使得应用程序将生产数据和消费数据当作一个原子单元来处理，要么全部成功，要么全部失败，即使该生产或消费跨多个<Topic, Partition>。
 
 另外，有状态的应用也可以保证重启后从断点处继续处理，也即事务恢复。
 
@@ -76,16 +76,16 @@ Kafka事务机制的实现主要是为了支持
 - 跨Session的数据幂等发送。当具有相同Transaction ID的新的Producer实例被创建且工作时，旧的且拥有相同Transaction ID的Producer将不再工作。
 - 跨Session的事务恢复。如果某个应用实例宕机，新的实例可以保证任何未完成的旧的事务要么Commit要么Abort，使得新实例从一个正常状态开始工作。
 
-需要注意的是，上述的事务保证是从Producer的角度去考虑的。从Consumer的角度来看，该保证会相对弱一些。尤其是不能保证所有被某事务Commit过的所有消息都被一起消费，因为：
+需要注意的是，上述的事务保证是从Producer的角度去考虑的。从Consumer的角度来看，该保证会相对弱一些。尤其是不能保证被某事务Commit过的所有消息都被一起消费，因为：
 
 - 对于压缩的Topic而言，同一事务的某些消息可能被其它版本覆盖
 - 事务包含的消息可能分布在多个Segment中（即使在同一个Partition内），当老的Segment被删除时，该事务的部分数据可能会丢失
 - Consumer在一个事务内可能通过seek方法访问任意Offset的消息，从而可能丢失部分消息
 - Consumer可能并不需要消费某一事务内的所有Partition，因此它将永远不会读取组成该事务的所有消息
 
-**事务机制原理**
+## 事务机制原理
 
-**事务性消息传递**
+### 事务性消息传递
 
 这一节所说的事务主要指原子性，也即Producer将多条消息作为一个事务批量发送，要么全部成功要么全部失败。
 
@@ -97,38 +97,66 @@ Producer并不直接读写Transaction Log，它与Transaction Coordinator通信�
 
 Transaction Log的设计与Offset Log用于保存Consumer的Offset类似。
 
-**事务中Offset的提交**
+### 事务中Offset的提交
 
 许多基于Kafka的应用，尤其是Kafka Stream应用中同时包含Consumer和Producer，前者负责从Kafka中获取消息，后者负责将处理完的数据写回Kafka的其它Topic中。
 
 为了实现该场景下的事务的原子性，Kafka需要保证对Consumer Offset的Commit与Producer对发送消息的Commit包含在同一个事务中。否则，如果在二者Commit中间发生异常，根据二者Commit的顺序可能会造成数据丢失和数据重复：
 
-- 如果先Commit Producer发送数据的事务再Commit Consumer的Offset，即At Least Once语义，可能造成数据重复。
+- 如果先Commit Producer发送数据的事务，再Commit Consumer的Offset，即At Least Once语义，可能造成数据重复。
 - 如果先Commit Consumer的Offset，再Commit Producer数据发送事务，即At Most Once语义，可能造成数据丢失。
 
-**用于事务特性的控制型消息**
+### 用于事务特性的控制型消息
 
 为了区分写入Partition的消息被Commit还是Abort，Kafka引入了一种特殊类型的消息，即Control Message。该类消息的Value内不包含任何应用相关的数据，并且不会暴露给应用程序。它只用于Broker与Client间的内部通信。
 
 对于Producer端事务，Kafka以Control Message的形式引入一系列的Transaction Marker。Consumer即可通过该标记判定对应的消息被Commit了还是Abort了，然后结合该Consumer配置的隔离级别决定是否应该将该消息返回给应用程序。
 
-**事务处理样例代码**
+### 事务处理样例代码
 
-| 1234567891011121314151617181920212223242526272829 | Producer producer = new KafkaProducer(props);// 初始化事务，包括结束该Transaction ID对应的未完成的事务（如果有）// 保证新的事务在一个正确的状态下启动producer.initTransactions();// 开始事务producer.beginTransaction();// 消费数据ConsumerRecords records = consumer.poll(100);try{// 发送数据 producer.send(new ProducerRecord("Topic", "Key", "Value"));// 发送消费数据的Offset，将上述数据消费与数据发送纳入同一个Transaction内 producer.sendOffsetsToTransaction(offsets, "group1");// 数据发送及Offset发送均成功的情况下，提交事务 producer.commitTransaction();} catch (ProducerFencedException \| OutOfOrderSequenceException \| AuthorizationException e) {// 数据发送或者Offset发送出现异常时，终止事务 producer.abortTransaction();} finally {// 关闭Producer和Consumer producer.close(); consumer.close();} |
-| ------------------------------------------------- | ------------------------------------------------------------ |
-|                                                   |                                                              |
+```java
+Producer<String, String> producer = new KafkaProducer<String, String>(props);
+    
+// 初始化事务，包括结束该Transaction ID对应的未完成的事务（如果有）
+// 保证新的事务在一个正确的状态下启动
+producer.initTransactions();
 
-**完整事务过程**
+// 开始事务
+producer.beginTransaction();
 
-![Kafka Transaction](C:\Users\WANG\Documents\YoudaoNote\m18588930828@163.com\bb7210dfb70c444bb08bfd164bf4b13c\697a5d97faff43dcba5dbe2a4f5d98ce.png)
+// 消费数据
+ConsumerRecords<String, String> records = consumer.poll(100);
 
-**找到****Transaction Coordinator**
+try{
+    // 发送数据
+    producer.send(new ProducerRecord<String, String>("Topic", "Key", "Value"));
+    
+    // 发送消费数据的Offset，将上述数据消费与数据发送纳入同一个Transaction内
+    producer.sendOffsetsToTransaction(offsets, "group1");
+
+    // 数据发送及Offset发送均成功的情况下，提交事务
+    producer.commitTransaction();
+} catch (ProducerFencedException | OutOfOrderSequenceException | AuthorizationException e) {
+    // 数据发送或者Offset发送出现异常时，终止事务
+    producer.abortTransaction();
+} finally {
+    // 关闭Producer和Consumer
+    producer.close();
+    consumer.close();
+}
+```
+
+### 完整事务过程
+
+<img src="D:\pic\markdown\kafka\697a5d97faff43dcba5dbe2a4f5d98ce.png" alt="Kafka Transaction" style="zoom:40%;" />
+
+#### 找到Transaction Coordinator
 
 由于Transaction Coordinator是分配PID和管理事务的核心，因此Producer要做的第一件事情就是通过向任意一个Broker发送FindCoordinator请求找到Transaction Coordinator的位置。
 
 注意：只有应用程序为Producer配置了Transaction ID时才可使用事务特性，也才需要这一步。另外，由于事务性要求Producer开启幂等特性，因此通过将transactional.id设置为非空从而开启事务特性的同时也需要通过将enable.idempotence设置为true来开启幂等特性。
 
-**获取PID**
+#### 获取PID
 
 找到Transaction Coordinator后，具有幂等特性的Producer必须发起InitPidRequest请求以获取PID。
 
@@ -136,32 +164,32 @@ Transaction Log的设计与Offset Log用于保存Consumer的Offset类似。
 
 **如果事务特性被开启**
 
-InitPidRequest会发送给Transaction Coordinator。如果Transaction Coordinator是第一次收到包含有该Transaction ID的InitPidRequest请求，它将会把该存入Transaction Log，如上图中步骤2.1所示。这样可保证该对应关系被持久化，从而保证即使Transaction Coordinator宕机该对应关系也不会丢失。
+InitPidRequest会发送给Transaction Coordinator。如果Transaction Coordinator是第一次收到包含有该Transaction ID的InitPidRequest请求，它将会把该存入Transaction Log，如上图步骤2.1所示。这样可保证该对应关系被持久化，从而保证即使Transaction Coordinator宕机该对应关系也不会丢失。
 
 除了返回PID外，InitPidRequest还会执行如下任务：
 
-- 增加该PID对应的epoch。具有相同PID但epoch小于该epoch的其它Producer（如果有）新开启的事务将被拒绝。
+- 增加该PID对应的epoch。具有相同PID小于该epoch的其它Producer（如果有）新开启的事务将被拒绝。
 - 恢复（Commit或Abort）之前的Producer未完成的事务（如果有）。
 
 注意：InitPidRequest的处理过程是同步阻塞的。一旦该调用正确返回，Producer即可开始新的事务。
 
 另外，如果事务特性未开启，InitPidRequest可发送至任意Broker，并且会得到一个全新的唯一的PID。该Producer将只能使用幂等特性以及单一Session内的事务特性，而不能使用跨Session的事务特性。
 
-**开启事务**
+#### 开启事务
 
 Kafka从0.11.0.0版本开始，提供beginTransaction()方法用于开启一个事务。调用该方法后，Producer本地会记录已经开启了事务，但Transaction Coordinator只有在Producer发送第一条消息后才认为事务已经开启。
 
-**Consume-Transform-Produce**
+#### Consume-Transform-Produce
 
 这一阶段，包含了整个事务的数据处理过程，并且包含了多种请求。
 
 **AddPartitionsToTxnRequest**
 
-一个Producer可能会给多个发送数据，给一个新的发送数据前，它需要先向Transaction Coordinator发送AddPartitionsToTxnRequest。
+一个Producer可能会给多个<Topic, Partition>发送数据，给一个新的<Topic, Partition>发送数据前，它需要先向Transaction Coordinator发送AddPartitionsToTxnRequest。
 
-Transaction Coordinator会将该存于Transaction Log内，并将其状态置为BEGIN，如上图中步骤4.1所示。有了该信息后，我们才可以在后续步骤中为每个Topic, Partition>设置COMMIT或者ABORT标记（如上图中步骤5.2所示）。
+Transaction Coordinator会将该存于Transaction Log内，并将其状态置为BEGIN，如上图中步骤4.1所示。有了该信息后，我们才可以在后续步骤中为每个<Topic, Partition>设置COMMIT或者ABORT标记（如上图中步骤5.2所示）。
 
-另外，如果该为该事务中第一个，Transaction Coordinator还会启动对该事务的计时（每个事务都有自己的超时时间）。
+另外，如果该为该<Topic, Partition>为事务中第一个<Topic, Partition>，Transaction Coordinator还会启动对该事务的计时（每个事务都有自己的超时时间）。
 
 **ProduceRequest**
 
@@ -171,20 +199,20 @@ Producer通过一个或多个ProduceRequest发送一系列消息。除了应用�
 
 为了提供事务性，Producer新增了sendOffsetsToTransaction方法，该方法将多组消息的发送和消费放入同一批处理内。
 
-该方法先判断在当前事务中该方法是否已经被调用并传入了相同的Group ID。若是，直接跳到下一步；若不是，则向Transaction Coordinator发送AddOffsetsToTxnRequests请求，Transaction Coordinator将对应的所有存于Transaction Log中，并将其状态记为BEGIN，如上图中步骤4.3所示。该方法会阻塞直到收到响应。
+该方法先判断在当前事务中该方法是否已经被调用并传入了相同的Group ID。若是，直接跳到下一步；若不是，则向Transaction Coordinator发送AddOffsetsToTxnRequests请求，Transaction Coordinator将对应的所有<Topic, Partition>存于Transaction Log中，并将其状态记为BEGIN，如上图中步骤4.3所示。该方法会阻塞直到收到响应。
 
 **TxnOffsetCommitRequest**
 
-作为sendOffsetsToTransaction方法的一部分，在处理完AddOffsetsToTxnRequest后，Producer也会发送TxnOffsetCommit请求给Consumer Coordinator从而将本事务包含的与读操作相关的各的Offset持久化到内部的__consumer_offsets中，如上图步骤4.4所示。
+作为sendOffsetsToTransaction方法的一部分，在处理完AddOffsetsToTxnRequest后，Producer也会发送TxnOffsetCommit请求给Consumer Coordinator从而将本事务包含的与读操作相关的各<Topic, Partition>的Offset持久化到内部的_consumer_offsets中，如上图步骤4.4所示。
 
-在此过程中，Consumer Coordinator会通过PID和对应的epoch来验证是否应该允许该Producer的该请求。
+在此过程中，Consumer Coordinator会通过PID和对应的epoch来验证是否允许该Producer的请求。
 
 这里需要注意：
 
-- 写入__consumer_offsets的Offset信息在当前事务Commit前对外是不可见的。也即在当前事务被Commit前，可认为该Offset尚未Commit，也即对应的消息尚未被完成处理。
+- 写入_consumer_offsets的Offset信息在当前事务Commit前对外是不可见的。也即在当前事务被Commit前，可认为该Offset尚未Commit，也即对应的消息尚未被完成处理。
 - Consumer Coordinator并不会立即更新缓存中相应的Offset，因为此时这些更新操作尚未被COMMIT或ABORT。
 
-**Commit或Abort事务**
+### Commit或Abort事务
 
 一旦上述数据写入操作完成，应用程序必须调用KafkaProducer的commitTransaction方法或者abortTransaction方法以结束当前事务。
 
@@ -210,9 +238,9 @@ commitTransaction方法使得Producer写入的数据对下游Consumer可见。ab
 
 该控制消息向Broker以及Consumer表明对应PID的消息被Commit了还是被Abort了。
 
-这里要注意，如果事务也涉及到__consumer_offsets，即该事务中有消费数据的操作且将该消费的Offset存于__consumer_offsets中，Transaction Coordinator也需要向该内部Topic的各Partition的Leader发送WriteTxnMarkerRequest从而写入COMMIT(PID)或COMMIT(PID)控制信息。
+这里要注意，如果事务也涉及到_consumer_offsets，即该事务中有消费数据的操作且将该消费的Offset存于_consumer_offsets中，Transaction Coordinator也需要向该内部Topic的各Partition的Leader发送WriteTxnMarkerRequest从而写入COMMIT(PID)或COMMIT(PID)控制信息。
 
-**写入最终的****COMPLETE_COMMIT****或****COMPLETE_ABORT****消息**
+**写入最终的COMPLETE_COMMIT或COMPLETE_ABORT消息**
 
 写完所有的Transaction Marker后，Transaction Coordinator会将最终的COMPLETE_COMMIT或COMPLETE_ABORT消息写入Transaction Log中以标明该事务结束，如上图中步骤5.3所示。
 
@@ -220,7 +248,7 @@ commitTransaction方法使得Producer写入的数据对下游Consumer可见。ab
 
 另外，COMPLETE_COMMIT或COMPLETE_ABORT的写入并不需要得到所有Rreplica的ACK，因为如果该消息丢失，可以根据事务协议重发。
 
-补充说明，如果参与该事务的某些在被写入Transaction Marker前不可用，它对READ_COMMITTED的Consumer不可见，但不影响其它可用的COMMIT或ABORT。在该恢复可用后，Transaction Coordinator会重新根据PREPARE_COMMIT或PREPARE_ABORT向该发送Transaction Marker。
+补充说明，如果参与该事务的某些<Topic, Partition>在被写入Transaction Marker前不可用，它对READ_COMMITTED的Consumer不可见，但不影响其它可用的COMMIT或ABORT。在该恢复可用后，Transaction Coordinator会重新根据PREPARE_COMMIT或PREPARE_ABORT向该<Topic, Partition>发送Transaction Marker。
 
 **总结**
 
@@ -231,7 +259,7 @@ commitTransaction方法使得Producer写入的数据对下游Consumer可见。ab
 - Kafka事务的本质是，将一组写操作（如果有）对应的消息与一组读操作（如果有）对应的Offset的更新进行同样的标记（即Transaction Marker）来实现事务中涉及的所有读写操作同时对外可见或同时对外不可见
 - Kafka只提供对Kafka本身的读写操作的事务性，不提供包含外部系统的事务性
 
-**异常处理**
+## 异常处理
 
 **Exception处理**
 
@@ -334,14 +362,3 @@ Zookeeper的原子广播协议与两阶段提交以及Kafka事务机制有相似
 - Kafka事务可COMMIT也可ABORT。而Zookeeper原子广播协议只有COMMIT没有ABORT。当然，Zookeeper不COMMIT某消息也即等效于ABORT该消息的更新。
 - Kafka存在多个Transaction Coordinator实例，扩展性较好。而Zookeeper写操作只能在Leader节点进行，所以其写性能远低于读性能。
 - Kafka事务是COMMIT还是ABORT完全取决于Producer即客户端。而Zookeeper原子广播协议中某条消息是否被COMMIT取决于是否有一大半FOLLOWER ACK该消息。
-
-**Kafka系列文章**
-
-- [Kafka设计解析（一）- Kafka背景及架构介绍](http://www.jasongj.com/2015/03/10/KafkaColumn1/)
-- [Kafka设计解析（二）- Kafka High Availability （上）](http://www.jasongj.com/2015/04/24/KafkaColumn2/)
-- [Kafka设计解析（三）- Kafka High Availability （下）](http://www.jasongj.com/2015/06/08/KafkaColumn3/)
-- [Kafka设计解析（四）- Kafka Consumer设计解析](http://www.jasongj.com/2015/08/09/KafkaColumn4/)
-- [Kafka设计解析（五）- Kafka性能测试方法及Benchmark报告](http://www.jasongj.com/2015/12/31/KafkaColumn5_kafka_benchmark/)
-- [Kafka设计解析（六）- Kafka高性能架构之道](http://www.jasongj.com/kafka/high_throughput/)
-- [Kafka设计解析（七）- Kafka Stream](http://www.jasongj.com/kafka/kafka_stream/)
-- [Kafka设计解析（八）- Kafka Exactly Once语义与事务机制原理](http://www.jasongj.com/kafka/transaction/)
