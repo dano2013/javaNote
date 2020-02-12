@@ -64,3 +64,83 @@ ISR、HW 和 LEO 的工作配合：
 5. 当 ISR 集合中的所有副本都完成了对 offset 的消息同步，Leader 副本会递增其 HW
 
 KafKa 的容灾机制： 通过分区的 Leader 副本和 Follower 副本来提高容灾能力。
+
+
+
+1.Kafka 中的 ISR(InSyncRepli)、OSR(OutSyncRepli)、AR(AllRepli)代表什么？
+
+2.Kafka 中的 HW、LEO 等分别代表什么？
+
+3.Kafka 中是怎么体现消息顺序性的？
+
+区内有序
+
+4.Kafka 中的分区器、序列化器、拦截器是否了解？它们之间的处理顺序是什么？
+
+拦截器 序列化器 分区器
+
+5.Kafka 生产者客户端的整体结构是什么样子的？使用了几个线程来处理？分别是什么？
+
+6.“消费组中的消费者个数如果超过 topic 的分区，那么就会有消费者消费不到数据”这句话是否正确？
+
+是
+
+7.消费者提交消费位移时提交的是当前消费到的最新消息的 offset 还是 offset+1？
+
+Offset+1
+
+8.有哪些情形会造成重复消费？
+
+先提交offset后处理数据
+
+9.那些情景会造成消息漏消费？
+
+先处理数据后提交offset                                
+
+10.当你使用 kafka-topics.sh 创建（删除）了一个 topic 之后，Kafka 背后会执行什么逻辑？
+
+1 ）会在 zookeeper 中的 /brokers/topics 节点下创建一个新的 topic 节点，如：
+
+/brokers/topics/first
+
+2）触发 Controller 的监听程序
+
+3）kafka Controller 负责 topic 的创建工作，并更新 metadata cache
+
+11.topic 的分区数可不可以增加？如果可以怎么增加？如果不可以，那又是为什么？
+
+12.topic 的分区数可不可以减少？如果可以怎么减少？如果不可以，那又是为什么？
+
+可增不可减
+
+13.Kafka 有内部的 topic 吗？如果有是什么？有什么所用？
+
+保存消费者的offset
+
+14.Kafka 分区分配的概念？
+
+partition 的分配问题，即确定那个 partition 由哪个 consumer 来消费。
+
+Kafka 有两种分配策略，一是 RoundRobin，一是 Range。
+
+15.简述 Kafka 的日志目录结构？
+
+.index .log文件
+
+16.如果我指定了一个 offset，Kafka Controller 怎么查找到对应的消息？
+
+通过二分查找法找到对应的index文件，通过index文件去扫描找到具体log文件里面的偏移量
+
+17.聊一聊 Kafka Controller 的作用？
+
+更新元数据 保存偏移量，并通知到其他节点
+
+Kafka controller 和leader的区别？
+
+18.Kafka 中有那些地方需要选举？这些地方的选举策略又有哪些？
+
+19.失效副本是指什么？有那些应对措施？
+
+20.Kafka 的哪些设计让它有如此高的性能？
+
+分布式 顺序写磁盘 零拷贝
