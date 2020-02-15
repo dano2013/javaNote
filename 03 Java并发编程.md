@@ -60,26 +60,12 @@
 5. 计时等待（TIMED_WAITING）状态：Object.wait、Thread.join、Lock.tryLock和Condition.await 等方法有超时参数，还有 Thread.sleep 方法、LockSupport.parkNanos 方法和 LockSupport.parkUntil 方法，这些方法会导致线程进入计时等待状态，如果超时或者出现通知，都会切换回可运行状态。
 6. 终止（TERMINATED）状态：当线程执行完毕，则进入该状态，表示结束。
 
-### 堆和方法区
-
-堆和方法区是所有线程共享的资源，其中堆是进程中最大的一块内存，主要用于存放新创建的对象 (所有对象都在这里分配内存)，方法区主要用于存放已被加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。
-
 ### 单线程 vs 多线程
 
 1. 在单核 CPU 中，将 CPU 分为很小的时间片，在每一时刻只能有一个线程在执行，是一种微观上轮流占用 CPU 的机制。
 2. 多线程会存在线程上下文切换，会导致程序执行速度变慢，即采用一个拥有两个线程的进程执行所需要的时间比一个线程的进程执行两次所需要的时间要多一些。
 
 结论：由于线程有创建和上下文切换的开销，采用多线程不会提高程序的执行速度，但是应为CPU利用率的提升，整体响应速度变快了。
-
-### 什么是上下文切换
-
-多线程编程中一般线程的个数都大于 CPU 核心的个数，而一个 CPU 核心在任意时刻只能被一个线程使用，为了让这些线程都能得到有效执行，CPU 采取的策略是为每个线程分配时间片并轮转的形式。当一个线程的时间片用完的时候就会重新处于就绪状态让给其他线程使用，这个过程就属于一次上下文切换。
-
-概括来说就是：当前任务在执行完 CPU 时间片切换到另一个任务之前会先保存自己的状态，以便下次再切换会这个任务时，可以再加载这个任务的状态。**任务从保存到再加载的过程就是一次上下文切换**。
-
-上下文切换通常是计算密集型的。也就是说，它需要相当可观的处理器时间，在每秒几十上百次的切换中，每次切换都需要纳秒量级的时间。所以，上下文切换对系统来说意味着消耗大量的 CPU 时间，事实上，可能是操作系统中时间消耗最大的操作。
-
-Linux 相比与其他操作系统（包括其他类 Unix 系统）有很多的优点，其中有一项就是，其上下文切换和模式切换的时间消耗非常少。
 
 ### 为什么要使用多线程
 
@@ -122,7 +108,7 @@ Linux 相比与其他操作系统（包括其他类 Unix 系统）有很多的�
 
 ### 线程的生命周期和状态
 
-Java 线程运行的生命周期中的指定时刻只可能处于下面 6 种不同状态的其中一个状态（图源《Java 并发编程艺术》4.1.4 节）。
+Java 线程运行的生命周期中的指定时刻只可能处于下面 6 种不同状态的其中一个状态。
 
 | 状态名称     | 说明                                                         |
 | ------------ | ------------------------------------------------------------ |
@@ -141,7 +127,7 @@ Java 线程运行的生命周期中的指定时刻只可能处于下面 6 种不
 
 操作系统隐藏 Java 虚拟机中的 READY和 RUNNING 状态，它只能看到 RUNNABLE 状态，所以 Java 系统一般将这两个状态统称为 **RUNNABLE（运行中）** 状态 。
 
-当线程执行 wait()方法之后，线程进入 **WAITING（等待）**状态。进入等待状态的线程需要依靠其他线程的通知才能够返回到运行状态，而 **TIME_WAITING(超时等待)** 状态相当于在等待状态的基础上增加了超时限制，比如通过 sleep（long millis）方法或 wait（long millis）方法可以将 Java 线程置于 TIMED WAITING 状态。当超时时间到达后 Java 线程将会返回到 RUNNABLE 状态。当线程调用同步方法时，在没有获取到锁的情况下，线程将会进入到 **BLOCKED（阻塞）** 状态。线程在执行 Runnable 的run()方法之后将会进入到 **TERMINATED（终止）** 状态。
+当线程执行 wait()方法之后，线程进入 **WAITING（等待）**状态。进入等待状态的线程需要依靠其他线程的通知才能够返回到运行状态，而 **TIME_WAITING(超时等待)** 状态相当于在等待状态的基础上增加了超时限制，比如通过 sleep（long millis）方法或 wait（long millis）方法可以将 Java 线程置于 TIMED_WAITING 状态。当超时时间到达后 Java 线程将会返回到 RUNNABLE 状态。当线程调用同步方法时，在没有获取到锁的情况下，线程将会进入到 **BLOCKED（阻塞）** 状态。线程在执行 Runnable 的run()方法之后将会进入到 **TERMINATED（终止）** 状态。
 
 ### 怎么理解线程优先级
 
@@ -150,6 +136,22 @@ Java 线程运行的生命周期中的指定时刻只可能处于下面 6 种不
 由于线程的优先级调度和底层操作系统有密切的关系，在各个平台上表现不一，并且这种优先级产生的后果也可能不容易预测，无法精准控制，比如一个低优先级的线程可能一直抢占不到资源，从而始终无法运行，而产生饥饿（虽然优先级低，但是也不能饿死它啊）。因此，在要求严格的场合，还是需要自己在应用层解决线程调度的问题。
 
 在 Java 中，使用 1 到 10 表示线程优先级，数字越大则优先级越高，但有效范围在 1 到 10 之间，默认的优先级为 5 。
+
+### 什么是上下文切换
+
+多线程编程中一般线程的个数都大于 CPU 核心的个数，而一个 CPU 核心在任意时刻只能被一个线程使用，为了让这些线程都能得到有效执行，CPU 采取的策略是为每个线程分配时间片并轮转的形式。当一个线程的时间片用完的时候就会重新处于就绪状态让给其他线程使用，这个过程就属于一次上下文切换。
+
+概括来说就是：当前任务在执行完 CPU 时间片切换到另一个任务之前会先保存自己的状态，以便下次再切换回这个任务时，可以再加载这个任务的状态。**任务从保存到再加载的过程就是一次上下文切换**。
+
+上下文切换通常是计算密集型的。也就是说，它需要相当可观的处理器时间，在每秒几十上百次的切换中，每次切换都需要纳秒量级的时间。所以，上下文切换对系统来说意味着消耗大量的 CPU 时间，事实上，可能是操作系统中时间消耗最大的操作。
+
+Linux 相比其他操作系统（包括其他类 Unix 系统）有很多的优点，其中有一项就是，其上下文切换和模式切换的时间消耗非常少。
+
+通常有以下解决方案:
+
+- 采用无锁编程，比如将数据按照 `Hash(id)` 进行取模分段，每个线程处理各自分段的数据，从而避免使用锁。
+- 采用 CAS(compare and swap) 算法，如 `Atomic` 包就是采用 CAS 算法([详见](https://github.com/crossoverJie/JCSprout/blob/master/MD/Threadcore.md#原子性))。
+- 合理的创建线程，避免创建了一些线程但其中大部分都是处于 `waiting` 状态，因为每当从 `waiting` 状态切换到 `running` 状态都是一次上下文切换。
 
 ### 什么是线程死锁
 
@@ -193,15 +195,15 @@ JDK 1.0 本来有一些像 stop()，suspend() 和 resume() 的控制方法但是
 
 ### start() vs run()
 
-start() 方法会新建一个线程并让这个线程执行 run() 方法；而直接调用 run() 方法知识作为一个普通的方法调用而已，它只会在当前线程中，串行执行 run() 中的代码。
+start() 方法会新建一个线程并让这个线程执行 run() 方法；而直接调用 run() 方法只是作为一个普通的方法调用而已，它只会在当前线程中，串行执行 run() 中的代码。
 
 ## synchronized
 
 ### 对 synchronized 的了解
 
-synchronized关键字解决的是多个线程之间访问资源的同步性，<u>synchronized关键字可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。</u>
+synchronized关键字解决的是多个线程之间访问资源的同步性，<u>可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。</u>
 
-在 Java 早期版本中，synchronized属于重量级锁，效率低下，因为监视器锁（monitor）是依赖于底层的操作系统的 Mutex Lock 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从用户态转换到内核态，这个状态之间的转换需要相对比较长的时间。
+在 Java 早期版本中，synchronized属于重量级锁，效率低下，因为监视器锁（monitor）是依赖于底层操作系统的 Mutex Lock 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从用户态转换到内核态，这个状态之间的转换需要相对比较长的时间。
 
 JDK1.6对锁的实现引入了大量的优化，如自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁等技术来减少锁操作的开销。synchronized是一个几种锁的封装。
 
@@ -237,23 +239,22 @@ JDK1.6 对锁的实现引入了大量的优化，如偏向锁、轻量级锁、�
 
 **轻量级锁**
 
-倘若偏向锁失败，虚拟机并不会立即升级为重量级锁，它还会尝试使用一种称为轻量级锁的优化手段。**轻量级锁不是为了代替重量级锁，它的本意是在没有多线程竞争的前提下，减少传统的重量级锁使用操作系统互斥量产生的性能消耗，因为使用轻量级锁时，不需要申请互斥量。另外，轻量级锁的加锁和解锁都用到了CAS操作。**
-
 **轻量级锁能够提升程序同步性能的依据是“对于绝大部分锁，在整个同步周期内都是不存在竞争的”，这是一个经验数据。如果没有竞争，轻量级锁使用 CAS 操作避免了使用互斥操作的开销。但如果存在锁竞争，除了互斥量开销外，还会额外发生CAS操作，因此在有锁竞争的情况下，轻量级锁比传统的重量级锁更慢，如果锁竞争激烈，那么轻量级将很快膨胀为重量级锁。**
 
 **自旋锁和自适应自旋锁**
+[自旋锁代码示例 5.3](http://blog.cuzz.site/2019/04/16/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/)
 
-轻量级锁失败后，虚拟机为了避免线程真实地在操作系统层面挂起，还会进行一项称为自旋锁的优化手段。
+轻量级锁失败后，为了避免线程真实地在操作系统层面挂起，还会进行一项称为自旋锁的优化手段。
 
 互斥同步对性能最大的影响就是阻塞的实现，因为挂起线程/恢复线程的操作都需要转入内核态中完成（用户态转换到内核态会耗费时间）。
 
-**一般线程持有锁的时间都不是太长，所以仅仅为了这一点时间去挂起线程/恢复线程是得不偿失的。** 所以，虚拟机的开发团队就这样去考虑：“我们能不能让后面来的请求获取锁的线程等待一会而不被挂起呢？看看持有锁的线程是否很快就会释放锁”。**为了让一个线程等待，我们只需要让线程执行一个忙循环（自旋），这项技术就叫做自旋**。
+**一般线程持有锁的时间都不是太长，仅仅为了这一点时间去挂起线程/恢复线程是得不偿失的。** 所以，虚拟机的开发团队就这样去考虑：“我们能不能让后面来的请求获取锁的线程等待一会而不被挂起呢？看看持有锁的线程是否很快就会释放锁”。**为了让一个线程等待，我们只需要让线程执行一个忙循环（自旋），这项技术就叫做自旋**。
 
 自旋锁在 JDK1.6 之前其实就已经引入了，不过是默认关闭的，需要通过--XX:+UseSpinning参数来开启。JDK1.6及1.6之后，就改为默认开启的了。
 
-需要注意的是，自旋等待不能完全替代阻塞，因为它还是要占用处理器时间。如果锁被占用的时间短，那么效果当然就很好了，相反，自旋等待的时间必须要有限度。如果自旋超过了限定次数任然没有获得锁，就应该挂起线程。**自旋次数的默认值是10次，用户可以通过****--XX:PreBlockSpin****来更改**。
+需要注意的是，自旋等待不能完全替代阻塞，因为它还是要占用处理器时间。如果锁被占用的时间短，那么效果当然就很好了，相反，自旋等待的时间必须要有限度。如果自旋超过了限定次数任然没有获得锁，就应该挂起线程。自旋次数的默认值是10次，用户可以通过--XX:PreBlockSpin来更改。
 
-另外，**在 JDK1.6 中引入了自适应的自旋锁。自适应的自旋锁带来的改进就是：自旋的时间不在固定了，而是和前一次同一个锁上的自旋时间以及锁的拥有者的状态来决定，虚拟机变得越来越“聪明”了**。
+另外，**在 JDK1.6 中引入了自适应的自旋锁。自适应的自旋锁带来的改进就是：自旋的时间不在固定了，而是由前一次同一个锁上的自旋时间以及锁的拥有者的状态来决定**。
 
 **锁消除**
 
@@ -270,7 +271,7 @@ JDK1.6 对锁的实现引入了大量的优化，如偏向锁、轻量级锁、�
 ### synchronized vs Lock
 
 - synchronized是关键字，而Lock是一个接口。
-- synchronized是不可中断的，Lok可以中断也可以不中断。
+- synchronized是不可中断的，Lock可以中断也可以不中断。
 - 通过Lock可以知道线程有没有拿到锁，而 synchronized不能。
 - synchronized能锁住方法和代码块，而Lock只能锁住代码块。
 - Lock可以使用读锁提高多线程读的效率。
@@ -281,33 +282,31 @@ JDK1.6 对锁的实现引入了大量的优化，如偏向锁、轻量级锁、�
 
 **两者都是可重入锁**
 
+[可重入锁、不可重入锁 代码示例 5.2](http://blog.cuzz.site/2019/04/16/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/)
+
 “可重入锁”概念是：自己可以再次获取自己的内部锁。比如一个线程获得了某个对象的锁，此时这个对象锁还没有释放，当其再次想要获取这个对象的锁的时候还是可以获取的，如果不可锁重入的话，就会造成死锁。同一个线程每次获取锁，锁的计数器都自增1，要等到锁的计数器下降为0时才能释放锁。
 
-**synchronized 依赖于 JVM 而 ReenTrantLock 依赖于 API**
-
-synchronized 是依赖于 JVM 实现的，JDK1.6 中为 synchronized 关键字进行了很多优化，但是这些优化都是在虚拟机层面实现的，并没有直接暴露给我们。
-
-ReenTrantLock 是 JDK 层面实现的（也就是 API 层面，需要 lock() 和 unlock 方法配合 try/finally 语句块来完成），所以我们可以通过查看它的源代码，来看它是如何实现的。
-
-**ReenTrantLock 比 synchronized 增加了一些高级功能**
-
-相比synchronized，ReenTrantLock增加了一些高级功能：**等待可中断；可实现公平锁；可实现选择性通知（锁可以绑定多个条件）。**
-
-- **ReenTrantLock提供了一种能够中断等待锁的线程的机制**，通过lock.lockInterruptibly()来实现这个机制，也就是说正在等待的线程可以选择放弃等待，改为处理其他事情。
-- **ReenTrantLock可以指定是公平锁还是非公平锁，而synchronized只能是非公平锁。所谓的公平锁就是先等待的线程先获得锁。** ReenTrantLock默认情况是非公平的，可以通过 ReenTrantLock类的ReentrantLock(boolean fair)构造方法来制定是否是公平的。
-- synchronized关键字与wait()和notify/notifyAll()方法相结合可以实现等待/通知机制，ReentrantLock类也可以实现，但是需要借助于Condition接口与newCondition() 方法。**线程对象可以注册在指定的Condition中，从而可以有选择性的进行线程通知，在调度线程上更加灵活。 在使用notify/notifyAll()方法进行通知时，被通知的线程是由 JVM 选择的，用ReentrantLock类结合Condition实例可以实现“选择性通知”** 。而synchronized关键字就相当于整个Lock对象中只有一个Condition实例，所有的线程都注册在它一个身上。如果执行notifyAll()方法的话就会通知所有处于等待状态的线程，这样会造成很大的效率问题，而Condition实例的signalAll()方法，只会唤醒注册在该Condition实例中的所有等待线程。
-
-**性能已不是选择标准**
-
-在JDK1.6之前，synchronized 的性能是比 ReenTrantLock 差很多。具体表示为：synchronized 关键字吞吐量随线程数的增加，下降得非常严重，而ReenTrantLock 基本保持一个比较稳定的水平。**JDK1.6 之后，synchronized 和 ReenTrantLock 的性能基本是持平了。性能已经不再是选择synchronized和ReenTrantLock的影响因素了，而且虚拟机在未来的性能改进中会更偏向于原生的synchronized，所以还是提倡在synchronized能满足你的需求的情况下，优先考虑使用synchronized关键字来进行同步。优化后的synchronized和ReenTrantLock一样，在很多地方都是用到了CAS操作**。
-
-
+- 原始结构
+  - synchronized 是关键字属于 JVM 层面，反应在字节码上是 monitorenter 和  monitorexit，其底层是通过 monitor 对象来完成，其实 wait/notify 等方法也是依赖 monitor  对象只有在同步快或方法中才能调用 wait/notify 等方法。
+  - Lock 是具体类（java.util.concurrent.locks.Lock）是 api 层面的锁。
+- 使用方法
+  - synchronized 不需要用户手动去释放锁，当 synchronized 代码执行完后系统会自动让线程释放对锁的占用。
+  - ReentrantLock 则需要用户手动的释放锁，若没有主动释放锁，可能导致出现死锁的现象，lock() 和 unlock() 方法需要配合 try/finally 语句来完成。
+- 等待是否可中断
+  - synchronized 不可中断，除非抛出异常或者正常运行完成。
+  - ReentrantLock 可中断，设置超时方法 tryLock(long timeout, TimeUnit unit)，lockInterruptibly() 放代码块中，调用 interrupt() 方法可中断。
+- 加锁是否公平
+  - synchronized 非公平锁，所谓的公平锁就是先等待的线程先获得锁。
+  - ReentrantLock 默认非公平锁，构造方法中可以传入 boolean 值，true 为公平锁，false 为非公平锁。
+- 锁可以绑定多个 Condition
+  - synchronized 没有 Condition。
+  - ReentrantLock 用来实现分组唤醒需要唤醒的线程们，可以精确唤醒，而不是像 synchronized 要么随机唤醒一个线程要么唤醒全部线程。
 
 ## volatile
 
 ### 对 volatile 的了解
 
- **volatile** 关键字的主要作用就是<u>保证变量的可见性（不保证原子性），防止指令重排序。</u>
+ **volatile** 关键字的主要作用就是<u>保证变量的可见性（不保证原子性），防止指令重排序（顺序性）。</u>
 
 在 JDK1.2 之前，Java的内存模型实现总是从**主内存**（即共享内存）读取变量。而在当前的 Java 内存模型下，线程可以把变量保存**本地内存**，比如机器的寄存器中，而不是直接在主内存中进行读写。这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值的拷贝，造成**数据的不一致**。
 
@@ -428,6 +427,22 @@ submit() 方法用于提交需要返回值的任务。线程池会返回一个 F
 - FixedThreadPool 和 SingleThreadExecutor ： 允许请求的队列长度为 Integer.MAX_VALUE ，可能堆积大量的请求，从而导致 OOM。
 - CachedThreadPool 和 ScheduledThreadPool ： 允许创建的线程数量为 Integer.MAX_VALUE ，可能会创建大量线程，从而导致 OOM。
 
+### 线程池的拒绝策略
+
+- AbortPolicy：处理程序遭到拒绝将抛出运行时 RejectedExecutionException 
+- CallerRunsPolicy：线程调用运行该任务的 execute 本身。此策略提供简单的反馈控制机制，能够减缓新任务的提交速度。
+- DiscardPolicy：不能执行的任务将被删除 
+- DiscardOldestPolicy：如果执行程序尚未关闭，则位于工作队列头部的任务将被删除，然后重试执行程序（如果再次失败，则重复此过程）
+
+### 合理配置线程池
+
+- CPU 密集型
+  - CPU 密集的意思是该任务需要大量的运算，而没有阻塞，CPU 一直全速运行。
+  - CPU 密集型任务尽可能的少的线程数量，一般为 CPU 核数 + 1 个线程的线程池。
+- IO 密集型
+  - 由于 IO 密集型任务线程并不是一直在执行任务，可以多分配一点线程数，如 CPU * 2 。
+  - 也可以使用公式：CPU 核数 / (1 - 阻塞系数)；其中阻塞系数在 0.8 ～ 0.9 之间。
+
 ## tomic 原子类
 
 ### 介绍一下 Atomic 原子类
@@ -471,8 +486,6 @@ submit() 方法用于提交需要返回值的任务。线程池会返回一个 F
 - AtomicStampedReference：原子更新带有版本号的引用类型。该类将整数值与引用关联起来，可用于解决原子的更新数据和数据的版本号，可以解决使用 CAS 进行原子更新时可能出现的 ABA 问题
   - ABA：如果内存值V初次读取的时候为A，在将要赋值的时候再次检查还是A，能说明V没有改变过吗
 
-
-
 ### 讲讲 AtomicInteger 的使用
 
 **AtomicInteger 类常用方法**
@@ -489,7 +502,34 @@ public final void lazySet(int newValue)//最终设置为 newValue,使用 lazySet
 
 使用 AtomicInteger 之后，不用对 increment() 方法加锁也可以保证线程安全。
 
-### AtomicInteger 原子类的原理
+### AtomicReference 原子引用
+
+AtomicReference是作用是对”对象”进行原子操作。 
+提供了一种读和写都是原子性的对象引用变量。原子意味着多个线程试图改变同一个AtomicReference(例如比较和交换操作)将不会使得AtomicReference处于不一致的状态。
+
+AtomicReference和AtomicInteger非常类似，不同之处就在于AtomicInteger是对整数的封装，底层采用的是compareAndSwapInt实现CAS，比较的是数值是否相等，而AtomicReference则对应普通的对象引用，底层使用的是compareAndSwapObject实现CAS，比较的是两个对象的地址是否相等。也就是它可以保证你在修改对象引用时的线程安全性。
+
+```java
+private static AtomicReference<Integer> ar=new AtomicReference<Integer>(num1);
+
+@Test
+public void dfasd111() throws InterruptedException{
+    for (int i = 0; i < 1000; i++) {
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                for (int i = 0; i < 10000; i++)
+                    while(true){
+                        Integer temp=ar.get();
+                        if(ar.compareAndSet(temp, temp+1))break;
+                    }
+            }       
+        }).start();
+    }
+    Thread.sleep(10000);
+    System.out.println(ar.get()); //10000000
+}
+```
 
 ## AQS
 
@@ -513,25 +553,6 @@ AQS(AbstractQueuedSynchronizer) 原理图：
 
 AQS 使用一个 int 成员变量来表示同步状态，通过内置的 FIFO(First Input First Output，先进先出) 队列来完成获取资源线程的排队工作。AQS 使用 CAS(Compare and Swap，比较再交换) 对该同步状态进行原子操作实现对其值的修改。
 
-状态信息通过 protected 类型的 getState，setState，compareAndSetState 进行操作
-
-```java
-private volatile int state;//共享变量，使用 volatile 修饰保证线程可见性
-
-//返回同步状态的当前值
-protected final int getState() {  
-    return state;
-}
-// 设置同步状态的值
-protected final void setState(int newState) { 
-    state = newState;
-}
-//原子地（CAS 操作）将同步状态值设置为给定值 update 如果当前同步状态的值等于 expect（期望值）
-protected final boolean compareAndSetState(int expect, int update) {
-    return unsafe.compareAndSwapInt(this, stateOffset, expect, update);
-}
-```
-
 ### AQS 对资源的共享方式
 
 - **Exclusive**（独占）：只有一个线程能执行，如 ReentrantLock，又可分为公平锁和非公平锁：
@@ -539,7 +560,7 @@ protected final boolean compareAndSetState(int expect, int update) {
   - 非公平锁：当线程要获取锁时，无视队列顺序直接去抢锁，谁抢到就是谁的
 - **Share**（共享）：多个线程可同时执行，如 Semaphore/CountDownLatch。
 
-ReentrantReadWriteLock 可以看成是组合式，因为 ReentrantReadWriteLock 也就是读写锁允许多个线程同时对某一资源进行读。
+ReentrantReadWriteLock 可以看成是组合式，因为 ReentrantReadWriteLock 也就是读写锁允许多个线程同时对某一资源进行读。[读写锁代码示例 5.4](http://blog.cuzz.site/2019/04/16/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/)
 
 自定义同步器在实现时只需要实现共享资源 state 的获取与释放方式即可，至于具体线程等待队列的维护（如获取资源失败入队/唤醒出队等），AQS 已经在底层实现好了。
 
@@ -567,138 +588,73 @@ tryReleaseShared(int)//共享方式。尝试释放资源，成功则返回 true�
 
 - **Semaphore（信号量 允许多个线程同时访问）：** synchronized 和 ReentrantLock 都是一次只允许一个线程访问某个资源，Semaphore(信号量) 可以指定多个线程同时访问某个资源。
 - **CountDownLatch （倒计时器）：** CountDownLatch 是一个同步工具类，用来协调多个线程之间的同步。这个工具通常用来控制线程等待，它可以让某一个线程等待直到倒计时结束，再开始执行。
-- **CyclicBarrier（循环栅栏）：** CyclicBarrier 和 CountDownLatch 非常类似，它也可以实现线程间的技术等待，但是它的功能比 CountDownLatch 更加复杂和强大。主要应用场景和 CountDownLatch 类似。CyclicBarrier 的字面意思是可循环使用（Cyclic）的屏障（Barrier）。它要做的事情是，让一组线程到达一个屏障（也可以叫同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会开门，所有被屏障拦截的线程才会继续干活。CyclicBarrier 默认的构造方法是 CyclicBarrier(int parties)，其参数表示屏障拦截的线程数量，每个线程调用 await() 方法告诉 CyclicBarrier 我已经到达了屏障，然后当前线程被阻塞。
+- **CyclicBarrier（循环栅栏）：** CyclicBarrier 和 CountDownLatch 非常类似，它也可以实现线程间的技术等待，但是它的功能比 CountDownLatch 更加复杂和强大。CyclicBarrier 的字面意思是可循环使用（Cyclic）的屏障（Barrier）。它要做的事情是，让一组线程到达一个屏障（也可以叫同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会开门，所有被屏障拦截的线程才会继续干活。CyclicBarrier 默认的构造方法是 CyclicBarrier(int parties)，其参数表示屏障拦截的线程数量，每个线程调用 await() 方法告诉 CyclicBarrier 我已经到达了屏障，然后当前线程被阻塞。
 
-### 线程安全的单例模式
+代码示例 [6.1、6.2、6.3](http://blog.cuzz.site/2019/04/16/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/)
 
-1. 饿汉式单例
+### CAS 介绍
 
-饿汉式单例是指在方法调用前，实例就已经创建好了。
+CAS 的全称 Compare-And-Swap，它的功能是判断内存某一个位置的值是否为预期，如果是则更改这个值，这个过程是原子的。
+
+CAS 并发原体现在 JAVA 语言中就是 sun.misc.Unsafe 类中的各个方法。调用 UnSafe 类中的 CAS  方法，JVM 会帮我们实现出 CAS 汇编指令。这是一种完全依赖硬件的功能，通过它实现了原子操作。由于 CAS  是一种系统源语，源语属于操作系统用语范畴，是由若干条指令组成，用于完成某一个功能的过程，并且原语的执行必须是连续的，在执行的过程中不允许被中断，也就是说 CAS 是一条原子指令，不会造成所谓的数据不一致的问题。 
+
+状态信息通过 protected 类型的 getState，setState，compareAndSetState 进行操作
 
 ```java
-public class Singleton {
+private volatile int state;//共享变量，使用 volatile 修饰保证线程可见性
 
-    private static Singleton instance = new Singleton();
-
-    private Singleton (){}
-
-    public static Singleton getInstance() {
-        return instance;
-    }
+//返回同步状态的当前值
+protected final int getState() {  
+    return state;
+}
+// 设置同步状态的值
+protected final void setState(int newState) { 
+    state = newState;
+}
+//原子地（CAS 操作）将同步状态值设置为给定值 update 如果当前同步状态的值等于 expect（期望值）
+protected final boolean compareAndSetState(int expect, int update) {
+    return unsafe.compareAndSwapInt(this, stateOffset, expect, update);
 }
 ```
 
-2. 加入 synchronized 的懒汉式单例
+### CAS缺点
 
-所谓懒汉式单例模式就是在调用的时候才去创建这个实例。
+- 循环时间长开销很大
+  - 如果 CAS 失败，会一直尝试，如果 CAS 长时间一直不成功，可能会给 CPU 带来很大的开销（比如线程数很多，每次比较都是失败，就会一直循环），所以希望是线程数比较小的场景。
+- 只能保证一个共享变量的原子操作
+  - 对于多个共享变量操作时，循环 CAS 就无法保证操作的原子性。
+- 引出 ABA 问题
 
-```java
-public class Singleton {    
+## 阻塞队列
 
-    private static Singleton instance;    
+### 阻塞队列有哪些
 
-    private Singleton (){}    
+特性：
 
-    public static synchronized Singleton getInstance() {    
-        if (instance == null) {    
-            instance = new Singleton();    
-    	}    
-    	return instance;    
-    }    
-}  
-```
+1. 当阻塞队列是空时，从队列中获取元素的操作将会被阻塞。
+2. 当阻塞队列是满时，往队列里添加元素的操作将会被阻塞。
 
-3. 使用静态内部类的方式创建单例
 
-这种方式利用了 classloder 的机制来保证初始化 instance 时只有一个线程，它跟饿汉式的区别是：饿汉式只要 Singleton 类被加载了，那么 instance 就会被实例化（没有达到 lazy loading 的效果），而这种方式是 Singleton 类被加载了，instance 不一定被初始化。只有显式通过调用 getInstance() 方法时才会显式装载 SingletonHoder 类，从而实例化 singleton。
 
-```java
-public class Singleton {
+- ArrayBlockingQueue：是一个基于数组结构的有界阻塞队列，此队列按 FIFO（先进先出）对元素进行排序。
+- LinkedBlokcingQueue：是一个基于链表结构的阻塞队列，此队列按 FIFO（先进先出）对元素进行排序，吞吐量通常要高于 ArrayBlockingQueue。
+- SynchronousQueue：是一个不存储元素的阻塞队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于 LinkedBlokcingQueue。
 
-    private Singleton() {}
+###  阻塞队列的常用方法
 
-    private static class SingletonHolder {// 静态内部类  
-        private static Singleton singleton = new Singleton();
-    }
+插入方法：
 
-    public static Singleton getInstance() {
-        return SingletonHolder.singleton;
-    }
-}
-```
+- add(E e)：添加成功返回true，失败抛 IllegalStateException 异常
+- offer(E e)：成功返回 true，如果此队列已满，则返回 false
+- put(E e)：将元素插入此队列的尾部，如果该队列已满，则一直阻塞
 
-4. 双重校验锁
+删除方法：
 
-为了达到线程安全，又能提高代码执行效率，我们这里可以采用DCL的双检查锁机制来完成，代码实现如下：
+- remove(Object o) ：移除指定元素,成功返回true，失败返回false
+- poll()：获取并移除此队列的头元素，若队列为空，则返回 null
+- take()：获取并移除此队列头元素，若没有元素则一直阻塞
 
-```java
-public class Singleton {  
-  
-    private static Singleton singleton;  
+检查方法：
 
-    private Singleton() {  
-    }  
-
-    public static Singleton getInstance(){  
-        if (singleton == null) {  
-            synchronized (Singleton.class) {  
-                if (singleton == null) {  
-                    singleton = new Singleton();  
-                }  
-            }  
-        }  
-        return singleton;  
-    }  
-} 
-```
-
-这种是用双重判断来创建一个单例的方法，那么我们为什么要使用两个if判断这个对象当前是不是空的呢 ？因为当有多个线程同时要创建对象的时候，多个线程有可能都停止在第一个if判断的地方，等待锁的释放，然后多个线程就都创建了对象，这样就不是单例模式了，所以我们要用两个if来进行这个对象是否存在的判断。
-
-5. 使用 static 代码块实现单例
-
-静态代码块中的代码在使用类的时候就已经执行了，所以可以应用静态代码块的这个特性来实现单例设计模式。
-
-```java
-public class Singleton{  
-       
-    private static Singleton instance = null;  
-       
-    private Singleton(){}  
-  
-    static{  
-        instance = new Singleton();  
-    }  
-      
-    public static Singleton getInstance() {   
-        return instance;  
-    }   
-}  
-```
-
-6. 使用枚举数据类型实现单例模式
-
-枚举enum和静态代码块的特性相似，在使用枚举时，构造方法会被自动调用，利用这一特性也可以实现单例：
-
-```java
-public class ClassFactory{   
-      
-    private enum MyEnumSingleton{  
-        singletonFactory;  
-          
-        private MySingleton instance;  
-          
-        private MyEnumSingleton(){//枚举类的构造方法在类加载是被实例化  
-            instance = new MySingleton();  
-        }  
-   
-        public MySingleton getInstance(){  
-            return instance;  
-        }  
-    }   
-   
-    public static MySingleton getInstance(){  
-        return MyEnumSingleton.singletonFactory.getInstance();  
-    }  
-}  
-```
-
+- element() ：获取但不移除此队列的头元素，没有元素则抛异常
+- peek() ：获取但不移除此队列的头；若队列为空，则返回 null

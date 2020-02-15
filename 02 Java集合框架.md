@@ -63,6 +63,26 @@ Vector 扩容时增长为原来的两倍，而 ArrayList 扩容时增长为原�
 - 是否支持快速随机访问： 快速随机访问就是通过元素的序号快速获取元素对象(对应于get(int index)方法)，**LinkedList 不支持，而 ArrayList 支持**
 - LinkedList 比 ArrayList 需要更多的内存，ArrayList的空间浪费主要体现在在list列表的结尾会预留一定的容量空间，而LinkedList的空间花费则体现在它的每一个元素要存放直接后继和直接前驱以及数据
 
+### ArrayList线程不安全示例
+
+```java
+public void testList() {
+    List<Integer> list = new ArrayList<>();
+    Random random = new Random();
+    for (int i = 0; i < 100; i++) {
+        new Thread(() -> {
+            list.add(random.nextInt(10));
+            System.out.println(list);
+        }).start();
+    }
+}
+//并发修改导致异常 java.util.ConcurrentModificationException
+//解决方案
+//new Vector();
+//new CopyOnWriteArrayList<>();
+//Collections.synchronizedList(new ArrayList<>());
+```
+
 ### RandomAccess接口
 
 ```java
