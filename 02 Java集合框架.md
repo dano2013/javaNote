@@ -83,6 +83,29 @@ public void testList() {
 //Collections.synchronizedList(new ArrayList<>());
 ```
 
+### CopyOnWriteArrayList 实现原理
+
+从 `CopyOnWriteArrayList` 的名字就能看出`CopyOnWriteArrayList` 是满足`CopyOnWrite` 的 ArrayList，所谓`CopyOnWrite` 也就是说：在计算机，如果你想要对一块内存进行修改时，我们不在原有内存块中进行写操作，而是将内存拷贝一份，在新的内存中进行写操作，写完之后呢，就将指向原来内存指针指向新的内存，原来的内存就可以被回收掉了。
+
+`CopyOnWriteArrayList` 类的所有可变操作（add，set  等等）都是通过创建底层数组的新副本来实现的。当 List  需要被修改的时候，我并不修改原有内容，而是对原有数据进行一次复制，将修改的内容写入副本。写完之后，再将修改完的副本替换原来的数据，这样就可以保证写操作不会影响读操作了。
+
+```java
+public boolean add(E e) {
+    final ReentrantLock lock = this.lock;
+    lock.lock();//加锁
+    try {
+        Object[] elements = getArray();
+        int len = elements.length;
+        Object[] newElements = Arrays.copyOf(elements, len + 1);//拷贝新数组
+        newElements[len] = e;
+        setArray(newElements);
+        return true;
+    } finally {
+        lock.unlock();//释放锁
+    }
+}
+```
+
 ### RandomAccess接口
 
 ```java
@@ -173,6 +196,15 @@ Hashtable 采用 **数组+链表** 的形式，数组是 Hashtable  的主体，
 
 <img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\7C499FAFE70B49C68711C34F91D96CF3.png" style="zoom: 40%;" />
 
+### HashMap常见问题
+
+1. 谈谈你理解的 HashMap，讲讲其中的 get put 过程。
+2. 1.8 做了什么优化？
+3. 是线程安全的嘛？
+4. 不安全会导致哪些问题？
+5. 如何解决？有没有线程安全的并发容器？
+6. ConcurrentHashMap 是如何实现的？ 1.7、1.8 实现有何不同？为什么这么做？
+
 ### List、Set和Map的初始容量和加载因子
 
 ArrayList的初始容量是10，加载因子为0.5； 扩容增量：原容量的 1.5倍；一次扩容后长度为15。
@@ -204,3 +236,53 @@ HashMap，初始容量16，加载因子为0.75； 扩容增量：原容量的 1 
 
 - 在遍历过程中，所有涉及到改变modCount值得地方全部加上synchronized。
 - 使用CopyOnWriteArrayList来替换ArrayList。
+
+## 非阻塞队列 ConcurrentLinkedQueue 
+
+一个基于链接节点的无界线程安全队列。此队列按照 FIFO（先进先出）原则对元素进行排序。队列的头部 是队列中时间最长的元素。队列的尾部 是队列中时间最短的元素。新的元素插入到队列的尾部，队列获取操作从队列头部获得元素。当多个线程共享访问一个公共 collection 时，ConcurrentLinkedQueue 是一个恰当的选择。此队列不允许使用 null 元素。
+
+## 阻塞队列 BlockingQueue
+
+阻塞队列（BlockingQueue）被广泛使用在“生产者-消费者”问题中，其原因是 BlockingQueue 提供了可阻塞的插入和移除的方法。当队列容器已满，生产者线程会被阻塞，直到队列未满；当队列容器为空时，消费者线程会被阻塞，直至队列非空时为止。
+
+BlockingQueue 是一个接口，继承自 Queue，所以其实现类也可以作为 Queue 的实现来使用，而 Queue 又继承自 Collection 接口。
+
+### ArrayBlockingQueue
+
+ArrayBlockingQueue 是 BlockingQueue 接口的有界队列实现类，底层采用**数组**来实现。ArrayBlockingQueue 一旦创建，容量不能改变。其并发控制采用可重入锁来控制，不管是插入操作还是读取操作，都需要获取到锁才能进行操作。当队列容量满时，尝试将元素放入队列将导致操作阻塞;尝试从一个空队列中取一个元素也会同样阻塞。[代码示例](https://crossoverjie.top/JCSprout/#/thread/ArrayBlockingQueue)
+
+ArrayBlockingQueue 默认情况下不能保证线程访问队列的公平性。如果保证公平性，通常会降低吞吐量。如果需要获得公平性的  ArrayBlockingQueue，可采用如下代码： 
+
+```java
+private static ArrayBlockingQueue<Integer> blockingQueue = new ArrayBlockingQueue<Integer>(10,true);
+```
+
+### LinkedBlockingQueue 
+
+**LinkedBlockingQueue** 底层基于**单向链表**实现的阻塞队列，可以当做无界队列也可以当做有界队列来使用，同样满足 FIFO 的特性，与 ArrayBlockingQueue 相比起来具有更高的吞吐量，为了防止 LinkedBlockingQueue  容量迅速增大，损耗大量内存，通常在创建 LinkedBlockingQueue 对象时，会指定其大小，如果未指定，容量等于  Integer.MAX_VALUE。
+
+```java
+/**
+ *某种意义上的无界队列
+ */
+public LinkedBlockingQueue() {
+    this(Integer.MAX_VALUE);
+}
+/**
+ *有界队列
+ */
+public LinkedBlockingQueue(int capacity) {
+    if (capacity <= 0) throw new IllegalArgumentException();
+    this.capacity = capacity;
+    last = head = new Node<E>(null);
+}
+```
+
+### PriorityBlockingQueue
+
+**PriorityBlockingQueue** 是一个支持优先级的无界阻塞队列。默认情况下元素采用自然顺序进行排序，也可以通过自定义类实现 `compareTo()` 方法来指定元素排序规则，或者初始化时通过构造器参数 `Comparator` 来指定排序规则。
+
+PriorityBlockingQueue 并发控制采用的是 **ReentrantLock**，队列为无界队列（ArrayBlockingQueue 是有界队列，LinkedBlockingQueue 也可以通过在构造函数中传入 capacity 指定队列最大的容量，但是  PriorityBlockingQueue 只能指定初始的队列大小，后面插入元素的时候，**如果空间不够的话会自动扩容**）。
+
+简单地说，它就是 PriorityQueue 的线程安全版本。不可以插入 null 值，同时，插入队列的对象必须是可比较大小的（comparable），否则报  ClassCastException 异常。它的插入操作 put 方法不会 block，因为它是无界队列（take  方法在队列为空的时候会阻塞）。
+
