@@ -49,17 +49,6 @@
 
 所以，为了**保证线程中的局部变量不被别的线程访问到**，虚拟机栈和本地方法栈是线程私有的。
 
-### 线程有几种状态
-
-六种，并且某个时刻 Java 线程只能处于其中的一种状态。
-
-1. 新建（NEW）状态：表示新创建了一个线程对象，而此时线程并没有开始执行。
-2. 可运行（RUNNABLE）状态：线程对象创建后，其它线程（比如 main 线程）调用了该对象的 start() 方法，才表示线程开始执行。当线程执行时，处于 RUNNBALE 状态，表示线程所需的一切资源都已经准备好了。该状态的线程位于可运行线程池中，等待被线程调度选中，获取 cpu 的使用权。
-3. 阻塞（BLOCKED）状态：如果线程在执行过程中遇到了 synchronized 同步块，就会进入 BLOCKED 阻塞状态，这时线程就会暂停执行，直到获得请求的锁。
-4. 等待（WAITING）状态：当线程等待另一个线程通知调度器一个条件时，它自己进入等待状态。在调用Object.wait方法或Thread.join方法，或者是等待java.util.concurrent库中的Lock或Condition时，就会出现这种情况。
-5. 计时等待（TIMED_WAITING）状态：Object.wait、Thread.join、Lock.tryLock和Condition.await 等方法有超时参数，还有 Thread.sleep 方法、LockSupport.parkNanos 方法和 LockSupport.parkUntil 方法，这些方法会导致线程进入计时等待状态，如果超时或者出现通知，都会切换回可运行状态。
-6. 终止（TERMINATED）状态：当线程执行完毕，则进入该状态，表示结束。
-
 ### 单线程 vs 多线程
 
 1. 在单核 CPU 中，将 CPU 分为很小的时间片，在每一时刻只能有一个线程在执行，是一种微观上轮流占用 CPU 的机制。
@@ -105,6 +94,17 @@
 <img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\7896890-3cbee585a5f68f02.png" style="zoom:50%;" />
 
 伪共享问题很难被发现，因为线程可能访问完全不同的全局变量，内存中却碰巧在很相近的位置上。如其他诸多的并发问题，避免伪共享的最基本方式是仔细审查代码，根据缓存行来调整你的数据结构。
+
+### 线程有几种状态
+
+六种，并且某个时刻 Java 线程只能处于其中的一种状态。
+
+1. 新建（NEW）状态：表示新创建了一个线程对象，而此时线程并没有开始执行。
+2. 可运行（RUNNABLE）状态：线程对象创建后，其它线程（比如 main 线程）调用了该对象的 start() 方法，才表示线程开始执行。当线程执行时，处于 RUNNBALE 状态，表示线程所需的一切资源都已经准备好了。该状态的线程位于可运行线程池中，等待被线程调度选中，获取 cpu 的使用权。
+3. 阻塞（BLOCKED）状态：如果线程在执行过程中遇到了 synchronized 同步块，就会进入 BLOCKED 阻塞状态，这时线程就会暂停执行，直到获得请求的锁。
+4. 等待（WAITING）状态：当线程等待另一个线程通知调度器一个条件时，它自己进入等待状态。在调用Object.wait方法或Thread.join方法，或者是等待java.util.concurrent库中的Lock或Condition时，就会出现这种情况。
+5. 计时等待（TIMED_WAITING）状态：Object.wait、Thread.join、Lock.tryLock和Condition.await 等方法有超时参数，还有 Thread.sleep 方法、LockSupport.parkNanos 方法和 LockSupport.parkUntil 方法，这些方法会导致线程进入计时等待状态，如果超时或者出现通知，都会切换回可运行状态。
+6. 终止（TERMINATED）状态：当线程执行完毕，则进入该状态，表示结束。
 
 ### 线程的生命周期和状态
 

@@ -446,6 +446,14 @@ bin/kafka-console-consumer.sh  --topic    __consumer_offsets   --
 zookeeper hadoop102:2181 --formatter "kafka.coordinator.group.GroupMetadataManager\$OffsetsMessageForm atter" --consumer.config config/consumer.properties --from-beginning
 ```
 
+### 3.3.4 reblance
+
+在大型系统中，一个topic可能对应数百个consumer实例。这些consumer陆续加入到一个空消费组将导致多次的rebalance；此外 consumer 实例启动的时间不可控，很有可能超出coordinator确定的rebalance  timeout(即max.poll.interval.ms)，将会再次触发rebalance，而每次rebalance的代价又相当地大，因为很多状态都需要在rebalance前被持久化，而在rebalance后被重新初始化。
+
+新版本改进：通过延迟进入PreparingRebalance状态减少reblance次数
+
+新版本新增了group.initial.rebalance.delay.ms参数。空消费组接受到成员加入请求时，不立即转化到PreparingRebalance状态来开启reblance。当时间超过group.initial.rebalance.delay.ms后，再把group状态改为PreparingRebalance（开启reblance）。实现机制是在coordinator底层新增一个group状态：InitialReblance。假设此时有多个consumer陆续启动，那么group状态先转化为InitialReblance，待group.initial.rebalance.delay.ms时间后，再转换为PreparingRebalance（开启reblance）。
+
 ## 3.4 Kafka 高效读写数据
 
 ### 3.4.1 顺序写磁盘
