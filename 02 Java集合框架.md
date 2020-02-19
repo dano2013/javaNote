@@ -2,22 +2,26 @@
 
 List：存储一组不唯一（可重复），有序的对象。
 
-- Arraylist： Object数组
+- Arraylist： Object数组 [源码解析](https://snailclimb.gitee.io/javaguide/#/docs/java/collection/ArrayList)
 - Vector： Object数组
-- LinkedList： 双向链表(JDK1.6之前为循环链表，JDK1.7取消了循环) 
+- LinkedList： 双向链表(JDK1.6之前为循环链表，JDK1.7取消了循环) ，支持顺序访问 [源码解析](https://snailclimb.gitee.io/javaguide/#/docs/java/collection/LinkedList)
 
 Set：不允许重复的集合
 
 - HashSet（无序，唯一）: 基于 HashMap 实现的，底层采用 HashMap 来保存元素
-- LinkedHashSet： LinkedHashSet 继承 HashSet，并且其内部是通过 LinkedHashMap 来实现的。
+- LinkedHashSet（有序，唯一）： LinkedHashSet 继承 HashSet，并且其内部是通过 LinkedHashMap 来实现的
 - TreeSet（有序，唯一）： 红黑树(自平衡的排序二叉树)
 
 Map：使用键值对存储，典型的Key是String类型，但也可以是任何对象
 
-- HashMap： JDK1.8之前HashMap由数组+链表组成的，数组是HashMap的主体，链表则是主要为了解决哈希冲突而存在的。JDK1.8以后在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间
-- LinkedHashMap： LinkedHashMap 继承自 HashMap，所以它的底层仍然是基于拉链式散列结构即由数组和链表或红黑树组成。另外，LinkedHashMap 在上面结构的基础上，增加了一条双向链表，使得上面的结构可以保持键值对的插入顺序
+- HashMap： JDK1.8之前HashMap由数组+链表组成的，数组是HashMap的主体，链表则是主要为了解决哈希冲突而存在的。JDK1.8以后在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间 [源码解析](https://snailclimb.gitee.io/javaguide/#/docs/java/collection/HashMap)
+- LinkedHashMap： LinkedHashMap（有顺序，不支持并发） 继承自 HashMap（无序），所以它的底层仍然是基于拉链式散列结构即由数组和链表或红黑树组成。另外，LinkedHashMap 在上面结构的基础上，增加了一条双向链表，利用了头节点和其余的各个节点之间通过 `Entry` 中的 `after` 和 `before` 指针进行关联，使得上面的结构可以保持键值对的插入顺序或者 LRU 顺序
 - Hashtable： 数组+链表组成的，数组是 Hashtable的主体，链表则是主要为了解决哈希冲突而存在的
 - TreeMap： 红黑树（自平衡的排序二叉树）
+
+![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\image-20191208220948084.png)
+
+![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\image-20191208224757855.png)
 
 ### 如何选用集合
 
@@ -49,11 +53,11 @@ HashSet set =new HashSet(vector);
 
 都是有序集合、允许元素重复。
 
-Vector类的所有方法都是**同步**的，可以由多个线程安全地访问一个Vector对象，但是要在同步操作上耗费大量的时间。
+Vector同步，Arraylist不是同步的。
 
-Arraylist**不是同步**的，在不需要保证线程安全时时建议使用Arraylist。
+Vector 扩容时默认增长为原来的两倍，而 ArrayList 扩容时增长为原容量的1.5倍。
 
-Vector 扩容时增长为原来的两倍，而 ArrayList 扩容时增长为原容量的1.5倍。
+最好使用 ArrayList 而不是 Vector，因为同步操作完全可以由程序员自己来控制；或者使用`Collections.synchronizedList();`得到一个线程安全的 ArrayList；也可以使用`CopyOnWriteArrayList `。
 
 ### Arraylist vs LinkedList
 
@@ -106,13 +110,18 @@ public boolean add(E e) {
 }
 ```
 
+缺点：
+
+- 内存占用：在写操作时需要复制一个新的数组，使得内存占用为原来的两倍左右；
+- 数据不一致：读操作不能读取实时性的数据，因为部分写操作的数据还未同步到读数组中。
+
 ### RandomAccess接口
 
 ```java
 public interface RandomAccess{}
 ```
 
- RandomAccess 接口中什么都没有定义，RandomAccess 接口只是一个标识， 标识实现这个接口的类具有随机访问功能（通过元素的序号快速获取元素对象）。
+ RandomAccess 接口中什么都没有定义，RandomAccess 接口只是一个标识， 标识实现这个接口的类具有随机访问功能（通过元素的序号快速获取元素对象）。类似的还有Serializable 接口，只是一个标准，没有任何方法需要实现。
 
 ArrayList 实现了 RandomAccess 接口， 而 LinkedList 没有实现。
 
@@ -129,7 +138,7 @@ ArrayList 实现了 RandomAccess 接口， 而 LinkedList 没有实现。
 
 ### HashSet如何检查重复
 
-当把对象加入HashSet时，HashSet会先计算对象的hashcode值来判断对象加入的位置，同时也会与其他对象的hashcode值作比较，如果没有相符的hashcode，HashSet会假设对象没有重复出现。但是如果发现有相同hashcode值的对象，这时会调用equals（）方法来检查hashcode相等的对象是否真的相同。如果两者相同，HashSet就不会让加入操作成功。
+当把对象加入HashSet时，HashSet会先计算对象的hashcode值来判断对象加入的位置，同时也会与其他对象的hashcode值作比较，如果没有相符的hashcode，HashSet会假设对象没有重复出现。但是如果发现有相同hashcode值的对象，这时会调用equals()方法来检查hashcode相等的对象是否真的相同。如果两者相同，HashSet就不会让加入操作成功。
 
 ###  HashSet vs HashMap
 

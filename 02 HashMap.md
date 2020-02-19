@@ -570,3 +570,4 @@ Map<String,String> map=new HashMap<>(initialCapacity);
 initialCapacity=(需要存储的元素个数/负载因子)+1
 
 ~~~
+
