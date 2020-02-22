@@ -1,14 +1,14 @@
 # Dobbo
 
-## dubbo架构
+## Dubbo架构
 
-![dubbo架构](http://my-blog-to-use.oss-cn-beijing.aliyuncs.com/18-4-9/95449759.jpg)
+- Provider：暴露服务的服务提供方。
+- Consumer：调用远程服务的服务消费方。
+- Registry：服务注册与发现的注册中心。
+- Monitor：统计服务的调用次数和调用时间的监控中心。
+- Container：服务运行容器
 
-- **Provider**     暴露服务的服务提供方
-- **Consumer**  调用远程服务的服务消费方
-- **Registry**  服务注册与发现的注册中心
-- **Monitor**   统计服务的调用次数和调用时间的监控中心
-- **Container**     服务运行容器
+<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e35527aab64417712002907.png" style="zoom:50%;" />
 
 #### 调用关系说明：
 
