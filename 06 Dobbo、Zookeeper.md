@@ -8,7 +8,7 @@
 - Monitor：统计服务的调用次数和调用时间的监控中心。
 - Container：服务运行容器
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e35527aab64417712002907.png" style="zoom:50%;" />
+<img src="image\5e35527aab64417712002907.png" style="zoom:50%;" />
 
 #### 调用关系说明：
 
@@ -49,7 +49,7 @@
 - 随机，按权重设置随机概率。
 - 在一个截面上碰撞的概率高，但调用量越大分布越均匀，而且按概率使用权重后也比较均匀，有利于动态调整提供者权重。
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\8b3743bc372a4f5682cc47c1725b9daa.png" alt="基于权重的随机负载均衡机制" style="zoom:50%;" />
+<img src="image\8b3743bc372a4f5682cc47c1725b9daa.png" alt="基于权重的随机负载均衡机制" style="zoom:50%;" />
 
 #### RoundRobin LoadBalance
 
@@ -58,7 +58,7 @@
 - 轮循，按公约后的权重设置轮循比率。
 - 存在慢的提供者累积请求的问题，比如：第二台机器很慢，但没挂，当请求调到第二台时就卡在那，久而久之，所有请求都卡在调到第二台上。
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\30efd23996bc4a69be479083f7e93027.png" alt="基于权重的轮询负载均衡机制" style="zoom:67%;" />
+<img src="image\30efd23996bc4a69be479083f7e93027.png" alt="基于权重的轮询负载均衡机制" style="zoom:67%;" />
 
 #### LeastActive LoadBalance
 
@@ -84,7 +84,7 @@ ZooKeeper 是一个开源的分布式协调服务，ZooKeeper框架最初是在�
 
 **Zookeeper 一个最常用的使用场景就是用于担任服务生产者和服务消费者的注册中心(提供发布订阅服务)。** 服务生产者将自己提供的服务注册到Zookeeper中心，服务的消费者在进行服务调用的时候先到Zookeeper中查找服务，获取到服务生产者的详细信息之后，再去调用服务生产者的内容与数据。如下图所示，在 Dubbo架构中 Zookeeper 就担任了注册中心这一角色。
 
-![Dubbo](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\3e6f2f21ee414d658f5256db841df78b.png)
+![Dubbo](image\3e6f2f21ee414d658f5256db841df78b.png)
 
 - ZooKeeper 本身就是一个分布式程序（只要半数以上节点存活，ZooKeeper 就能正常服务）。
 - 为了保证高可用，最好是以集群形态来部署，这样只要集群中大部分机器是可用的，那么 ZooKeeper 本身仍然是可用的。
@@ -124,7 +124,7 @@ zookeeper的容错机制导致，zookeeper服务器可用的个数必须大于�
 
 ZNode（数据节点）是 ZooKeeper 中数据的最小单元，每个ZNode上都可以保存数据，同时还可以有子节点。
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\d61c09016777421cbd328fd9c3bd833f.jpeg" alt="ZooKeeper 数据模型" style="zoom:80%;" />
+<img src="image\d61c09016777421cbd328fd9c3bd833f.jpeg" alt="ZooKeeper 数据模型" style="zoom:80%;" />
 
 ZNode可以分为持久节点和临时节点两类。所谓持久节点是指一旦这个ZNode被创建了，除非主动进行移除操作，否则这个ZNode将一直保存在Zookeeper上；而临时节点就不一样了，它的生命周期和客户端会话绑定，一旦客户端会话失效，那么这个客户端创建的所有临时节点都会被移除。
 
@@ -169,7 +169,7 @@ Zookeeper采用ACL（AccessControlLists）策略来进行权限控制，类似�
 
 但是，**在 ZooKeeper 中没有选择传统的 Master/Slave 概念，而是引入了Leader、Follower 和 Observer 三种角色**。如下图所示
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5571ad11f9a14d0f9e78162c42a92c22.png" alt="img" style="zoom:80%;" />
+<img src="image\5571ad11f9a14d0f9e78162c42a92c22.png" alt="img" style="zoom:80%;" />
 
 ZooKeeper 集群中的所有机器通过 Leader 选举过程来选定一台称为 “Leader” 的机器，Leader 既可以为客户端提供写服务又能提供读服务；而 Follower 和 Observer 都只能提供读服务。Follower 和 Observer 唯一的区别在于 Observer 不参与 Leader 的选举过程，也不参与写操作的“过半写成功”策略，因此 Observer 可以在不影响写性能的情况下提升集群的读性能。
 

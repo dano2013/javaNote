@@ -14,7 +14,7 @@ Zookeeper集群数据同步的核心是原子广播，这个机制保证了各�
 
 来自 Client的写请求， Follower会把请求转给Leader处理，因为 Zookeeper要保证每台Server的本地副本是一致的，需要通过一致性协议来处理，实现这个机制的协议叫做Zab协议。
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e354aacab644175150027dc.jpeg" style="zoom:67%;" />
+<img src="image/5e354aacab644175150027dc.jpeg" style="zoom:67%;" />
 
 ### zookeeper原子广播
 #### zab协议概述
@@ -23,7 +23,7 @@ Zab协议是 Zookeeper为分布式协调服务专门设计的一种支持容错�
 1. zab协议需要确保那些已经在 Leader服务器上提交的事务最终被所有的服务器都提交。
 2. zab协议需要确保丢弃那些只在 Leader上被提出而没有被提交的事务。
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e354aabab644175150027d6.jpeg" style="zoom:50%;" />
+<img src="image/5e354aabab644175150027d6.jpeg" style="zoom:50%;" />
 
 #### Zab协议详解
 
@@ -41,7 +41,7 @@ Zab协议是 Zookeeper为分布式协调服务专门设计的一种支持容错�
 
 7. 当收到 Leader发来的 commity消息时， Follower也会提交该消息。
 
-  <img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e354aabab644175150027d0.jpeg" style="zoom:50%;" />
+  <img src="image/5e354aabab644175150027d0.jpeg" style="zoom:50%;" />
 
 ### zookeeper选举
 #### zookeeper选举规则
@@ -50,7 +50,7 @@ Zab协议是 Zookeeper为分布式协调服务专门设计的一种支持容错�
 - 投票超过半数通过
 - Observer不参与选举
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e354aabab644175150027d3.jpeg" style="zoom:50%;" />
+<img src="image/5e354aabab644175150027d3.jpeg" style="zoom:50%;" />
 
 #### zookeeper选举指标
 选举参数(Epoch,Zxid,Serverid)
@@ -60,20 +60,20 @@ Zab协议是 Zookeeper为分布式协调服务专门设计的一种支持容错�
 - Serverid：服务器编号id，值越大权重越大
 
 #### zookeeper集群初始选举
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e354aacab644175150027d8.png" style="zoom:50%;" />
+<img src="image/5e354aacab644175150027d8.png" style="zoom:50%;" />
 
 #### zookeeper运行期间重新选举
 Leader节点服务宕机
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e354aacab644175150027d9.png" style="zoom:50%;" />
+<img src="image/5e354aacab644175150027d9.png" style="zoom:50%;" />
 
 ### 分布式同步锁
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e354aabab644175150027d2.png" style="zoom:50%;" />
+<img src="image/5e354aabab644175150027d2.png" style="zoom:50%;" />
 
 synchronized只能解决单个Java进程内线程同步的问题
 
 #### zookeeper实现分布式锁的逻辑结构
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e354aabab644175150027d7.png" style="zoom:50%;" />
+<img src="image/5e354aabab644175150027d7.png" style="zoom:50%;" />
 
 #### zookeeper实现分布式锁的原理
 1. 利用 Zookeeper顺序节点特性
@@ -83,17 +83,17 @@ synchronized只能解决单个Java进程内线程同步的问题
 5. 删除顺序节点
 
 #### zookeeper实现分布式锁的流程
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e354aabab644175150027d4.png" style="zoom:50%;" />
+<img src="image/5e354aabab644175150027d4.png" style="zoom:50%;" />
 
 #### zookeeper实现分布式锁的结构图
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e354aacab644175150027db.png" style="zoom:50%;" />
+<img src="image/5e354aacab644175150027db.png" style="zoom:50%;" />
 
 ## zookeeper API
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e354aabab644175150027d5.png" style="zoom:57%;" />
+<img src="image/5e354aabab644175150027d5.png" style="zoom:57%;" />
 
 **实例化zkClient**
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e354aacab644175150027da.png" style="zoom:50%;" />
+<img src="image/5e354aacab644175150027da.png" style="zoom:50%;" />
 
 - serverstring可以指定单个服务器地址，也可以是多个(zookeeper:port, zookeeper:port)
 - connection Timeout, session Timeout是连接超时时间和会话超时时间。单位都是毫秒，会话默认是30000毫秒。

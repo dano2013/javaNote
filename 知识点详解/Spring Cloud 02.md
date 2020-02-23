@@ -36,13 +36,13 @@ return restTemplate.getForObject(url, String.class);
 
 Feign也叫伪装： 
 
-![1572166999223](D:/pic/markdown/SpringCloud/001.png)&nbsp;
+![1572166999223](SpringCloud/001.png)&nbsp;
 
 Feign可以把Rest的请求进行隐藏，伪装SpringMVC的Controller一样。你不用再自己拼接url，拼接参数等等操作，一切的一切都交给Feign去做。(从而简化java语言http客户端远程调用问题) 
 
 项目主页：https://github.com/OpenFeign/feign 
 
-![1572166999223](D:/pic/markdown/SpringCloud/1572166999223.png)
+![1572166999223](SpringCloud/1572166999223.png)
 
 ### 1.2 使用【掌握】
 
@@ -118,7 +118,7 @@ Feign可以把Rest的请求进行隐藏，伪装SpringMVC的Controller一样。�
   package cn.itcast.consumer;
   
   import org.springframework.boot.SpringApplication;
-  import org.springframework.cloud.client.D:/pic/markdown/SpringCloudApplication;
+  import org.springframework.cloud.client.SpringCloudApplication;
   import org.springframework.cloud.client.loadbalancer.LoadBalanced;
   import org.springframework.cloud.openfeign.EnableFeignClients;
   import org.springframework.context.annotation.Bean;
@@ -127,7 +127,7 @@ Feign可以把Rest的请求进行隐藏，伪装SpringMVC的Controller一样。�
   /** @SpringBootApplication
    @EnableDiscoveryClient
    @EnableCircuitBreaker */
-  @D:/pic/markdown/SpringCloudApplication
+  @SpringCloudApplication
   @EnableFeignClients // 开启Feign客户端
   public class ConsumerApplication {
       public static void main(String[] args){
@@ -145,14 +145,14 @@ Feign可以把Rest的请求进行隐藏，伪装SpringMVC的Controller一样。�
 
 + 启动测试: 访问地址 http://localhost:8080/cf/1
 
-  ![1572170381541](D:/pic/markdown/SpringCloud/1572170381541.png) 
+  ![1572170381541](SpringCloud/1572170381541.png) 
 
 
 ### 1.3、Feign：Ribbon的支持
 
 + Feign中本身已经集成了Ribbon依赖和自动配置:
 
-  ![1572191899479](D:/pic/markdown/SpringCloud/1572191899479.png)
+  ![1572191899479](SpringCloud/1572191899479.png)
 
 + Fegin内置的Ribbon默认设置了请求超时时长，可以通过手动配置来修改这个超时时长：
 
@@ -188,17 +188,17 @@ Feign可以把Rest的请求进行隐藏，伪装SpringMVC的Controller一样。�
 
   说明：com.netflix.client.config.DefaultClientConfigImpl.java类中的默认配置
 
-  ![1575388873283](D:/pic/markdown/SpringCloud/1575388873283.png) 
+  ![1575388873283](SpringCloud/1575388873283.png) 
 
-  ![1575388991009](D:/pic/markdown/SpringCloud/1575388991009.png) 
+  ![1575388991009](SpringCloud/1575388991009.png) 
 
-  ![1572193520578](D:/pic/markdown/SpringCloud/1572193520578.png)
+  ![1572193520578](SpringCloud/1572193520578.png)
 
 ### 1.4、Feign：Hystrix的支持
 
 + Feign默认也有对Hystrix做了集成(只不过，默认情况下是关闭的):
 
-  ![1572196163561](D:/pic/markdown/SpringCloud/1572196163561.png) 
+  ![1572196163561](SpringCloud/1572196163561.png) 
 
 + 需要通过下面的参数来开启:
 
@@ -243,7 +243,7 @@ Feign可以把Rest的请求进行隐藏，伪装SpringMVC的Controller一样。�
 
   + 重启测试(关闭user-service服务，然后在页面访问):
 
-    ![1572229457585](D:/pic/markdown/SpringCloud/1572229457585.png)&nbsp;
+    ![1572229457585](SpringCloud/1572229457585.png)&nbsp;
 
 ### 1.5、Feign：日志级别【了解】
 
@@ -260,7 +260,7 @@ Feign可以把Rest的请求进行隐藏，伪装SpringMVC的Controller一样。�
 + 在user-consumer启动类中，定义fegin.Logger.Level实例
 
   ```java
-  @D:/pic/markdown/SpringCloudApplication
+  @SpringCloudApplication
   @EnableFeignClients // 开启Feign客户端
   public class ConsumerApplication {
       
@@ -290,7 +290,7 @@ Feign可以把Rest的请求进行隐藏，伪装SpringMVC的Controller一样。�
 
 + 重启项目，Fegin客户端调用微服时，就可以输出访问的日志:
 
-  ![1572231843263](D:/pic/markdown/SpringCloud/1572231843263.png)
+  ![1572231843263](SpringCloud/1572231843263.png)
 
 ## 02、Gateway：网关介绍
 
@@ -309,7 +309,7 @@ Geteway网关的核心功能是：**路由、断言、过滤器**
 
 > Geteway加入后的架构
 
-![1572232735021](D:/pic/markdown/SpringCloud/1572232735021.png)
+![1572232735021](SpringCloud/1572232735021.png)
 
 说明：不管是来自于客户端（PC或移动端）的请求，还是服务内部调用。一切对服务的请求都可经过网关，然后再由网关来实现鉴权、动态路由等等操作。Gateway就是我们微服务调用的统一入口。 
 
@@ -326,9 +326,9 @@ Geteway网关的核心功能是：**路由、断言、过滤器**
 
 + 填写基本信息
 
-  ![1572233975329](D:/pic/markdown/SpringCloud/1572233975329.png)
+  ![1572233975329](SpringCloud/1572233975329.png)
 
-  ![1572234035717](D:/pic/markdown/SpringCloud/1572234035717.png)
+  ![1572234035717](SpringCloud/1572234035717.png)
 
 + 添加依赖
 
@@ -339,7 +339,7 @@ Geteway网关的核心功能是：**路由、断言、过滤器**
            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
            http://maven.apache.org/xsd/maven-4.0.0.xsd">
       <parent>
-          <artifactId>D:/pic/markdown/SpringCloud-demo</artifactId>
+          <artifactId>SpringCloud-demo</artifactId>
           <groupId>cn.itcast</groupId>
           <version>1.0-SNAPSHOT</version>
       </parent>
@@ -402,11 +402,11 @@ eureka:
 
 + 启动三个Spring Boot应用:
 
-  ![1572235671256](D:/pic/markdown/SpringCloud/1572235671256.png) 
+  ![1572235671256](SpringCloud/1572235671256.png) 
 
 + 需要用网关来代理user-service服务，先看一下控制面板中的服务状态:
 
-  ![1572235875152](D:/pic/markdown/SpringCloud/1572235875152.png)
+  ![1572235875152](SpringCloud/1572235875152.png)
 
 + 修改gateway-server的application.yml文件为(GatewayProperties.java):
 
@@ -440,7 +440,7 @@ eureka:
 
 访问的路径中需要加上配置规则的映射路径，我们访问：http://localhost:10010/user/1
 
-![1572237032054](D:/pic/markdown/SpringCloud/1572237032054.png)
+![1572237032054](SpringCloud/1572237032054.png)
 
 
 
@@ -477,13 +477,13 @@ eureka:
 
   > 路由配置中uri所用的协议为lb时（以uri: lb://user-service为例），gateway将使用 LoadBalancerClient把user-service通过eureka解析为实际的主机和端口，并进行ribbon负载均衡。
 
-  ![1572257331337](D:/pic/markdown/SpringCloud/1572257331337.png)
+  ![1572257331337](SpringCloud/1572257331337.png)
 
 + 启动测试
 
   再次启动，这次gateway进行代理时，会利用Ribbon进行负载均衡访问：
 
-  ![1572259349840](D:/pic/markdown/SpringCloud/1572259349840.png)
+  ![1572259349840](SpringCloud/1572259349840.png)
 
   > 说明: spring-cloud-gateway网关服务，默认就已经集成了Ribbon负载均衡(轮询算法) 
 
@@ -528,7 +528,7 @@ eureka:
 
 + PrefixPath=/user/abc http://localhost:10010/1 => http://localhost:9001/user/abc/1 以此类推。
 
-  ![1572260447715](D:/pic/markdown/SpringCloud/1572260447715.png)
+  ![1572260447715](SpringCloud/1572260447715.png)
 
 **去除前缀**
 
@@ -567,7 +567,7 @@ eureka:
 
  以此类推。
 
- ![1572261006650](D:/pic/markdown/SpringCloud/1572261006650.png)
+ ![1572261006650](SpringCloud/1572261006650.png)
 
 ### 2.4、Gateway：过滤器介绍
 
@@ -584,7 +584,7 @@ Gateway作为网关的其中一个重要功能，就是实现请求的鉴权。�
   | AddResponseHeader    | 对从网关返回的响应添加Header |
   | StripPrefix          | 对匹配上的请求路径去除前缀   |
 
-  ![1572262078572](D:/pic/markdown/SpringCloud/1572262078572.png)
+  ![1572262078572](SpringCloud/1572262078572.png)
 
   详细的说明在: <a href='https://cloud.spring.io/spring-cloud-static/spring-cloud-gateway/2.2.0.RC1/reference/html/#gatewayfilter-factories'>官网链接</a>
 
@@ -597,7 +597,7 @@ Gateway作为网关的其中一个重要功能，就是实现请求的鉴权。�
 
 Spring Cloud Gateway 的 Filter 的生命周期有两个(前置过滤与后置过滤)：“pre” 和 “post”。“pre”和 “post” 分别会在请求执行前调用 或 请求执行后调用。
 
-![1572265550032](D:/pic/markdown/SpringCloud/1572265550032.png)&nbsp;
+![1572265550032](SpringCloud/1572265550032.png)&nbsp;
 
 过滤器使用场景(例举):
 
@@ -641,7 +641,7 @@ eureka:
 
 运行测试:
 
-![1572265183926](D:/pic/markdown/SpringCloud/1572265183926.png)
+![1572265183926](SpringCloud/1572265183926.png)
 
 ### 2.6、Gateway：自定义全局过滤器
 
@@ -689,11 +689,11 @@ eureka:
 
   + 访问 http://localhost:10010/api/user/1
 
-    ![1572456868176](D:/pic/markdown/SpringCloud/1572456868176.png)
+    ![1572456868176](SpringCloud/1572456868176.png)
 
   + 访问 http://localhost:10010/api/user/1?token=abc
 
-    ![1572337878029](D:/pic/markdown/SpringCloud/1572337878029.png) 
+    ![1572337878029](SpringCloud/1572337878029.png) 
 
 
 
@@ -758,7 +758,7 @@ eureka:
 
 - 第五步: 测试
 
-  ![1575308843439](./D:/pic/markdown/SpringCloud/1575308843439.png) 
+  ![1575308843439](./SpringCloud/1575308843439.png) 
 
 ### 2.8、Gateway：高可用【了解】 
 
@@ -785,7 +785,7 @@ eureka:
 
 官网：https://github.com/Netflix/zuul
 
- ![1525675037152](D:/doc/study_doc/00 note/D:/pic/markdown/SpringCloud/mdpic1/1525675037152.png)
+ ![1525675037152](D:/doc/study_doc/00 note/SpringCloud/mdpic1/1525675037152.png)
 
 Zuul：维基百科：
 
@@ -799,13 +799,13 @@ Zuul的作用，保护后台所有微服务！
 
 
 
-![1525675168152](D:/doc/study_doc/00 note/D:/pic/markdown/SpringCloud/mdpic1/1525675168152.png) 
+![1525675168152](D:/doc/study_doc/00 note/SpringCloud/mdpic1/1525675168152.png) 
 
 
 
 加入了Zuul网关后的微服务架构：
 
-![1525675648881](D:/doc/study_doc/00 note/D:/pic/markdown/SpringCloud/mdpic1/1525675648881.png) 
+![1525675648881](D:/doc/study_doc/00 note/SpringCloud/mdpic1/1525675648881.png) 
 
 
 
@@ -843,7 +843,7 @@ Zuul 网关  vs  Nginx
 
 
 
-![image-20191118112802669](D:/doc/study_doc/00 note/D:/pic/markdown/SpringCloud/mdpic1/image-20191118112802669.png)
+![image-20191118112802669](D:/doc/study_doc/00 note/SpringCloud/mdpic1/image-20191118112802669.png)
 
 ==核心代码：==
 
@@ -861,7 +861,7 @@ Zuul 网关  vs  Nginx
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   		<java.version>1.8</java.version>
-  		<!-- D:/pic/markdown/SpringCloud版本，F系列 -->
+  		<!-- SpringCloud版本，F系列 -->
   		<spring-cloud.version>Finchley.RC1</spring-cloud.version>
   	</properties>
   
@@ -874,7 +874,7 @@ Zuul 网关  vs  Nginx
   
   	<dependencyManagement>
   		<dependencies>
-  		<!-- D:/pic/markdown/SpringCloud依赖，一定要放到dependencyManagement中，起到管理版本的作用即可 -->
+  		<!-- SpringCloud依赖，一定要放到dependencyManagement中，起到管理版本的作用即可 -->
   			<dependency>
   				<groupId>org.springframework.cloud</groupId>
   				<artifactId>spring-cloud-dependencies</artifactId>
@@ -922,7 +922,7 @@ Zuul 网关  vs  Nginx
         url: http://127.0.0.1:9001
   ```
 
-  ![1566034284188](D:/doc/study_doc/00 note/D:/pic/markdown/SpringCloud/mdpic1/1566034284188.png)
+  ![1566034284188](D:/doc/study_doc/00 note/SpringCloud/mdpic1/1566034284188.png)
 
 
 
@@ -1072,7 +1072,7 @@ public abstract class ZuulFilter implements IZuulFilter{
 
 这张是Zuul官网提供的请求生命周期图，清晰的表现了一次请求在各个过滤器的执行顺序。
 
-![1533945001048](D:/doc/study_doc/00 note/D:/pic/markdown/SpringCloud/mdpic1/1533945001048.png)
+![1533945001048](D:/doc/study_doc/00 note/SpringCloud/mdpic1/1533945001048.png)
 
 
 
@@ -1200,7 +1200,7 @@ ribbon的连接超时时间 小于 Hystrix的熔断超时时间。
 
 使用Spring Cloud Config配置中心后的架构如下图：
 
-![1572343652379](D:/pic/markdown/SpringCloud/1572343652379.png)
+![1572343652379](SpringCloud/1572343652379.png)
 
 官网学习文档：<https://cloud.spring.io/spring-cloud-static/spring-cloud-config/2.2.0.RC1/reference/html/> 
 
@@ -1221,9 +1221,9 @@ ribbon的连接超时时间 小于 Hystrix的熔断超时时间。
 
 首先要使用码云上的私有远程git仓库需要先注册帐号；请先自行访问网站并注册帐号，然后使用帐号登录码云控制台并创建公开仓库。
 
-![1572417177423](D:/pic/markdown/SpringCloud/1572417177423.png)&nbsp;
+![1572417177423](SpringCloud/1572417177423.png)&nbsp;
 
-![1572417406310](D:/pic/markdown/SpringCloud/1572417406310.png)
+![1572417406310](SpringCloud/1572417406310.png)
 
 **创建配置文件**
 
@@ -1238,15 +1238,15 @@ ribbon的连接超时时间 小于 Hystrix的熔断超时时间。
 
 如user-dev.yml，表示用户微服务开发环境下使用的配置文件。这里将user-service工程的配置文件application.yml文件的内容复制作为user-dev.yml文件的内容，具体配置如下：
 
-![1572417859433](D:/pic/markdown/SpringCloud/1572417859433.png)
+![1572417859433](SpringCloud/1572417859433.png)
 
-![1572418009042](D:/pic/markdown/SpringCloud/1572418009042.png)
+![1572418009042](SpringCloud/1572418009042.png)
 
-![1572418108488](D:/pic/markdown/SpringCloud/1572418108488.png)
+![1572418108488](SpringCloud/1572418108488.png)
 
 创建完user-dev.yml配置文件之后，gitee中的仓库如下：
 
-![1572418171104](D:/pic/markdown/SpringCloud/1572418171104.png)
+![1572418171104](SpringCloud/1572418171104.png)
 
 
 
@@ -1256,9 +1256,9 @@ ribbon的连接超时时间 小于 Hystrix的熔断超时时间。
 
 + 创建配置中心微服务模块
 
-  ![1572419995349](D:/pic/markdown/SpringCloud/1572419995349.png)
+  ![1572419995349](SpringCloud/1572419995349.png)
 
-  ![1572420032713](D:/pic/markdown/SpringCloud/1572420032713.png) 
+  ![1572420032713](SpringCloud/1572420032713.png) 
 
 + 添加依赖，修改pom.xml
 
@@ -1269,7 +1269,7 @@ ribbon的连接超时时间 小于 Hystrix的熔断超时时间。
            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
            http://maven.apache.org/xsd/maven-4.0.0.xsd">
       <parent>
-          <artifactId>D:/pic/markdown/SpringCloud-demo</artifactId>
+          <artifactId>SpringCloud-demo</artifactId>
           <groupId>cn.itcast</groupId>
           <version>1.0-SNAPSHOT</version>
       </parent>
@@ -1343,7 +1343,7 @@ eureka:
 
 启动eureka注册中心和配置中心，然后访问http://localhost:12000/user-dev.yml ，查看能否输出在码云存储管理的user-dev.yml文件。并且可以在gitee上修改user-dev.yml然后刷新上述测试地址也能及时到最新数据。
 
-![1572423792488](D:/pic/markdown/SpringCloud/1572423792488.png)
+![1572423792488](SpringCloud/1572423792488.png)
 
 
 
@@ -1396,7 +1396,7 @@ eureka:
 
   user-service模块，修改后的结构:
 
-  ![1572426539208](D:/pic/markdown/SpringCloud/1572426539208.png)&nbsp;
+  ![1572426539208](SpringCloud/1572426539208.png)&nbsp;
 
   + bootstrap.yml文件也是Spring Boot的默认配置文件，而且其加载的时间相比于application.yml更早。 
   + application.yml和bootstrap.yml虽然都是Spring Boot的默认配置文件，但是定位却不相同。bootstrap.yml可以理解成系统级别的一些参数配置，这些参数一般是不会变动的。application.yml可以用来定义应用级别的参数，如果搭配 spring cloud config 使用，application.yml里面定义的文件可以实现动态替换。 
@@ -1406,7 +1406,7 @@ eureka:
 
 启动注册中心、配置中心、用户服务user-service，如果启动没有报错其实已经使用上配置中心内容，可以到注册中心查看，也可以检验user-service的服务。
 
-![1572427096538](D:/pic/markdown/SpringCloud/1572427096538.png)
+![1572427096538](SpringCloud/1572427096538.png)
 
 
 
@@ -1420,7 +1420,7 @@ eureka:
 
 + 修改在码云上的user-dev.yml文件，添加一个属性test.name
 
-  ![1572428018674](D:/pic/markdown/SpringCloud/1572428018674.png) 
+  ![1572428018674](SpringCloud/1572428018674.png) 
 
 + 修改user-service工程中的UserController.java
 
@@ -1459,13 +1459,13 @@ eureka:
 
   + 依次启动Eureka、配置中心微服务、用户微服务、然后修改Git仓库中的配置信息，访问用户微服务，查看输出内容。http://localhost:9001/user/1
 
-    ![1572429589291](D:/pic/markdown/SpringCloud/1572429589291.png)
+    ![1572429589291](SpringCloud/1572429589291.png)
 
-    ![1572429551939](D:/pic/markdown/SpringCloud/1572429551939.png) 
+    ![1572429551939](SpringCloud/1572429551939.png) 
 
   + 结论：通过查看用户微服务控制台的输出结果可以发现，我们对于Git仓库中配置文件的修改并没有及时更新到用户微服务，只有重启用户微服务才能生效。【重启用户微服务效果】
 
-    ![1572429752529](D:/pic/markdown/SpringCloud/1572429752529.png)
+    ![1572429752529](SpringCloud/1572429752529.png)
 
   + 如果想在不重启微服务的情况下更新配置该如何实现呢? 可以使用Spring Cloud Bus来实现配置的自动更新。需要注意的是Spring Cloud Bus底层是基于RabbitMQ实现的，默认使用本地的消息队列服务，所以需要提前启动本地RabbitMQ服务。
 
@@ -1475,7 +1475,7 @@ Spring Cloud Bus是用轻量的消息代理将分布式的节点连接起来,可
 
 使用了Bus之后: 
 
-![1572430080736](D:/pic/markdown/SpringCloud/1572430080736.png)
+![1572430080736](SpringCloud/1572430080736.png)
 
 ### 5.1、Spring Cloud Bus：改造配置中心
 
@@ -1586,7 +1586,7 @@ Spring Cloud Bus是用轻量的消息代理将分布式的节点连接起来,可
 
 +  改造user-service模块的UserController.java
 
-  ![1572450619755](D:/pic/markdown/SpringCloud/1572450619755.png) 
+  ![1572450619755](SpringCloud/1572450619755.png) 
 
 + 启动测试
 
@@ -1604,11 +1604,11 @@ Spring Cloud Bus是用轻量的消息代理将分布式的节点连接起来,可
 
     http://127.0.0.1:12000/actuator/bus-refresh
 
-    ![1572456439768](D:/pic/markdown/SpringCloud/1572456439768.png)
+    ![1572456439768](SpringCloud/1572456439768.png)
 
   + 第五步：访问用户微服务系统控制台查看输出结果
 
-    ![1572456622779](D:/pic/markdown/SpringCloud/1572456622779.png)
+    ![1572456622779](SpringCloud/1572456622779.png)
 
   #### 说明
 
@@ -1618,7 +1618,7 @@ Spring Cloud Bus是用轻量的消息代理将分布式的节点连接起来,可
 
 ### 5.3、Spring Cloud：技术体系综合应用
 
-![1572451364036](D:/pic/markdown/SpringCloud/1572451364036.png)
+![1572451364036](SpringCloud/1572451364036.png)
 
 ## 06、swagger
 

@@ -8,7 +8,7 @@ Docker支持将软件编译成一个镜像；然后在镜像中各种软件做�
 
 运行中的这个镜像称为容器，容器启动是非常快速的。
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\9a5adb1fb096.png" alt="img" style="zoom:67%;" />
+<img src="image/9a5adb1fb096.png" alt="img" style="zoom:67%;" />
 
 ### 2、核心概念
 
@@ -18,11 +18,11 @@ docker客户端(Client)：连接docker主机进行操作；
 
 docker仓库(Registry)：用来保存各种打包好的软件镜像；
 
-docker镜像(Images)：软件打包好的镜像；放在docker仓库中；
+docker镜像(images)：软件打包好的镜像；放在docker仓库中；
 
 docker容器(Container)：镜像启动后的实例称为一个容器；容器是独立运行的一个或一组应用
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\b5a858bff334.png" alt="img" style="zoom:70%;" />
+<img src="image/b5a858bff334.png" alt="img" style="zoom:70%;" />
 
 使用Docker的步骤：
 
@@ -91,7 +91,7 @@ https://docs.docker.com/engine/reference/commandline/docker/
 
 错误截图：
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\0a1be6ca137d.png)
+![img](image/0a1be6ca137d.png)
 
 原因：mysql 8.0 默认使用 caching_sha2_password 身份验证机制；客户端不支持新的加密方式。
 
@@ -169,4 +169,4 @@ mysql> select host,user,plugin,authentication_string from mysql.user;
 
 4、测试：连接成功
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\f15dcf872943.png)
+![img](image/f15dcf872943.png)

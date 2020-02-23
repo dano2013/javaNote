@@ -10,7 +10,7 @@
 
 当网站流量很小时，只需一个应用，将所有功能都部署在一起，以减少部署节点和成本。此时，用于简化增删改查工作量的数据访问框架(ORM)是关键。
 
-<img src="D:/pic/markdown/SpringCloud/1571629658566.png" alt="1571629658566" style="zoom: 80%;" /> 
+<img src="SpringCloud/1571629658566.png" alt="1571629658566" style="zoom: 80%;" /> 
 
 **存在的问题：**
 
@@ -28,7 +28,7 @@
 
 当访问量逐渐增大，单一应用增加机器带来的加速度越来越小，将应用拆成互不相干的几个应用，以提升效率。此时，用于加速前端页面开发的Web框架(MVC)是关键。
 
-<img src="D:/pic/markdown/SpringCloud/1571629692382.png" alt="1571629692382" style="zoom:50%;" /> 
+<img src="SpringCloud/1571629692382.png" alt="1571629692382" style="zoom:50%;" /> 
 
 **优点：**
 
@@ -50,7 +50,7 @@
 
 当垂直应用越来越多，应用之间交互不可避免，将核心业务抽取出来，作为独立的服务，逐渐形成稳定的服务中心，使前端应用能更快速的响应多变的市场需求。此时，用于提高业务复用及整合的分布式服务框架(RPC)是关键。
 
-<img src="D:/pic/markdown/SpringCloud/1571629942430.png" alt="1571629942430" style="zoom:50%;" /> 
+<img src="SpringCloud/1571629942430.png" alt="1571629942430" style="zoom:50%;" /> 
 
 **优点：**
 
@@ -68,7 +68,7 @@
 
 当服务越来越多，容量的评估，小服务资源的浪费等问题逐渐显现，此时需增加一个调度中心基于访问压力实时管理集群容量，提高集群利用率。此时，用于提高机器利用率的资源调度和治理中心(SOA)是关键。
 
-![img](D:/pic/markdown/SpringCloud/wps4.jpg) 
+![img](SpringCloud/wps4.jpg) 
 
 以前出现了什么问题？
 
@@ -124,7 +124,7 @@
 
 **微服务架构图：**
 
-<img src="D:/pic/markdown/SpringCloud/wps6.jpg" alt="img" style="zoom:67%;" /> 
+<img src="SpringCloud/wps6.jpg" alt="img" style="zoom:67%;" /> 
 
 
 
@@ -158,11 +158,11 @@
 
 + HttpClient (<http://hc.apache.org/>)
 
-  ![1571633337739](D:/pic/markdown/SpringCloud/1571633337739.png)
+  ![1571633337739](SpringCloud/1571633337739.png)
 
 + OkHttp (<https://square.github.io/okhttp/>)
 
-  ![1571633234904](D:/pic/markdown/SpringCloud/1571633234904.png)
+  ![1571633234904](SpringCloud/1571633234904.png)
 
 + URLConnection (JDK原生) 
 
@@ -192,7 +192,7 @@ spring-web模块提供了一个RestTemplate模板工具类，对基于Http的客
 
 + 搭建项目(http-demo)
 
-  ![1571670646861](D:/pic/markdown/SpringCloud/1571670646861.png)&nbsp;
+  ![1571670646861](SpringCloud/1571670646861.png)&nbsp;
 
 + 配置部分
 
@@ -302,11 +302,11 @@ spring-web模块提供了一个RestTemplate模板工具类，对基于Http的客
 
 ------
 
-D:/pic/markdown/SpringCloud是Spring旗下的项目之一，官网地址：
+SpringCloud是Spring旗下的项目之一，官网地址：
 
 <https://spring.io/projects/spring-cloud> 
 
-![1571813318337](D:/pic/markdown/SpringCloud/1571813318337.png)
+![1571813318337](SpringCloud/1571813318337.png)
 
 Spring最擅长的就是集成，把世界上最好的框架拿过来，集成到自己的项目中。
 
@@ -320,7 +320,7 @@ Spring Cloud也是一样，它将现在非常流行的一些技术整合到一�
 
  以上只是其中一部分，架构图：
 
-![1571812412767](D:/pic/markdown/SpringCloud/1571812412767.png)
+![1571812412767](SpringCloud/1571812412767.png)
 
 ### 4.2 版本
 
@@ -328,13 +328,13 @@ Spring Cloud也是一样，它将现在非常流行的一些技术整合到一�
 
 Spring Cloud的版本命名比较特殊，因为它不是一个组件，而是许多组件的集合，它的命名是以A到Z的为首字母的一些单词（其实是伦敦地铁站的名字）组成： 
 
-![1571814169723](D:/pic/markdown/SpringCloud/1571814169723.png)
+![1571814169723](SpringCloud/1571814169723.png)
 
 我们在项目中，使用最新稳定的Greenwich版本。
 
 Greenwich版本包含的组件，也都有各自的版本，如下表:
 
-![1571814721258](D:/pic/markdown/SpringCloud/1571814721258.png)
+![1571814721258](SpringCloud/1571814721258.png)
 
 ## 05、搭建微服务模拟场景
 
@@ -344,15 +344,15 @@ Greenwich版本包含的组件，也都有各自的版本，如下表:
 
 微服务中需要同时创建多个项目，为了方便课堂演示，先创建一个父工程，然后后续的工程都以这个工程为父，实现maven的聚合。这样可以在一个窗口看到所有工程，方便讲解。**在实际开发中，每个微服务可独立一个工程**。 
 
-![1571815268138](D:/pic/markdown/SpringCloud/1571815268138.png)
+![1571815268138](SpringCloud/1571815268138.png)
 
 编写项目信息： 
 
-![1571815365792](D:/pic/markdown/SpringCloud/1571815365792.png)
+![1571815365792](SpringCloud/1571815365792.png)
 
 编写保存位置： 
 
-![1571815415545](D:/pic/markdown/SpringCloud/1571815415545.png)
+![1571815415545](SpringCloud/1571815415545.png)
 
 配置pom.xml:
 
@@ -364,7 +364,7 @@ Greenwich版本包含的组件，也都有各自的版本，如下表:
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.itcast</groupId>
-    <artifactId>D:/pic/markdown/SpringCloud-demo</artifactId>
+    <artifactId>SpringCloud-demo</artifactId>
     <version>1.0-SNAPSHOT</version>
     <!-- 配置父级 -->
     <parent>
@@ -429,7 +429,7 @@ Greenwich版本包含的组件，也都有各自的版本，如下表:
 
 说明：这里已经对大部分要用到的依赖的版本进行了管理，方便后续使用。
 
-![1571816322635](D:/pic/markdown/SpringCloud/1571816322635.png)
+![1571816322635](SpringCloud/1571816322635.png)
 
 
 
@@ -441,19 +441,19 @@ Greenwich版本包含的组件，也都有各自的版本，如下表:
 
 **创建模块**
 
-选中父工程：D:/pic/markdown/SpringCloud-demo
+选中父工程：SpringCloud-demo
 
-![1571817432283](D:/pic/markdown/SpringCloud/1571817432283.png)
+![1571817432283](SpringCloud/1571817432283.png)
 
-![1571817525684](D:/pic/markdown/SpringCloud/1571817525684.png)
+![1571817525684](SpringCloud/1571817525684.png)
 
 注意: 子模块要在父工程的下级目录
 
-![1571817613071](D:/pic/markdown/SpringCloud/1571817613071.png)
+![1571817613071](SpringCloud/1571817613071.png)
 
 项目结构：
 
-![1571818796480](D:/pic/markdown/SpringCloud/1571818796480.png)
+![1571818796480](SpringCloud/1571818796480.png)
 
 **配置依赖**
 
@@ -464,7 +464,7 @@ Greenwich版本包含的组件，也都有各自的版本，如下表:
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>D:/pic/markdown/SpringCloud-demo</artifactId>
+        <artifactId>SpringCloud-demo</artifactId>
         <groupId>cn.itcast</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -498,7 +498,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/D:/pic/markdown/SpringCloud
+    url: jdbc:mysql://localhost:3306/SpringCloud
     username: root
     password: root
 mybatis:
@@ -507,7 +507,7 @@ mybatis:
   type-aliases-package: cn.itcast.user.pojo
 ```
 
-使用工具创建 D:/pic/markdown/SpringCloud 数据库，将 资料\tb_user.sql 导入。
+使用工具创建 SpringCloud 数据库，将 资料\tb_user.sql 导入。
 
 启动类： 
 
@@ -633,13 +633,13 @@ public class UserController {
 
 项目结构： 
 
-<img src="D:/pic/markdown/SpringCloud/1571822761843.png" alt="1571822761843" style="zoom:50%;" />&nbsp;
+<img src="SpringCloud/1571822761843.png" alt="1571822761843" style="zoom:50%;" />&nbsp;
 
 **启动测试**
 
 启动项目，访问接口：http://localhost:9001/user/1
 
-![1571823023031](D:/pic/markdown/SpringCloud/1571823023031.png)
+![1571823023031](SpringCloud/1571823023031.png)
 
 ### 5.3 服务消费者
 
@@ -649,9 +649,9 @@ public class UserController {
 
 与上面类似，这里不再赘述，需要注意的是，我们调用user-service的功能，因此不需要mybatis相关依赖了。 
 
-![1571823843833](D:/pic/markdown/SpringCloud/1571823843833.png)
+![1571823843833](SpringCloud/1571823843833.png)
 
-![1571823915499](D:/pic/markdown/SpringCloud/1571823915499.png)
+![1571823915499](SpringCloud/1571823915499.png)
 
 pom.xml:
 
@@ -662,7 +662,7 @@ pom.xml:
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>D:/pic/markdown/SpringCloud-demo</artifactId>
+        <artifactId>SpringCloud-demo</artifactId>
         <groupId>cn.itcast</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -687,7 +687,7 @@ server:
 
 模块结构： 
 
-![1571842190944](D:/pic/markdown/SpringCloud/1571842190944.png)&nbsp;
+![1571842190944](SpringCloud/1571842190944.png)&nbsp;
 
 **编写代码**
 
@@ -772,13 +772,13 @@ public class ConsumerController {
 
 项目结构： 
 
-![1571825478422](D:/pic/markdown/SpringCloud/1571825478422.png)&nbsp;
+![1571825478422](SpringCloud/1571825478422.png)&nbsp;
 
 **启动测试**
 
 访问：http://localhost:8080/consumer/1
 
-![1571825588631](D:/pic/markdown/SpringCloud/1571825588631.png)&nbsp;
+![1571825588631](SpringCloud/1571825588631.png)&nbsp;
 
 ### 5.4 存在问题分析
 
@@ -808,7 +808,7 @@ user-consumer：通过RestTemplate访问 http://locahost:9001/user/{id}接口，
 + 服务如何解决容灾问题 
 + 服务如何实现统一配置 
 
-> 说明：以上的问题，都将在D:/pic/markdown/SpringCloud中得到答案。
+> 说明：以上的问题，都将在SpringCloud中得到答案。
 
 
 
@@ -846,7 +846,7 @@ user-consumer：通过RestTemplate访问 http://locahost:9001/user/{id}接口，
 
 > 基本架构
 
-![1571886244487](D:/pic/markdown/SpringCloud/1571886244487.png)
+![1571886244487](SpringCloud/1571886244487.png)
 
 + Eureka：就是服务注册中心（可以是一个集群），对外暴露自己的地址 
 + 提供者：启动后向Eureka注册自己信息（地址，提供什么服务） 
@@ -867,9 +867,9 @@ user-consumer：通过RestTemplate访问 http://locahost:9001/user/{id}接口，
 
 + 创建模块: eureka-server
 
-  ![1571887419180](D:/pic/markdown/SpringCloud/1571887419180.png)
+  ![1571887419180](SpringCloud/1571887419180.png)
 
-  ![1571887490439](D:/pic/markdown/SpringCloud/1571887490439.png)
+  ![1571887490439](SpringCloud/1571887490439.png)
 
 + 配置依赖: pom.xml
 
@@ -880,7 +880,7 @@ user-consumer：通过RestTemplate访问 http://locahost:9001/user/{id}接口，
            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
            http://maven.apache.org/xsd/maven-4.0.0.xsd">
       <parent>
-          <artifactId>D:/pic/markdown/SpringCloud-demo</artifactId>
+          <artifactId>SpringCloud-demo</artifactId>
           <groupId>cn.itcast</groupId>
           <version>1.0-SNAPSHOT</version>
       </parent>
@@ -933,9 +933,9 @@ user-consumer：通过RestTemplate访问 http://locahost:9001/user/{id}接口，
 
 + 启动服务，并访问：http://127.0.0.1:8761
 
-  ![1571889233646](D:/pic/markdown/SpringCloud/1571889233646.png)
+  ![1571889233646](SpringCloud/1571889233646.png)
 
-  ![1571889610181](D:/pic/markdown/SpringCloud/1571889610181.png)
+  ![1571889610181](SpringCloud/1571889610181.png)
 
 **小结**
 
@@ -943,15 +943,15 @@ user-consumer：通过RestTemplate访问 http://locahost:9001/user/{id}接口，
 
   + eureka服务端启动器
 
-    ![1571888764490](D:/pic/markdown/SpringCloud/1571888764490.png)
+    ![1571888764490](SpringCloud/1571888764490.png)
 
   + eureka服务端注解
 
-    ![1571888802216](D:/pic/markdown/SpringCloud/1571888802216.png)
+    ![1571888802216](SpringCloud/1571888802216.png)
 
   + eureka服务端配置
 
-    ![1571888853725](D:/pic/markdown/SpringCloud/1571888853725.png)
+    ![1571888853725](SpringCloud/1571888853725.png)
 
 ## 08、Eureka客户端：服务注册
 
@@ -993,7 +993,7 @@ user-consumer：通过RestTemplate访问 http://locahost:9001/user/{id}接口，
   spring:
     datasource:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/D:/pic/markdown/SpringCloud
+      url: jdbc:mysql://localhost:3306/SpringCloud
       username: root
       password: root
     application:
@@ -1014,7 +1014,7 @@ user-consumer：通过RestTemplate访问 http://locahost:9001/user/{id}接口，
 
 + 重启项目，访问Eureka监控页面查看:
 
-  ![1571891351141](D:/pic/markdown/SpringCloud/1571891351141.png)
+  ![1571891351141](SpringCloud/1571891351141.png)
 
   说明：我们发现user-service服务已经注册成功了。
 
@@ -1024,15 +1024,15 @@ user-consumer：通过RestTemplate访问 http://locahost:9001/user/{id}接口，
 
   + eureka客户端启动器
 
-    ![1575106301907](D:/pic/markdown/SpringCloud/1575106301907.png) 
+    ![1575106301907](SpringCloud/1575106301907.png) 
 
   + eureka客户端注解
 
-    ![1571891598042](D:/pic/markdown/SpringCloud/1571891598042.png)
+    ![1571891598042](SpringCloud/1571891598042.png)
 
   + eureka客户端配置
 
-    ![1571891650709](D:/pic/markdown/SpringCloud/1571891650709.png)
+    ![1571891650709](SpringCloud/1571891650709.png)
 
 ## 09、Eureka客户端：服务发现
 
@@ -1143,7 +1143,7 @@ user-consumer：通过RestTemplate访问 http://locahost:9001/user/{id}接口，
 
 + Debug跟踪运行
 
-  ![1571893317891](D:/pic/markdown/SpringCloud/1571893317891.png)
+  ![1571893317891](SpringCloud/1571893317891.png)
 
 **小结**
 
@@ -1185,7 +1185,7 @@ Eureka Server即服务的注册中心，在刚才的案例中，我们只有一�
 
 而作为客户端，需要把信息注册到每个Eureka中：
 
-![1571923955820](D:/pic/markdown/SpringCloud/1571923955820.png)&nbsp;
+![1571923955820](SpringCloud/1571923955820.png)&nbsp;
 
 如果有三个Eureka，则每一个EurekaServer都需要注册到其它几个Eureka服务中，例如：有三个分别为8761、8762、8763，则： 
 
@@ -1229,17 +1229,17 @@ Eureka Server即服务的注册中心，在刚才的案例中，我们只有一�
 
 + 另外一台在启动的时候指定端口port和defaultZone配置
 
-  ![1571925268139](D:/pic/markdown/SpringCloud/1571925268139.png)&nbsp;
+  ![1571925268139](SpringCloud/1571925268139.png)&nbsp;
 
-  ![1571925607908](D:/pic/markdown/SpringCloud/1571925607908.png)
+  ![1571925607908](SpringCloud/1571925607908.png)
 
   复制一份并修改:
 
-  ![1571925711584](D:/pic/markdown/SpringCloud/1571925711584.png)
+  ![1571925711584](SpringCloud/1571925711584.png)
 
 + 启动测试
 
-  ![1571925989273](D:/pic/markdown/SpringCloud/1571925989273.png)
+  ![1571925989273](SpringCloud/1571925989273.png)
 
 + 客户端注册服务到集群
 
@@ -1259,11 +1259,11 @@ Eureka Server即服务的注册中心，在刚才的案例中，我们只有一�
 
   + Eureka服务端
 
-  ![1571926522277](D:/pic/markdown/SpringCloud/1571926522277.png)
+  ![1571926522277](SpringCloud/1571926522277.png)
 
   + Eureka客户端
 
-    ![1571926550121](D:/pic/markdown/SpringCloud/1571926550121.png)
+    ![1571926550121](SpringCloud/1571926550121.png)
 
 ## 11、Eureka客户端：服务提供者的其他配置
 
@@ -1291,7 +1291,7 @@ eureka:
     prefer-ip-address: true # 更倾向于使用ip，而不是host名称
 ```
 
-修改完后先后重启user-service和user-consumer![1571931610212](D:/pic/markdown/SpringCloud/1571931610212.png)
+修改完后先后重启user-service和user-consumer![1571931610212](SpringCloud/1571931610212.png)
 
 > 服务续约 
 
@@ -1341,7 +1341,7 @@ eureka:
 
 我们关停一个服务，就会在Eureka面板看到一条警告： 
 
-![1571933329264](D:/pic/markdown/SpringCloud/1571933329264.png)
+![1571933329264](SpringCloud/1571933329264.png)
 
 这是触发了Eureka的自我保护机制。当服务未按时进行心跳续约时，Eureka会统计服务实例最近5分钟心跳续约的比例是否低于了85%。在生产环境下，因为网络延迟等原因，心跳失败实例的比例很有可能超标，但是此时就把服务剔除列表并不妥当，因为服务可能没有宕机。Eureka在这段时间内不会剔除任何服务实例，直到网络恢复正常。生产环境下这很有效，保证了大多数服务依然可用，不过也有可能获取到失败的服务实例，因此服务调用者必须做好服务的失败容错。
 
@@ -1355,7 +1355,7 @@ eureka:
     enable-self-preservation: false # 关闭自我保护模式（缺省为打开）
 ```
 
-![1571933631927](D:/pic/markdown/SpringCloud/1571933631927.png)
+![1571933631927](SpringCloud/1571933631927.png)
 
 
 
@@ -1370,7 +1370,7 @@ eureka:
 
 什么是Ribbon?
 
-![1571933956241](D:/pic/markdown/SpringCloud/1571933956241.png)
+![1571933956241](SpringCloud/1571933956241.png)
 
 **目标**
 
@@ -1382,17 +1382,17 @@ eureka:
 
   首先我们配置启动两个user-service实例，一个9001，一个9002。
 
-  ![1571995452729](D:/pic/markdown/SpringCloud/1571995452729.png)
+  ![1571995452729](SpringCloud/1571995452729.png)
 
-  ![1571995508887](D:/pic/markdown/SpringCloud/1571995508887.png)
+  ![1571995508887](SpringCloud/1571995508887.png)
 
-  ![1571995688849](D:/pic/markdown/SpringCloud/1571995688849.png)
+  ![1571995688849](SpringCloud/1571995688849.png)
 
-  ![1571996724908](D:/pic/markdown/SpringCloud/1571996724908.png)&nbsp;
+  ![1571996724908](SpringCloud/1571996724908.png)&nbsp;
 
   Eureka监控面板：
 
-  ![1571996772658](D:/pic/markdown/SpringCloud/1571996772658.png)
+  ![1571996772658](SpringCloud/1571996772658.png)
 
 + 开启负载均衡(user-consumer)
 
@@ -1436,7 +1436,7 @@ eureka:
 
   为了方便在控制台，查看负载均衡效果，修改user-service模块的application.yml文件增加日志的输出：
 
-  ![1571998441043](D:/pic/markdown/SpringCloud/1571998441043.png)
+  ![1571998441043](SpringCloud/1571998441043.png)
 
   访问页面，查看结果；并可以在9001和9002的控制台查看执行情况：
 
@@ -1456,7 +1456,7 @@ eureka:
 
   Ribbon负载均衡策略类都实现了IRule接口：
 
-  ![1572075063123](D:/pic/markdown/SpringCloud/1572075063123.png)
+  ![1572075063123](SpringCloud/1572075063123.png)
 
   
 
@@ -1468,37 +1468,37 @@ eureka:
 
   我们进行源码跟踪(**Ctrl + Shift + N** 搜索LoadBalancerInterceptor)：
 
-  ![1572072930140](D:/pic/markdown/SpringCloud/1572072930140.png)
+  ![1572072930140](SpringCloud/1572072930140.png)
 
   继续跟入execute方法：发现获取了9001或9002端口的服务
 
-  ![1572075792053](D:/pic/markdown/SpringCloud/1572075792053.png)
+  ![1572075792053](SpringCloud/1572075792053.png)
 
-  ![1572074236857](D:/pic/markdown/SpringCloud/1572074236857.png)
+  ![1572074236857](SpringCloud/1572074236857.png)
 
   接下来，再按 Step Over 两次：
 
-  ![1572075937712](D:/pic/markdown/SpringCloud/1572075937712.png)
+  ![1572075937712](SpringCloud/1572075937712.png)
 
-  ![1572074431540](D:/pic/markdown/SpringCloud/1572074431540.png) 
+  ![1572074431540](SpringCloud/1572074431540.png) 
 
   再跟下一次，发现获取的是9001、9002之间切换：
 
-  ![1572074574474](D:/pic/markdown/SpringCloud/1572074574474.png)
+  ![1572074574474](SpringCloud/1572074574474.png)
 
   果然实现了负载均衡: 
 
-  ![1572075621984](D:/pic/markdown/SpringCloud/1572075621984.png)
+  ![1572075621984](SpringCloud/1572075621984.png)
 
 **小结**
 
 + 负载均衡注解: @LoadBalanced
 
-  ![1572076330378](D:/pic/markdown/SpringCloud/1572076330378.png)&nbsp;
+  ![1572076330378](SpringCloud/1572076330378.png)&nbsp;
 
 + 调用服务时，使用服务id
 
-  ![1572076266835](D:/pic/markdown/SpringCloud/1572076266835.png)
+  ![1572076266835](SpringCloud/1572076266835.png)
 
 
 
@@ -1510,7 +1510,7 @@ Hystrix也是Netflix公司的一款组件。
 
 访问地址：<https://github.com/Netflix/Hystrix> 
 
-![1572077313705](D:/pic/markdown/SpringCloud/1572077313705.png)
+![1572077313705](SpringCloud/1572077313705.png)
 
 那么Hystix的作用是什么呢？具体要保护什么呢？ 
 
@@ -1522,17 +1522,17 @@ Hystix是Netflix开源的一个延迟和容错库，用于隔离访问远程服�
 
 微服务中，服务间调用关系错综复杂，一个请求，可能需要调用多个微服务接口才能实现，会形成非常复杂的调用链路：
 
-![1562598446267](D:/pic/markdown/SpringCloud/002.png)&nbsp;
+![1562598446267](SpringCloud/002.png)&nbsp;
 
 如图，一次业务请求，需要调用A、P、H、I四个服务，这四个服务又可能调用其它服务。 
 
 如果此时，某个服务出现异常：
 
-![1562598446267](D:/pic/markdown/SpringCloud/003.png)&nbsp;
+![1562598446267](SpringCloud/003.png)&nbsp;
 
 例如微服务I发生异常，请求阻塞，用户不会得到响应，则tomcat的这个线程不会释放，于是越来越多的用户请求到来，越来越多的线程会阻塞：
 
-![1562598446267](D:/pic/markdown/SpringCloud/004.png)&nbsp;
+![1562598446267](SpringCloud/004.png)&nbsp;
 
 服务器支持的线程和并发数有限，请求一直阻塞，会导致服务器资源耗尽，从而导致所有其它服务都不可用，形成雪崩效应。 
 
@@ -1549,7 +1549,7 @@ Hystix解决雪崩问题的手段主要是服务降级，包括：
 
 线程隔离示意图: 
 
-![1562598446267](D:/pic/markdown/SpringCloud/005.png)  
+![1562598446267](SpringCloud/005.png)  
 
 + Hystrix为每个依赖服务调用分配一个小的线程池，如果线程池已满调用将被立即拒绝，默认不采用排队，加速失败判定时间。 
 + 用户的请求将不再直接访问服务，而是通过线程池中的空闲线程来访问服务，如果线程池已满，或者请求超时，则会进行降级处理，什么是服务降级？
@@ -1595,14 +1595,14 @@ tip:这节只是实现了服务降级，并不是真正意义上的线程隔离
     }
     ```
 
-    可以看到，我们类上的注解越来越多，在微服务中，经常会引入上面的三个注解，于是Spring就提供了一个组合注解：@D:/pic/markdown/SpringCloudApplication
+    可以看到，我们类上的注解越来越多，在微服务中，经常会引入上面的三个注解，于是Spring就提供了一个组合注解：@SpringCloudApplication
 
-    ![1572081430584](D:/pic/markdown/SpringCloud/1572081430584.png)&nbsp;
+    ![1572081430584](SpringCloud/1572081430584.png)&nbsp;
 
     因此，我们可以使用这个组合注解来代替之前的3个注解:
 
     ```java
-    @D:/pic/markdown/SpringCloudApplication
+    @SpringCloudApplication
     public class ConsumerApplication {
     	// ......
     }
@@ -1664,7 +1664,7 @@ tip:这节只是实现了服务降级，并不是真正意义上的线程隔离
 
   + 当user-service正常提供服务时，访问与以前一致。但是当将user-service停机时，会发现页面返回了降级处理信息： 
 
-    ![1572083152674](D:/pic/markdown/SpringCloud/1572083152674.png)
+    ![1572083152674](SpringCloud/1572083152674.png)
 
 + 默认fallback
 
@@ -1733,7 +1733,7 @@ public class ConsumerController {
 
 + @DefaultProperties(defaultFallback = "defaultFallBack")：在类上指明统一的失败降级方法；该类中所有方法返回类型要与处理失败的方法的返回类型一致。
 
-  ![1572083756286](D:/pic/markdown/SpringCloud/1572083756286.png)
+  ![1572083756286](SpringCloud/1572083756286.png)
   
 + 超时配置
 
@@ -1774,7 +1774,7 @@ public class UserService {
 
 测试：
 
-![1572084683334](D:/pic/markdown/SpringCloud/1572084683334.png)
+![1572084683334](SpringCloud/1572084683334.png)
 
 可以发现，请求的时长已经到了2s+，证明配置生效了。 
 
@@ -1801,11 +1801,11 @@ public class UserService {
 
 熔断器，也叫断路器，其英文单词为：Circuit Breaker
 
-![1572100760209](D:/pic/markdown/SpringCloud/006.png)&nbsp;
+![1572100760209](SpringCloud/006.png)&nbsp;
 
 Hystix的熔断状态机模型：
 
-![1572100760209](D:/pic/markdown/SpringCloud/007.png)
+![1572100760209](SpringCloud/007.png)
 
 状态机有3个状态： 
 
@@ -1837,7 +1837,7 @@ Hystix的熔断状态机模型：
 
   说明：这样如果参数是id为1，一定失败，其它情况都成功。（不要忘了注释user-service中的休眠逻辑）
 
-  ![1572160513795](D:/pic/markdown/SpringCloud/1572160513795.png)
+  ![1572160513795](SpringCloud/1572160513795.png)
 
 - 我们准备两个请求窗口： 
 
@@ -1848,7 +1848,7 @@ Hystix的熔断状态机模型：
 
   此时你访问id为2的请求，会发现返回的也是失败，而且失败时间很短，只有5秒左右；因进入半开状态之后2是可以的。
 
-  ![1572161697652](D:/pic/markdown/SpringCloud/1572161697652.png)
+  ![1572161697652](SpringCloud/1572161697652.png)
 
   不过，默认的熔断触发要求较高，休眠时间窗较短，为了测试方便，我们可以通过配置修改熔断策略： 
 
@@ -1864,7 +1864,7 @@ Hystix的熔断状态机模型：
 
    默认配置：com.netflix.hystrix.HystrixCommandProperties
 
-  ![1572162913791](D:/pic/markdown/SpringCloud/1572162913791.png)
+  ![1572162913791](SpringCloud/1572162913791.png)
 
 - 配置服务熔断(user-consumer)
 

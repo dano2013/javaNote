@@ -40,7 +40,7 @@ static final int hash(Object key) {
 
 会产生哈希碰撞，若key值内容相同则替换旧的value，不然就连接到链表后面，链表长度超过阈值8转为红黑树
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images/1580383175740.png" alt="1580383175740" style="zoom:50%;" />
+<img src="image/1580383175740.png" alt="1580383175740" style="zoom:50%;" />
 
 说明：
 
@@ -50,7 +50,7 @@ static final int hash(Object key) {
 
 ## HashMap继承关系
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images/1580383442784.png" alt="1580383442784" style="zoom:80%;" />
+<img src="image/1580383442784.png" alt="1580383442784" style="zoom:80%;" />
 
 ## HashMap集合类的成员
 

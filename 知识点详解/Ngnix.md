@@ -62,7 +62,7 @@ yum -y install iptables-services && systemctl start iptables && systemctl enable
 
 firewall-cmd --list-all
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\283c4e5b55de4e56a6bfdddb958d99be.png)
+![img](image\283c4e5b55de4e56a6bfdddb958d99be.png)
 
 ②　设置开放的端口号
 
@@ -74,11 +74,11 @@ firewall-cmd --add-port=80/tcp --permanent
 
 firewall-cmd --reload
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\edd50e94df96459ebce18ebc77921c22.png)
+![img](image/edd50e94df96459ebce18ebc77921c22.png)
 
 ④　访问成功
 
-![](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\C34C95D8DD434FFE85863F1E5FA58113.png)
+![](image/C34C95D8DD434FFE85863F1E5FA58113.png)
 
 ### 二、Nginx常用命令
 
@@ -112,7 +112,7 @@ events 块涉及的指令主要影响 Nginx 服务器与用户的网络连接，
 
 下图就表示每个 work process 支持的最大连接数为 1024。
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\a0dcb06105ec4bdea171e99c575b0c95.png)
+![img](image/a0dcb06105ec4bdea171e99c575b0c95.png)
 
 ##### （3）http 块
 
@@ -120,13 +120,13 @@ events 块涉及的指令主要影响 Nginx 服务器与用户的网络连接，
 
 需要注意的是：http 块也可以包括 http 全局块、server 块。
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\c2745882a2014020adff5e861f569072.png)
+![img](image/c2745882a2014020adff5e861f569072.png)
 
 **①、http 全局块**
 
 http 全局块配置的指令包括文件引入、MIME-TYPE 定义、日志自定义、连接超时时间、单链接请求数上限等。
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\79b117e686a94bbd8730eb9501590654.png)
+![img](image/79b117e686a94bbd8730eb9501590654.png)
 
 **②、server 块**
 
@@ -136,7 +136,7 @@ http 全局块配置的指令包括文件引入、MIME-TYPE 定义、日志自�
 
 而每个 server 块也分为全局 server 块，以及可以同时包含多个 locaton 块。
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\480ef899eb4e49b393d4ec74be839149.png)
+![img](image/480ef899eb4e49b393d4ec74be839149.png)
 
 **全局 server 块**
 
@@ -180,7 +180,7 @@ http 全局块配置的指令包括文件引入、MIME-TYPE 定义、日志自�
 
 #### 3、访问过程的分析
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\abbb9fdd52f44d35ae8662a8b1a8eece.png)
+![img](image/abbb9fdd52f44d35ae8662a8b1a8eece.png)
 
 #### 4、具体配置
 
@@ -188,15 +188,15 @@ http 全局块配置的指令包括文件引入、MIME-TYPE 定义、日志自�
 
 添加内容在 host 文件中
 
-![](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\140AF60A7A1A492DA28AC04FACBC3C27.png)
+![](image/140AF60A7A1A492DA28AC04FACBC3C27.png)
 
 第二步在 nginx 进行请求转发的配置（反向代理配置）
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\00b774c2df294ffeb702be08417f83ec.png)
+![img](image/00b774c2df294ffeb702be08417f83ec.png)
 
 #### 5、最终测试
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\ccbbcd91358340f8a07bde77989dae08.png)
+![img](image/ccbbcd91358340f8a07bde77989dae08.png)
 
 ### 五、Nginx 反向代理实例 2
 
@@ -220,13 +220,13 @@ nginx 监听端口为 9001，
 
 （1）找到 nginx 配置文件，进行反向代理配置
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\6aa4f059b04b45419aa54f570869211e.png)
+![img](image/6aa4f059b04b45419aa54f570869211e.png)
 
 （2）开放对外访问的端口号 9001 8080 8081
 
 #### 4、最终测试
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5a2148246c204f43bf73604ca48d0ed4.png" alt="img" style="zoom:67%;" />
+<img src="image/5a2148246c204f43bf73604ca48d0ed4.png" alt="img" style="zoom:67%;" />
 
 #### 5、location指令说明
 
@@ -262,7 +262,7 @@ location [ = | ~ | ~ | ^~] uri {     }
 
 #### 3、修改配置文件
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\b6aa8e4226334b97a5afaf00ec37eab4.png)
+![img](image/b6aa8e4226334b97a5afaf00ec37eab4.png)
 
 #### 4、nginx 分配服务器策略
 
@@ -274,25 +274,25 @@ location [ = | ~ | ~ | ^~] uri {     }
 
 weight 代表权重默认为 1,权重越高被分配的客户端越多
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\bdb004ed88ca42f5ac603744cc25cb6e.png)
+![img](image/bdb004ed88ca42f5ac603744cc25cb6e.png)
 
 第三种 ip_hash
 
 每个请求按访问 ip 的 hash 结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\e78da2123ac1482789ff166f51e899b4.png)
+![img](image/e78da2123ac1482789ff166f51e899b4.png)
 
 第四种 fair（第三方）
 
 按后端服务器的响应时间来分配请求，响应时间短的优先分配。
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\0a8af288653c47859679993d94b39a1c.png)
+![img](image/0a8af288653c47859679993d94b39a1c.png)
 
 ### 七、Nginx 配置实例-动静分离
 
 #### 1、什么是动静分离
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\5e056e15711046e0824891f5990636ac.png" alt="img" style="zoom:50%;" />
+<img src="image/5e056e15711046e0824891f5990636ac.png" alt="img" style="zoom:50%;" />
 
 动静分离简单来说就是把动态跟静态请求分开，不能理解成只是单纯的把动态页面和静态页面物理分离。严格意义上说应该是动态请求跟静态请求分开，可以理解成使用 Nginx 处理静态页面，Tomcat 处理动态页面。
 
@@ -304,13 +304,13 @@ weight 代表权重默认为 1,权重越高被分配的客户端越多
 
 在 liunx 系统中准备静态资源，用于进行访问
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\beb28ea92c2e44229f6a67d3d90e0eb1.png)
+![img](image/beb28ea92c2e44229f6a67d3d90e0eb1.png)
 
 #### 3、具体配置
 
 在 nginx 配置文件中进行配置
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\c0e34c3a25ee49c292f9dd852481e63c.png)
+![img](image/c0e34c3a25ee49c292f9dd852481e63c.png)
 
 #### 4、最终测试
 
@@ -318,11 +318,11 @@ weight 代表权重默认为 1,权重越高被分配的客户端越多
 
 http://192.168.17.129/image/01.jpg
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\8b8c480588ac4612af6b277b2c35c727.png)
+![img](image/8b8c480588ac4612af6b277b2c35c727.png)
 
 因为配置文件 autoindex on
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\11410156dec646668839a756ecd1eceb.png)
+![img](image/11410156dec646668839a756ecd1eceb.png)
 
 重点是添加 location，最后检查 Nginx 配置是否正确即可，然后测试动静分离是否成功，之需要删除后端 tomcat服务器上的某个静态文件，查看是否能访问，如果可以访问说明静态资源 nginx 直接返回了，不走后端 tomcat 服务器。
 
@@ -330,13 +330,13 @@ http://192.168.17.129/image/01.jpg
 
 #### 1、master 和 worker
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\8853b14e03fb4c63b77a3521c9fa4975.png)
+![img](image/8853b14e03fb4c63b77a3521c9fa4975.png)
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\97a0bc3f52a74aa48ab8c3cd0a7119da.png)
+![img](image/97a0bc3f52a74aa48ab8c3cd0a7119da.png)
 
 #### 2、worker 如何进行工作的
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\31f77fac7c064eff909ad8afd6510317.png)
+![img](image/31f77fac7c064eff909ad8afd6510317.png)
 
 #### 3、一个 master 和多个 woker 有好处
 
@@ -354,7 +354,7 @@ worker 数和服务器的 cpu 数相等是最为适宜的
 
 答案：2 或者 4 个
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\b55085273c5343fd801e5fd2c638d0a5.png)
+![img](image/b55085273c5343fd801e5fd2c638d0a5.png)
 
 第二个：nginx 有一个 master，有四个 woker，每个 woker 支持最大的连接数 1024，支持的
 

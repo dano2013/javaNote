@@ -17,7 +17,7 @@
 
 下图是 Java 内存区域，通过下图我们从 JVM 的角度来说一下线程和进程之间的关系。
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\17257a5b841f4ff4bc8486db2d19f36f.png" alt="img" style="zoom: 67%;" />
+<img src="image\17257a5b841f4ff4bc8486db2d19f36f.png" alt="img" style="zoom: 67%;" />
 
 从上图可以看出：一个进程中可以有多个线程，多个线程共享进程的**堆**和**方法区 (JDK1.8 之后的元空间)**资源，但是每个线程有自己的**程序计数器**、**虚拟机栈** 和 **本地方法栈**。
 
@@ -91,7 +91,7 @@
 
 伪共享发生在不同处理器的上的线程对变量的修改依赖于相同的缓存和行，如下图所示：
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\7896890-3cbee585a5f68f02.png" style="zoom:50%;" />
+<img src="image\7896890-3cbee585a5f68f02.png" style="zoom:50%;" />
 
 伪共享问题很难被发现，因为线程可能访问完全不同的全局变量，内存中却碰巧在很相近的位置上。如其他诸多的并发问题，避免伪共享的最基本方式是仔细审查代码，根据缓存行来调整你的数据结构。
 
@@ -121,7 +121,7 @@ Java 线程运行的生命周期中的指定时刻只可能处于下面 6 种不
 
 线程在生命周期中并不是固定处于某一个状态而是随着代码的执行在不同状态之间切换。Java 线程状态变迁如下图所示（图源《Java 并发编程艺术》4.1.4 节）：
 
-![Java 线程状态变迁](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\c7eeb95311294f04ac87342ff6e22550.png)
+![Java 线程状态变迁](image\c7eeb95311294f04ac87342ff6e22550.png)
 
 由上图可以看出：线程创建之后它将处于 NEW（新建） 状态，调用 start() 方法后开始运行，线程这时候处于 READY（可运行） 状态。可运行状态的线程获得了 CPU 时间片（timeslice）后就处于 RUNNING（运行） 状态。
 
@@ -161,7 +161,7 @@ Linux 相比其他操作系统（包括其他类 Unix 系统）有很多的优�
 
 如下图所示，线程 A 持有资源 2，线程 B 持有资源 1，他们同时都想申请对方的资源，所以这两个线程就会互相等待而进入死锁状态。
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\ccd8adb6f69b4e29958bc7bfa119c082.png" style="zoom: 67%;" />
+<img src="image\ccd8adb6f69b4e29958bc7bfa119c082.png" style="zoom: 67%;" />
 
 ### 如何避免线程死锁
 
@@ -312,11 +312,11 @@ JDK1.6 对锁的实现引入了大量的优化，如偏向锁、轻量级锁、�
 
 在 JDK1.2 之前，Java的内存模型实现总是从**主内存**（即共享内存）读取变量。而在当前的 Java 内存模型下，线程可以把变量保存**本地内存**，比如机器的寄存器中，而不是直接在主内存中进行读写。这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值的拷贝，造成**数据的不一致**。
 
-![img](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\515eea4401174d69bfdde5e894ff5709.png)
+![img](image\515eea4401174d69bfdde5e894ff5709.png)
 
 要解决这个问题，就需要把变量声明为**volatile**，这就指示 JVM 这个变量是不稳定的，每次使用它都到主存中进行读取。
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\12bdfa6ce1584d40b7c4909e644dccc6.png" alt="img" style="zoom:75%;" />
+<img src="image\12bdfa6ce1584d40b7c4909e644dccc6.png" alt="img" style="zoom:75%;" />
 
 ### synchronized vs volatile
 
@@ -380,7 +380,7 @@ java.util.concurrent.ThreadPoolExecutor 类就是一个线程池。客户端调�
 2. 如果运行的线程等于或者多于 corePoolSize，则 Executor 始终首选将请求加入队列，而不是添加新线程；
 3. 如果无法将请求加入队列，即队列已经满了，则创建新的线程，除非创建此线程超出 maxinumPoolSize， 在这种情况下，任务将被拒绝。
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\图解线程池实现原理.png" style="zoom:67%;" />
+<img src="image\图解线程池实现原理.png" style="zoom:67%;" />
 
 ### 为什么要用线程池
 
@@ -404,7 +404,7 @@ submit() 方法用于提交需要返回值的任务。线程池会返回一个 F
 
 **方式一：通过构造方法实现**
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\089dc1c798b74db6a745d70378589f99.png" alt="通过构造方法实现" style="zoom:80%;" />
+<img src="image\089dc1c798b74db6a745d70378589f99.png" alt="通过构造方法实现" style="zoom:80%;" />
 
 **方式二：通过 Executor 框架的工具类 Executors 来实现**
 
@@ -414,7 +414,7 @@ submit() 方法用于提交需要返回值的任务。线程池会返回一个 F
 - **SingleThreadExecutor：** 该方法返回一个只有一个线程的线程池。若多余一个任务被提交到该线程池，任务会被保存在一个任务队列中，待线程空闲，按先入先出的顺序执行队列中的任务。
 - **CachedThreadPool：** 该方法返回一个可根据实际情况调整线程数量的线程池。线程池的线程数量不确定，但若有空闲线程可以复用，则会优先使用可复用的线程。若所有线程均在工作，又有新的任务提交，则会创建新的线程处理任务。所有线程在当前任务执行完毕后，将返回线程池进行复用。
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\e8d3f68a9b854258bae53744a1a415e5.png" alt="通过 Executor 框架的工具类 Executors 来实现" style="zoom:80%;" />
+<img src="image\e8d3f68a9b854258bae53744a1a415e5.png" alt="通过 Executor 框架的工具类 Executors 来实现" style="zoom:80%;" />
 
 《阿里巴巴 Java 开发手册》中强制线程池不允许使用 Executors 去创建，而是通过 ThreadPoolExecutor 的方式。Executors 返回线程池对象的弊端如下：
 
@@ -443,7 +443,7 @@ submit() 方法用于提交需要返回值的任务。线程池会返回一个 F
 
 并发包 java.util.concurrent 的原子类都存放在java.util.concurrent.atomic下，如下图所示。
 
-![JUC 原子类概览](C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\17894be993784d5cb50a3ffedfa3c3f8.png)
+![JUC 原子类概览](image\17894be993784d5cb50a3ffedfa3c3f8.png)
 
 
 
@@ -529,7 +529,7 @@ public void dfasd111() throws InterruptedException{
 
 AQS 的全称为（AbstractQueuedSynchronizer），抽象队列同步器，这个类在 java.util.concurrent.locks 包下面。
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\8951d2bd3a61451090cc56469d383283.png" alt="AQS" style="zoom:75%;" />
+<img src="image\8951d2bd3a61451090cc56469d383283.png" alt="AQS" style="zoom:75%;" />
 
 AQS 是一个用来构建锁和同步器的框架，使用 AQS 能简单且高效地构造出应用广泛的大量的同步器，比如我们提到的 ReentrantLock，Semaphore，其他的诸如 ReentrantReadWriteLock，SynchronousQueue，FutureTask 等等皆是基于 AQS 的。我们自己也能利用 AQS 非常轻松容易地构造出符合我们自己需求的同步器。
 
@@ -541,7 +541,7 @@ CLH(Craig,Landin,and Hagersten) 队列是一个虚拟的双向队列（虚拟的
 
 AQS(AbstractQueuedSynchronizer) 原理图：
 
-<img src="C:\Users\WANG\AppData\Roaming\Typora\typora-user-images\2bc517b5aa9b443ca6b9b031979136bd.png" alt="AQS原理图" style="zoom:80%;" />
+<img src="image\2bc517b5aa9b443ca6b9b031979136bd.png" alt="AQS原理图" style="zoom:80%;" />
 
 AQS 使用一个 int 成员变量来表示同步状态，通过内置的 FIFO(First Input First Output，先进先出) 队列来完成获取资源线程的排队工作。AQS 使用 CAS(Compare and Swap，比较再交换) 对该同步状态进行原子操作实现对其值的修改。
 
