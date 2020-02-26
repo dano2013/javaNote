@@ -66,7 +66,7 @@ TransactionDefinition 接口中定义了五个表示隔离级别的常量：
 
 #### 回滚规则
 
-这些规则定义了哪些异常会导致事务回滚而哪些不会。默认情况下，事务只有遇到运行期异常时才会回滚，而在遇到检查型异常时不会回滚（这一行为与EJB的回滚行为是一致的）。 但是你可以声明事务在遇到特定的检查型异常时像遇到运行期异常那样回滚。同样，你还可以声明事务遇到特定的异常不回滚，即使这些异常是运行期异常。
+这些规则定义了哪些异常会导致事务回滚而哪些不会。默认情况下，事务只有遇到运行期异常时才会回滚，而在遇到检查型异常时不会回滚。 但是你可以声明事务在遇到特定的检查型异常时像遇到运行期异常那样回滚，同样，你还可以声明事务遇到特定的异常不回滚，即使这些异常是运行期异常。
 
 #### 是否只读
 
@@ -74,7 +74,7 @@ TransactionDefinition 接口中定义了五个表示隔离级别的常量：
 
 #### 事务超时
 
-所谓事务超时，就是指一个事务所允许执行的最长时间，如果超过该时间限制但事务还没有完成，则自动回滚事务。在 TransactionDefinition 中以 int 的值来表示超时时间，其单位是秒。
+指一个事务所允许执行的最长时间，如果超过该时间限制但事务还没有完成，则自动回滚事务。在 TransactionDefinition 中以 int 的值来表示超时时间，其单位是秒。
 
 ### 事务的管理方式
 
@@ -82,6 +82,12 @@ TransactionDefinition 接口中定义了五个表示隔离级别的常量：
 2. 声明式事务：在配置文件中配置，实际是通过AOP实现（推荐使用）
    - 基于XML的声明式事务
    - 基于注解的声明式事务
+
+### @Transactional
+
+当@Transactional注解作用于类上时，该类的所有 public 方法将都具有该类型的事务属性，同时我们也可以在方法级别使用该标注来覆盖类级别的定义。如果类或者方法加了这个注解，那么这个类里面的方法抛出异常时就会回滚，数据库里面的数据也会回滚。
+
+在@Transactional注解中如果不配置rollbackFor属性，那么事物只会在遇到RuntimeException的时候才会回滚，加上rollbackFor=Exception.class，可以让事务在遇到非运行时异常时也回滚。
 
 ## IoC & AOP
 
@@ -97,7 +103,7 @@ Spring IoC的初始化过程：
 
 Spring 时代我们一般通过 XML 文件来配置 Bean，后来开发人员觉得 XML 文件来配置不太好，于是 SpringBoot 的注解配置就慢慢开始流行起来。
 
-**DI(Dependecy Inject,依赖注入)是实现控制反转的一种设计模式，依赖注入就是将实例变量传入到一个对象中去。**
+**DI(Dependecy Inject，依赖注入)是实现控制反转的一种设计模式，依赖注入就是将实例变量传入到一个对象中去。**
 
 ### AOP
 
@@ -125,17 +131,9 @@ JDK 动态代理，只能对实现了接口的类生成代理，而不是针对�
 
 **Spring AOP 属于运行时增强，而 AspectJ 是编译时增强。** Spring AOP 基于代理(Proxying)，而 AspectJ 基于字节码操作(Bytecode Manipulation)。
 
- Spring AOP 已经集成了 AspectJ  ，AspectJ  应该算的上是 Java 生态系统中最完整的 AOP 框架了。AspectJ  相比于 Spring AOP 功能更加强大，但是 Spring AOP 相对来说更简单，
-
-如果我们的切面比较少，那么两者性能差异不大。但是，当切面太多的话，最好选择 AspectJ ，它比Spring AOP 快很多。
+ Spring AOP 已经集成了 AspectJ  ，AspectJ  应该算的上是 Java 生态系统中最完整的 AOP 框架了。AspectJ  相比于 Spring AOP 功能更加强大，但是 Spring AOP 相对来说更简单。如果我们的切面比较少，那么两者性能差异不大，但是当切面太多的时候，最好选择 AspectJ ，它比Spring AOP 快很多。
 
 ## bean
-
-### @Component vs @Bean
-
-1. 作用对象不同：@Component 注解作用于类，而@Bean注解作用于方法。
-2. @Component通常是通过类路径扫描来自动侦测以及自动装配到Spring容器中的；@Bean 通常是我们在标有该注解的方法中定义产生这个 bean，@Bean告诉了Spring这是某个类的示例，当我需要用它的时候还给我。
-3. @Bean 比 @Component 的自定义性更强，而且很多地方我们只能通过 @Bean 注解来注册bean。比如当我们引用第三方库中的类需要装配到 Spring容器时，则只能通过 @Bean来实现。
 
 ### 声明为 bean 的注解有哪些
 
@@ -145,6 +143,12 @@ JDK 动态代理，只能对实现了接口的类生成代理，而不是针对�
 - @Repository : 对应持久层即 Dao 层，主要用于数据库相关操作。
 - @Service : 对应服务层，主要涉及一些复杂的逻辑，需要用到 Dao层。
 - @Controller : 对应 Spring MVC 控制层，主要用于接受用户请求并调用 Service 层返回数据给前端页面。
+
+### @Component vs @Bean
+
+1. 作用对象不同：@Component 注解作用于类，而@Bean注解作用于方法。
+2. @Component通常是通过类路径扫描来自动侦测以及自动装配到Spring容器中的；@Bean 通常是我们在标有该注解的方法中定义产生这个 bean，@Bean告诉了Spring这是某个类的示例，当我需要用它的时候还给我。
+3. @Bean 比 @Component 的自定义性更强，而且很多地方我们只能通过 @Bean 注解来注册bean。比如当我们引用第三方库中的类需要装配到 Spring容器时，则只能通过 @Bean来实现。
 
 ### bean 的作用域
 
@@ -158,21 +162,20 @@ JDK 动态代理，只能对实现了接口的类生成代理，而不是针对�
 
 - Bean 容器找到配置文件中 Spring Bean 的定义。
 - Bean 容器利用 Java Reflection API 创建一个Bean的实例。
-- 如果涉及到一些属性值利用 set()方法设置一些属性值。
+- 如果涉及到一些属性值利用 set() 方法设置一些属性值。
 - 如果 Bean 实现了 BeanNameAware 接口，调用 setBeanName()方法，传入Bean的名字。
 - 如果 Bean 实现了 BeanClassLoaderAware 接口，调用 setBeanClassLoader()方法，传入 ClassLoader对象的实例。
 - 如果Bean实现了 BeanFactoryAware 接口，调用 setBeanClassLoader()方法，传入 ClassLoader对象的实例。
 - 与上面的类似，如果实现了其他 *.Aware接口，就调用相应的方法。
-- 如果有和加载这个 Bean 的 Spring 容器相关的 BeanPostProcessor 对象，执行postProcessBeforeInitialization() 方法
+- 如果有和加载这个 Bean 的 Spring 容器相关的 BeanPostProcessor 对象，执行postProcessBeforeInitialization() 方法。
 - 如果Bean实现了InitializingBean接口，执行afterPropertiesSet()方法。
 - 如果 Bean 在配置文件中的定义包含 init-method 属性，执行指定的方法。
-- 如果有和加载这个 Bean的 Spring 容器相关的 BeanPostProcessor 对象，执行postProcessAfterInitialization() 方法。
 - 当要销毁 Bean 的时候，如果 Bean 实现了 DisposableBean 接口，执行 destroy() 方法。
 - 当要销毁 Bean 的时候，如果 Bean 在配置文件中的定义包含 destroy-method 属性，执行指定的方法。
 
 <img src="https://i.loli.net/2018/09/20/5ba2e83a54fd9.jpeg" style="zoom:80%;" />
 
-> Spring 容器可以管理  singleton 作用域下 bean 的生命周期，在此作用域下，Spring  能够精确地知道bean何时被创建，何时初始化完成，以及何时被销毁。而对于 prototype 作用域的bean，Spring只负责创建，当容器创建了 bean 的实例后，bean  的实例就交给了客户端的代码管理，Spring容器将不再跟踪其生命周期，并且不会管理那些被配置成prototype作用域的bean的生命周期。
+> Spring 容器可以管理  singleton 作用域下 bean 的生命周期，在此作用域下，Spring  能够精确地知道bean何时被创建，何时初始化完成，以及何时被销毁。而对于 prototype 作用域的bean，Spring只负责创建，当容器创建了 bean 的实例后，bean  的实例就交给了客户端的代码管理，Spring容器将不再跟踪、管理其生命周期。
 
 ### 单例 bean 的线程安全问题
 
@@ -183,6 +186,8 @@ JDK 动态代理，只能对实现了接口的类生成代理，而不是针对�
 1. 在Bean对象中尽量避免定义可变的成员变量（不太现实）
 2. 在类中定义一个ThreadLocal成员变量，将需要的可变成员变量保存在 ThreadLocal 中
 
+## 其他
+
 ### @RestController vs @Controller
 
 - @Controller 返回一个页面
@@ -192,93 +197,7 @@ JDK 动态代理，只能对实现了接口的类生成代理，而不是针对�
 
 - @RestController 返回JSON 或 XML 形式数据
 
+@RestController只返回对象，对象数据直接以 JSON 或 XML 形式写入 HTTP 响应(Response)中，这种情况属于 RESTful Web服务，这也是目前日常开发所接触的最常用的情况（前后端分离）。如果你需要在Spring4之前开发 RESTful Web服务的话，你需要使用@Controller 并结合@ResponseBody注解，也就是说<u>@Controller +@ResponseBody= @RestController</u>（Spring 4 之后新加的注解）。
 
-@RestController只返回对象，对象数据直接以 JSON 或 XML 形式写入 HTTP 响应(Response)中，这种情况属于 RESTful Web服务，这也是目前日常开发所接触的最常用的情况（前后端分离）。
-
-如果你需要在Spring4之前开发 RESTful Web服务的话，你需要使用@Controller 并结合@ResponseBody注解，也就是说<u>@Controller +@ResponseBody= @RestController</u>（Spring 4 之后新加的注解）。
-
-@ResponseBody 的作用是将 Controller 的方法返回的对象通过适当的转换器转换为指定的格式之后，写入到HTTP 响应(Response)对象的 body 中，通常用来返回 JSON 或者 XML 数据。
-
-### @Transactional
-
-当@Transactional注解作用于类上时，该类的所有 public 方法将都具有该类型的事务属性，同时我们也可以在方法级别使用该标注来覆盖类级别的定义。如果类或者方法加了这个注解，那么这个类里面的方法抛出异常时就会回滚，数据库里面的数据也会回滚。
-
-在@Transactional注解中如果不配置rollbackFor属性,那么事物只会在遇到RuntimeException的时候才会回滚,加上rollbackFor=Exception.class，可以让事务在遇到非运行时异常时也回滚。
-
-### 如何使用JPA在数据库中非持久化一个字段
-
-```java
-Entity(name="USER")
-public class User {
-    private String secrect;	//未修改前
-    static String transient1; 			// not persistent because of static
-    final String transient2 = “Satish”; // not persistent because of final
-    transient String transient3; 		// not persistent because of transient
-    @Transient
-    String transient4; 					// not persistent because of @Transient
-}
-```
-
-# SpringMVC
-
-### SpringMVC 介绍
-
-SpringMVC 框架是以请求为驱动，围绕 Servlet 设计，将请求发给控制器，然后通过模型对象、分派器来展示请求结果视图。其核心类是实现了 Servlet 接口的 DispatcherServlet。
-
-### SpringMVC 工作流程
-
-SpringMVC的核心控制器是DispatcherServlet。
-
-<img src="image\7b948963f66748798d25ad194708bc0c.png" alt="SpringMVC运行原理" style="zoom:80%;" />
-
-**流程说明：**
-
-1. 客户端（浏览器）发送请求，直接请求到 DispatcherServlet。
-2. DispatcherServlet 根据请求信息调用 HandlerMapping，解析请求对应的 Handler。
-3. 解析到对应的 Handler（也就是我们平常说的 Controller 控制器）后，开始由 HandlerAdapter 适配器处理。
-4. HandlerAdapter 会根据 Handler来调用真正的处理器处理请求。
-5. 处理器处理完业务后，会返回一个 ModelAndView 对象，Model 是返回的数据对象，View 是个逻辑上的 View。
-6. ViewResolver 会根据逻辑 View 查找实际的 View。
-7. DispatcherServlet 把返回的 Model 传给 View（视图渲染）。
-8. 把 View 返回给请求者（浏览器）。
-
-### SpringMVC 重要组件说明
-
-1、前端控制器DispatcherServlet
-
-作用：Spring MVC 的入口函数。接收请求，响应结果，相当于转发器，中央处理器。有了 DispatcherServlet  减少了其它组件之间的耦合度。用户请求到达前端控制器，它就相当于mvc模式中的c，DispatcherServlet是整个流程控制的中心，由它调用其它组件处理用户的请求，DispatcherServlet的存在降低了组件之间的耦合性。
-
-2、处理器映射器HandlerMapping
-
-作用：根据请求的url查找Handler。HandlerMapping负责根据用户请求找到Handler即处理器（Controller），SpringMVC提供了不同的映射器实现不同的映射方式，例如：配置文件方式，实现接口方式，注解方式等。
-
-3、处理器适配器HandlerAdapter
-
-作用：按照特定规则（HandlerAdapter要求的规则）去执行Handler，通过HandlerAdapter对处理器进行执行，这是适配器模式的应用，通过扩展适配器可以对更多类型的处理器进行执行。
-
-4、处理器Handler
-
-注意：编写Handler时按照HandlerAdapter的要求去做，这样适配器才可以去正确执行Handler，Handler 是继DispatcherServlet前端控制器的后端控制器，在DispatcherServlet的控制下Handler对具体的用户请求进行处理。
-
-5、视图解析器View resolver
-
-作用：进行视图解析，根据逻辑视图名解析成真正的视图（view），View Resolver负责将处理结果生成View视图，View  Resolver首先根据逻辑视图名解析成物理视图名即具体的页面地址，再生成View视图对象，最后对View进行渲染将处理结果通过页面展示给用户。 springmvc框架提供了很多的View视图类型，包括：jstlView、freemarkerView、pdfView等。 一般情况下需要通过页面标签或页面模版技术将模型数据通过页面展示给用户，需要由工程师根据业务需求开发具体的页面。
-
-6、视图View
-
-View是一个接口，实现类支持不同的View类型（jsp、freemarker、pdf...）
-
-注意：处理器Handler（也就是我们平常说的Controller控制器）以及视图层view都是需要我们自己手动开发的。其他的一些组件比如：前端控制器DispatcherServlet、处理器映射器HandlerMapping、处理器适配器HandlerAdapter等等都是框架提供给我们的，不需要自己手动开发。
-
-### Cookie vs Session
-
-Cookie 和 Session都是用来跟踪浏览器用户身份的会话方式，但是两者的应用场景不太一样。
-
-①我们在 Cookie 中保存已经登录过的用户信息，下次访问网站的时候页面可以自动帮你把登录的一些基本信息给填了；
-
-②一般的网站都会有保持登录也就是说下次你再访问网站的时候就不需要重新登录了，这是因为用户登录的时候我们可以存放了一个 Token 在 Cookie 中，下次登录的时候只需要根据 Token 值来查找用户即可(为了安全考虑，重新登录一般要将 Token 重写)；
-
-③登录一次网站后访问网站其他页面不需要重新登录。Session 的主要作用就是通过服务端记录用户的状态， 典型的场景是购物车，当你要添加商品到购物车的时候，系统不知道是哪个用户操作的，因为 HTTP 协议是无状态的。服务端给特定的用户创建特定的 Session 之后就可以标识这个用户并且跟踪这个用户了。
-
-Cookie 存储在客户端中，而Session存储在服务器上，相对来说 Session 安全性更高。
+@ResponseBody 的作用是将 Controller 的方法返回的对象转换为指定的格式之后，写入到HTTP 响应(Response)对象的 body 中，通常用来返回 JSON 或者 XML 数据。
 
