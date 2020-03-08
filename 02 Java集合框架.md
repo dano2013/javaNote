@@ -279,7 +279,7 @@ private static ArrayBlockingQueue<Integer> blockingQueue = new ArrayBlockingQueu
 
 #### LinkedBlockingQueue 
 
-底层是基于单向链表实现的阻塞队列，可以当做无界队列也可以当做有界队列来使用，同样满足 FIFO 的特性，与 ArrayBlockingQueue 相比起来具有更高的吞吐量，为了防止 LinkedBlockingQueue  容量迅速增大，损耗大量内存，通常在创建 LinkedBlockingQueue 对象时，会指定其大小，如果未指定，容量等于  Integer.MAX_VALUE。
+底层是基于单向链表实现的阻塞队列，可以当做无界队列也可以当做有界队列来使用，同样满足 FIFO 的特性，与 ArrayBlockingQueue 相比起来具有更高的吞吐量，为了防止 LinkedBlockingQueue  容量迅速增大，损耗大量内存，通常在创建 LinkedBlockingQueue 对象时，会指定其大小，如果未指定，容量等于  Integer.MAX_VALUE。[ArrayBlockingQueue vs LinkedBlockingQueue  ](https://www.cnblogs.com/kaneziki/p/9767414.html)
 
 #### PriorityBlockingQueue
 
